@@ -9,8 +9,8 @@ Flow是一个静态的检查类型检查工具，设计之初的目的就是为�
 [flow-bin](https://github.com/flowtype/flow-bin);
 [查看官网](https://flow.org/);
 
-1、flow中支持的 primitive types  有  Booleans,String,Numbers,null,void(相当于js中的undefined).
-2、flow支持
+1. flow中支持的 primitive types  有  Booleans,String,Numbers,null,void(相当于js中的undefined).
+2. flow支持
 [Type Annotations](https://flow.org/en/docs/types/);
 [Primitive Types](https://flow.org/en/docs/types/primitives/);
 [Literal Types](https://flow.org/en/docs/types/literals/);
