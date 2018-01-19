@@ -19,3 +19,6 @@
 	  它是一个用于测试JavaScript代码的行为驱动开发框架。它不依赖于任何其他JavaScript框架。
 	  它不需要DOM，而且它有简介和明了的语法，这样你就可以更轻松的编写测试
 			  
+##四、karma	
+[karma 测试框架的前世今生](https://juejin.im/entry/56c80331efa631005c1aeacc);		  
+
