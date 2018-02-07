@@ -66,7 +66,22 @@
 
 
  ## karma是如何工作的
-    
+ 
+ 
+ ## [代码测试覆盖率分析](https://www.v2ex.com/t/385149)
+ 
+ ## karma + webpack 的代码覆盖率测试
+     这里如果直接用 karma-coverage 会出现直接对 karma 配置中入口文件生成的 webpack 代码的代码覆盖率测试。
+ 会出现很多 webpack 生成的额外代码。而且也不是源代码的代码覆盖率测试。
+     这里有两个方案：
+	 1. karma-coverage + isparta-loader
+	  isparta-loader  已废弃，推荐istanbul-instrumenter-loader 	  
+	 2. karma-coverage-istanbul-reporter + istanbul-instrumenter-reporter 
+	    karma-coverage-istanbul-reporter  仅仅是报告，不运行你的代码的实际设置。
+		babel 用户需要使用babel-plugin-istanbul插件   来配置你的代码
+		webpack+typescript用户 需要使用istanbul-instrumenter-loader  
+		然后使用 这个karma reporter 来执行实际报告。
+	    
  
  
 	
