@@ -55,4 +55,63 @@ karma是 AngularJS team开发的工具
     调试容易直接从您的IDE通过webstorm或谷歌浏览器。
  + 6、持续集成
     与 Jenkins, Travis or Semaphore的简单集成。
+	
+	#### 测试代码中使用到的
+	1. es6-promise   .
+	它是 es6-promise  的polyfill .  它的实现是  rsvp.js的子集（被 @jakearchibald从rsvp.js
+	中抽取的）。如果你想要额外的特点和更多的debugging options,   那么就check out下所有的库。
+	2、webpack  中require.context功能
+	    我们可以使用require.context()函数来创建自己的上下文。它允许你传入参数：一个文件夹名去搜索；
+	一个flag标记去表明子文件夹是否也需要被搜索到；一个正则表达式去去匹配需要查找的文件。
+	    即require.context(文件夹名，flag标记，正则表达式)  
+		----require.context(directory, useSubdirectories = false, regExp = /^\.\//);
+		
+		在building的同时，webpack 解析代码中的require.context。
+		例如：
+		<pre>
+		   <code>
+			   require.context("./test", false, /\.test\.js$/);
+			   // a context with files from the test directory that can be required with a request endings with `.test.js`.
+			   require.context("../", true, /\.stories\.js$/);
+			   // a context with all files in the parent folder and descending folders ending with `.stories.js		       
+		   </code>
+		</pre>
+		
+		这个context 模块导出一个require函数（这个函数接收一个参数request）.
+		这个导出的函数有3个属性： resolve,keys,id
+		   1. resolve 是一个函数，返回parsed 请求的module的id值
+		   2. keys 是一个函数，  返回一个数组（所有上下文模块可以处理的possible请求）
+		   
+		例子：
+		<pre>
+		    <code>
+			//例子1：
+			function importAll (r) {
+			    r.keys().forEach(r);
+			}
+			
+			importAll(require.context('../components/', true, /\.js$/));			
+			
+            //例子2：
+			var cache = {};
+			function importAll (r) {
+      			r.keys().forEach(key => cache[key] = r(key));
+			}
+			
+			importAll(require.context('../components/', true, /\.js$/));		
+			
+            </code>				
+		</pre>
+		
+		
+		
+		
+		
+	
+	
+	
+	
+     
+	
+	
 
