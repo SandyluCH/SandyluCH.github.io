@@ -144,6 +144,143 @@ https://github.com/vuejs/vue-test-utils-getting-started   该用例使用点:
 	 </pre>	 
 	 6. [trace example](https://coding.net/u/Sandych/p/vue-test/git)
  
-	 
-	 
-	 
+	 ### 用Mocha和webpack测试单文件组件
+	     根据官方文档可知 该策略是指通过 webpack 编译所有的测试文件然后在测试运行器中运行。
+	 这样做的好处是可以完全支持所有 webpack 和 vue-loader 的功能，
+	 所以我们不必对我们的源代码做任何妥协。
+	 从技术的角度讲，你可以使用任何喜欢的测试运行器并把所有的东西都手动串联起来，
+	 但是我们已经找到了 mocha-webpack 能够为这项特殊任务提供非常流畅的体验。
+	     1.  前提条件：安装webpack 、mocha、mocha-webpack
+		 2.  在package.json中定义一个测试脚本
+		 <pre>
+		   <code>
+		      "scripts": {
+				"test": "mocha-webpack --webpack-config webpack.test.config.js --require test/setup.js test/**/*.spec.js"
+			  }
+		   </code>
+		 </pre>
+		 这里有一些注意事项：
+			-- webpack-config 标识指定了该测试使用的 webpack 配置文件。在大多数情况下该配置会在其实际
+			项目的配置文件基础上做一些小的调整。我们晚些时候会再聊到这一点。
+			-- require 标识确保了文件 test/setup.js 会在任何测试之前运行，这样我们可以在该文件中设置
+			测试所需的全局环境。最后一个参数是该测试包所涵盖的所有测试文件的聚合。   
+	    3. 暴露 NPM 依赖
+		     在测试中我们很可能会导入一些 NPM 依赖——这里面的有些模块可能没有针对浏览器的场景编写，也不适合
+		被 webpack 打包。另一个考虑是为了尽可能的将依赖外置以提升测试的启动速度。我们可以通过 
+		webpack-node-externals 外置所有的 NPM 依赖：
+		webpack.base.config.js的代码如下：
+		<pre>
+		   <code>
+		   
+		   </code>
+		</pre>
+		在webpack.base.config.js基础上修改  代码：
+		<pre>
+		   <code>
+		     // webpack.test.config.js
+				const nodeExternals = require('webpack-node-externals')
+				const baseconfig = require('webpack.base.config.js');
+				var merge = require('webpack-merge');
+				
+				module.exports = merge(baseconfig,{				 
+				   externals: [nodeExternals()],
+				   devtool: 'inline-cheap-module-source-map'
+				});
+		   </code>
+		</pre>
+		4. 设置浏览器环境
+		    vue-test-utils需要在浏览器环境中运行。我们可以在node中使用jsdim-global
+		进行模拟：
+		    <pre>
+			   <code>
+			        npm install --save-dev jsdom jsdom-global
+			   </code>
+			</pre>
+		在test/setup.js中写入：
+		<pre>
+		    <code>
+			   require('jsdom-global')();
+			</code>
+		</pre>
+		5. 选用断言库
+		Chai 是一个流行的断言库，经常和 Mocha 配合使用。你可能也想把 Sinon 用于创建间谍和存根。
+		另外你也可以使用 expect，它现在是 Jest 的一部分，且在 Jest 文档里暴露了完全相同的 API。
+		这里我们将使用 expect 且令其全局可用，这样我们就不需要在每个测试文件里导入它了：
+		<pre>
+		   <code>
+		       npm install --save-dev expect
+		   </code>
+		</pre>
+		然后在 test/setup.js 中编写：
+		<pre>
+		    <code>
+				require('jsdom-global')()
+				global.expect = require('expect')
+			</code>
+		</pre>
+		6. 使用babel-loader来处理JavaScript.
+		  安装："babel-core",  "babel-loader","babel-preset-env",
+		  在 .babelrc 文件配置如下：
+		  <pre>
+		     <code>
+			 "env": {
+				"test": {
+				  "presets": [
+					["env", {
+					  "modules": false,
+					  "targets": { "node": "current" }
+					}]
+				  ]
+				}
+			  }
+			 </code>
+		  </pre>
+		  7. 测试
+		  <pre>
+		     <code>
+					<template>
+						<div>
+						  {{ count }}
+						  <button @click="increment">自增</button>
+						</div>
+					</template>
+
+					<script>
+					export default {
+					  data () {
+						return {
+						  count: 0
+						}
+					  },
+
+					  methods: {
+						increment () {
+						  this.count++
+						}
+					  }
+					}
+					</script>			 
+			 </code>
+		  </pre>
+		  然后创建一个名为 test/Counter.spec.js 的测试文件并写入如下代码：
+		   <pre>
+		     <code> 
+				import { shallow } from 'vue-test-utils'
+				import Counter from '../src/Counter.vue'
+
+				describe('Counter.vue', () => {
+				  it('计数器在点击按钮时自增', () => {
+					const wrapper = shallow(Counter)
+					wrapper.find('button').trigger('click')
+					expect(wrapper.find('div').text()).toMatch('1')
+				  })
+				})
+			 </code>
+		  </pre>
+
+
+现在我们运行测试：
+
+npm run test
+
+		
