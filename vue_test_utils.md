@@ -277,10 +277,6 @@ https://github.com/vuejs/vue-test-utils-getting-started   该用例使用点:
 				})
 			 </code>
 		  </pre>
-
-
-现在我们运行测试：
-
-npm run test
+		  现在我们运行测试：npm run test
 
 		
