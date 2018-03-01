@@ -1,4 +1,4 @@
-# puppeteer
+# [puppeteer](https://github.com/GoogleChrome/puppeteer)
   Puppeteer 是node库，它提供了一个高阶API在遵循
   DevTools Protocol的同时来控制Chrome或Chromium .
   它也能被配置成使用full(non-headless) Chrome or Chromium.
