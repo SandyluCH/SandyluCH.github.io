@@ -220,16 +220,64 @@
 			</script> 	   	  	   
 ##### 单选按钮
 	<input type="radio" v-model="pick" v-bind:value="a">
+	<!-- 相当于 -->
+	<input type="radio" @change="changeRadio($event)"/>
+自定义radio子组件写法如下：
+    子组件
+
+	<template>
+	    <div>
+	        <!--自定义radio-->
+	        <input type="radio"
+	               @change="changeRadio($event)"
+	               :value="defaultVal"
+	               :checked="tval == defaultVal"/>{{defaultVal}}
+	    </div>
+	</template>
+	<script>
+	    export default {      
+	        model:{
+	            prop:'tval',
+	            event:'mchange',
+	        },
+	        props:['tval','defaultVal'],
+	        methods:{
+	            changeRadio($event){
+	                let _self = this;
+	                _self.$emit('mchange',$event.target.value);
+	            }
+	        }
+	    }
+	</script>
+
+   父组件使用
+	<template>
+	    <div id="app">
+	        <inputradio v-model="inputRadio" :defaultVal="1"></inputradio>
+	        <inputradio v-model="inputRadio" :defaultVal="2"></inputradio>
+	        ---{{inputRadio}}
+	    </div>
+	</template>
+	<script>
+	   import inputradio from './components/inputradio.vue';
+		export default{
+			data: function () {
+		  			inputRadio:1,
+		    }
+		}	 
+	</script>
+
+
+
+
+
+
+
 ##### 选择框
 	<select v-model="selected">
 	  <!-- 内联对象字面量 -->
 	  <option v-bind:value="{ number: 123 }">123</option>
 	</select>	
-	   
-	   
-	   
-	   
-	   
-	   
+	  
 		
    
