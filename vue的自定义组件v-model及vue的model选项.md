@@ -121,7 +121,11 @@
 			    data: function () {
                    return {
 				      tcontent:'init content',				   
-				   } 
+				   }
+                },
+				components: {
+					mtextarea
+				}				
 			  }			
 			</script>		
 			  
@@ -131,9 +135,119 @@
 	   ** 复选框
 	    <pre>
 	      <code>
-		     <input type="checkbox" v-model="mcheck" />		    		
+		     <input type="checkbox" v-model="mcheck" />		  
+              //相当于
+			    <input type="checkbox" @change="checkChange" />		  
 		  </code>
-	   </pre>	   
+	   </pre>
+	   自定义checkbox组件写法
+	    <pre>
+	      <code>
+            //自定义组件文件
+			<template>
+				<!--自定义checkbox-->
+				<div>
+				  <input type="checkbox"
+						 @change="changeCheck($event)"
+						 :value="defaultVal"
+						 :checked="isCheck"/>
+				</div>
+			</template>
+			<script>
+				export default {
+					model:{
+						prop:'tval',
+						event:'mchange',
+					},
+					props:['tval','defaultVal'],//父组件可以通过tval的值来改变子组件的checkbox的选中状态，defaultVal是默认值
+					data() {
+						return {
+							isCheck:false,
+						}
+					},
+					watch:{
+						'tval':function (v1) {
+							let _self = this;
+							_self.checkIsCheck(v1);
+						}
+					},
+					mounted(){
+						let _self = this;
+						_self.checkIsCheck(_self.tval);
+					},
+					methods:{
+						changeCheck($event){
+							console.info($event);
+							let _self = this;
+							let target = $event.target;
+							_self.checkIsArray(Boolean(target.checked),target.value);
+						},
+						checkIsArray(isTrue,defaultV){
+							//判断是否是数组
+							let _self = this;
+							if(Array.isArray(_self.tval)){
+								let arr = [];
+								for(let index = 0; index < _self.tval.length; index++){
+									let i = _self.tval[index];
+									if(i != defaultV){
+										arr.push(i);
+									}
+								}
+							   if(isTrue){
+									arr.push(defaultV);
+							   }
+								_self.$emit('mchange',arr);
+							}else{
+								if(isTrue){
+									_self.$emit('mchange',defaultV);
+								}else{
+									_self.$emit('mchange',null);
+								}
+							}
+						},
+						checkIsCheck(v1){
+							//判断是否需要checkbox是否是选中状态
+							let _self = this;
+							if(Array.isArray(v1)){
+								_self.isCheck =  v1.indexOf(_self.defaultVal)>-1?true:false;
+							} else {
+								_self.isCheck =  v1 == _self.defaultVal?true:false;
+							}
+						}
+					}
+				}
+			</script>
+			
+			
+			//父组件中写法
+			<template>
+			    <div>
+				    <cuscheckbox v-model="tcheck"  :defaultVal="1"></cuscheckbox>					
+					<cuscheckbox v-model="tcheck"  :defaultVal="2"></cuscheckbox>
+					-----{{tcheck}}				
+				</div>
+			</template>
+			<script>
+			     import cuscheckbox from './components/cuscheckbox.vue';
+				 export default{
+				    data() {
+						return {
+							tcheck:[],// 当tcheck的类型是数组的时候，是多选； 当tcheck的类型是object的时候，是单选
+						}
+					},
+					components: {
+					   cuscheckbox
+					}				 
+				 }
+			
+			</script>
+	  
+	  
+	  
+
+	      </code>
+	    </pre>
+	   
 	   	  	   
 	   **  单选按钮
 	    <pre>
