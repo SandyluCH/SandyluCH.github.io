@@ -19,7 +19,7 @@
 	   注 :v-model会忽略所有表单元素的value、checked、selected特性的初始化值，而总是将
 	   Vue实例的数据作为数据来源。我们可以通过Javascript在组件的data选项中声明初始值。
 	   
-	   ** 文本
+	   * 文本
 	   <pre>
 	      <code>
 		    <input type='text' v-model="message" />
@@ -77,7 +77,7 @@
 		  </code>		  
 		</pre>
 			
-	   ** 多行文本	   
+	   * 多行文本	   
 	    <pre>
 	      <code>
 		    <textarea v-model="message" placeholder="add multiple lines"></textarea>	
@@ -133,7 +133,7 @@
 	      </code>
 	    </pre>	  
 	   
-	   ** 复选框
+	   * 复选框
 	    <pre>
 	      <code>
 		     <input type="checkbox" v-model="mcheck" />		  
@@ -245,14 +245,14 @@
 	    </pre>
 	   
 	   	  	   
-	   **  单选按钮
+	   *  单选按钮
 	    <pre>
 	      <code>
 		    <input type="radio" v-model="pick" v-bind:value="a">	
 		  </code>
 	   </pre>
 	   
-	   **  选择框
+	   *  选择框
 	    <pre>
 	      <code>
 			<select v-model="selected">
