@@ -54,8 +54,10 @@
 			
 			//父组件app.vue中使用该自定义组件
 			<template>
-			    <inputtext v-model="inputTx"></inputtext>
+			   <div>
+			     <inputtext v-model="inputTx"></inputtext>
              ---{{inputTx}}
+			   </div>
 			</template>
 			<script>
 			    import inputtext from './components/inputtext.vue';
@@ -83,7 +85,48 @@
 		  </code>
 	   </pre>
 	   那么自定义的textarea组件的写法如下：
-	   
+	    <pre>
+	      <code>
+	        //自定义组件textarea
+			<template>
+			   <div>
+                  <textarea :value="content" @input="inputContent"></textarea>
+               </div>
+			</template>
+			<script>
+				export default {
+					model:{
+						prop:'content',
+						event:'inputC',
+					},
+					props:['content'],
+					methods:{
+						inputContent($event){
+						  this.$emit('inputC',$event.target.value)
+						}
+					}
+				}
+			</script>
+			
+			//在app.vue中使用自定义组件
+			<template>
+			   <div>
+                  <mtextarea v-model="tcontent"></mtextarea>
+                  -----{{tcontent}}
+               </div>
+			</template>
+			<script>
+			  import mtextarea from './components/textarea.vue';
+			  export default {
+			    data: function () {
+                   return {
+				      tcontent:'init content',				   
+				   } 
+			  }			
+			</script>		
+			  
+	      </code>
+	    </pre>	  
 	   
 	   ** 复选框
 	    <pre>
