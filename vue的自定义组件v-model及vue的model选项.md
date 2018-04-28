@@ -223,7 +223,8 @@
 	<!-- 相当于 -->
 	<input type="radio" @change="changeRadio($event)"/>
 自定义radio子组件写法如下：
-    子组件
+
+   子组件
 
 	<template>
 	    <div>
@@ -251,7 +252,7 @@
 	</script>
 
    父组件使用
-   
+
 	<template>
 	    <div id="app">
 	        <inputradio v-model="inputRadio" :defaultVal="1"></inputradio>
