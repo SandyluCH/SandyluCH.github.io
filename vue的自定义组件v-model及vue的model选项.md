@@ -77,9 +77,13 @@
 	   ** 多行文本	   
 	    <pre>
 	      <code>
-		    <textarea v-model="message" placeholder="add multiple lines"></textarea>			
+		    <textarea v-model="message" placeholder="add multiple lines"></textarea>	
+            //相当于
+            <textarea :value="content" @input="inputContent" ></textarea>			
 		  </code>
 	   </pre>
+	   那么自定义的textarea组件的写法如下：
+	   
 	   
 	   ** 复选框
 	    <pre>
