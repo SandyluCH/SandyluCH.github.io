@@ -335,4 +335,51 @@
 在父组件中改变foo的值，子组件中的fval值也会改变
 
 
+   2. 使用引用类型传值来实现数据双向绑定
+   
+   子组件
 
+	 <template>
+	    <div @click="changeSubcval">
+	      子组件中fval={{fval}}
+	    </div>
+	</template>
+	<script>
+	    export default {       
+	        props:['fval'],//fval
+	        methods: {
+	            changeSubcval(){
+	               //改变子组件中的数据
+	                let _self = this;
+	                let num = _self.fval.value;
+	                _self.fval.value = num + 1 ;//此处如果fval不是object引用类型的对象，这样操作，会报vue warn,因为有改变父组件的嫌疑
+	                
+	            },
+	        }
+	    }
+	</script>
+
+
+父组件
+
+	<template>
+		<div>
+			 <cuscompsync  ：fval="foo" ></cuscompsync>			 	        
+			父组件中val的值={{foo}}
+		</div>
+	</template>
+	<script>
+	    import cuscompsync from './cusSyncc.vue';
+		export default{
+			data(){
+				return {
+					foo:{
+						value:1,
+					}
+				}
+			},
+			components:{
+				cuscompsync
+			}
+		}
+	</script>
