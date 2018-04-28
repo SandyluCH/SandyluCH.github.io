@@ -221,10 +221,10 @@
 ##### 单选按钮
 	<input type="radio" v-model="pick" v-bind:value="a">
 ##### 选择框
-			<select v-model="selected">
-			  <!-- 内联对象字面量 -->
-			  <option v-bind:value="{ number: 123 }">123</option>
-			</select>	
+<select v-model="selected">
+  <!-- 内联对象字面量 -->
+  <option v-bind:value="{ number: 123 }">123</option>
+</select>	
 	   
 	   
 	   
