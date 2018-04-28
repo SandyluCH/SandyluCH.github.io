@@ -364,7 +364,7 @@
 
 	<template>
 		<div>
-			 <cuscompsync  ：fval="foo" ></cuscompsync>			 	        
+			 <cuscompsync  :fval="foo" ></cuscompsync>			 	        
 			父组件中val的值={{foo}}
 		</div>
 	</template>
