@@ -11,7 +11,7 @@
 	   2.  实现父子组件的传值的双向绑定（当然实现数据双向绑定的方式有很多）
          
    ### form表单组件 进行v-model自定义实现
-      = form表单的输入绑定  
+      #### form表单的输入绑定  
 	   文档资料回顾：可以用v-model指令在表单input即textarea元素上创建双向数据绑定。
 	   它会根据空间类型自动选取正确的方法来更新元素。另外v-model的本事上不过是语法糖。
 	   他负责监听用户的输入时间以及更新数据，并对一些极端场景进行了一些特殊处理。
@@ -19,7 +19,7 @@
 	   注 :v-model会忽略所有表单元素的value、checked、selected特性的初始化值，而总是将
 	   Vue实例的数据作为数据来源。我们可以通过Javascript在组件的data选项中声明初始值。
 	   
-	  - 文本
+	  ##### 文本
 	   <pre>
 	      <code>
 		    <input type='text' v-model="message" />
@@ -77,7 +77,7 @@
 		  </code>		  
 		</pre>
 			
-	  - 多行文本	   
+	    ##### 多行文本	   
 	    <pre>
 	      <code>
 		    <textarea v-model="message" placeholder="add multiple lines"></textarea>	
@@ -133,7 +133,7 @@
 	      </code>
 	    </pre>	  
 	   
-	  - 复选框
+	    ##### 复选框
 	    <pre>
 	      <code>
 		     <input type="checkbox" v-model="mcheck" />		  
@@ -245,14 +245,14 @@
 	    </pre>
 	   
 	   	  	   
-	    - 单选按钮
+	    ##### 单选按钮
 	    <pre>
 	      <code>
 		    <input type="radio" v-model="pick" v-bind:value="a">	
 		  </code>
 	   </pre>
 	   
-	  - 选择框
+	    ##### 选择框
 	    <pre>
 	      <code>
 			<select v-model="selected">
@@ -262,14 +262,6 @@
 		  </code>
 	   </pre>
 	   
-	   
-	   
-	   <pre>
-	      <code>
-		  
-		  
-		  </code>		  
-		</pre>
 	   
 	   
 	   
