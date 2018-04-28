@@ -261,25 +261,78 @@
 	    </div>
 	</template>
 	<script>
-	   import inputradio from './components/inputradio.vue';
+	    import inputradio from './components/inputradio.vue';
 		export default{
 			data: function () {
-		  			inputRadio:1,
+		  		inputRadio:1,
 		    }
 		}	 
 	</script>
 
 
-
-
-
-
-
 ##### 选择框
+###### 单项选择框
 	<select v-model="selected">
 	  <!-- 内联对象字面量 -->
 	  <option v-bind:value="{ number: 123 }">123</option>
 	</select>	
-	  
 		
    
+   可参考[element-ui或者mint-ui源码](https://github.com/SandyluCH/element)
+
+### 实现父子组件的双向绑定
+   1. 用v-model实现双向绑定
+
+   子组件cusSyncc
+
+	<template>
+	    <div @click="changeSubcval">
+	      子组件中fval={{fval}}
+	    </div>
+	</template>
+	<script>
+	    export default {
+	        model: {
+	            prop: 'fval',
+	            event: 'mchange'
+	        },
+	        props:['fval'],//fval是父组件中传入的model的值对应的数据，该名字需要跟定义的model的prop名字一致
+	        methods: {
+	            changeSubcval(){
+	               //改变子组件中的数据
+	                let _self = this;
+	                let num = _self.fval;
+	                num++;
+	                _self.$emit('mchange',num);
+	            },
+	        }
+	    }
+	</script>   
+
+   父组件中使用
+
+
+	<template>
+		<div>
+			 <cuscompsync  v-model="foo" ></cuscompsync>			 	        
+			父组件中val的值={{foo}}
+		</div>
+	</template>
+	<script>
+	    import cuscompsync from './cusSyncc.vue';
+		export default{
+			data(){
+				return {
+					foo:1
+				}
+			},
+			components:{
+				cuscompsync
+			}
+		}
+	</script>
+ 
+在父组件中改变foo的值，子组件中的fval值也会改变
+
+
+
