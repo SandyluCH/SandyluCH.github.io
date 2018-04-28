@@ -251,6 +251,7 @@
 	</script>
 
    父组件使用
+   
 	<template>
 	    <div id="app">
 	        <inputradio v-model="inputRadio" :defaultVal="1"></inputradio>
