@@ -33,21 +33,25 @@ React使用JSX来替换常规的JavaScript。JSX的优点：
 6. StyleSheet   样式类（用来创建样式，类似于CSS StyleSheets）
    创建一个stylesheet类
 
+	<pre>
+      <code>
+	    const styles = StyleSheet.create({
+		  tcontainer: {
+		    borderRadius: 4,
+		    borderWidth: 0.5,
+		    borderColor: '#d6d7da',
+		  },
+		  title: {
+		    fontSize: 19,
+		    fontWeight: 'bold',
+		  },
+		  activeTitle: {
+		    color: 'red',
+		  },
+		});
+      </code>
+	</pre>
 	
-	const styles = StyleSheet.create({
-	  tcontainer: {
-	    borderRadius: 4,
-	    borderWidth: 0.5,
-	    borderColor: '#d6d7da',
-	  },
-	  title: {
-	    fontSize: 19,
-	    fontWeight: 'bold',
-	  },
-	  activeTitle: {
-	    color: 'red',
-	  },
-	});
 
 代码中的‘container’，‘title’,'activeTitle'是命名，该命名是可自定义的，
 只要定义和使用的命令一直就可以。
