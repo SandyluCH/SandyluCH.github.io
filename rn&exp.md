@@ -30,6 +30,15 @@ React使用JSX来替换常规的JavaScript。JSX的优点：
 3. Image  图片
 4. TextInput    输入框
 5. ScrollView   可滑动的视图或者容器
+   ScrollViews必须有一个有界的高度，所以要么直接设置一个具体的高度，或者
+保证所有的parent views都有一个确定的高度。不要使用flex:1,会导致错误的。
+
+   ScrollView & FlatList
+   
+   ScrollView 仅仅只是render 所有的react 子组件一次，不适用与多数据列表，
+   而FlatList render items lazily,只有在items 出现在屏幕时才加载，而移除
+   哪些被滑出屏幕的items以节省内存。
+
 6. StyleSheet   样式类（用来创建样式，类似于CSS StyleSheets）
    创建一个stylesheet类
 
