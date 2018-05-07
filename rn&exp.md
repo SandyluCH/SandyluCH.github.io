@@ -71,9 +71,55 @@ React使用JSX来替换常规的JavaScript。JSX的优点：
 	  <Text style={[styles.title, this.props.isActive && styles.activeTitle]} />
 	</View>
 
+##### user interface(用户接口)
+1. Button
+2. Picker
+3. Slider
+4. Switch
 
+##### List Views
+1. FlatList
+2. SectionList
 
+##### iOS 组件和APIs
+以下组件提供了通用UIKit 类的包装器
+1. ActionSheetIOS
+2. AlertIOS
+3. DatePickerIOS
+4. ImagePickerIOS
+5. NavigatorIOS
+6. ProgressViewIOS
+7. PushNotificationIOS
+8. SegmentedControlIOS
+9. TabBarIOS
 
+##### Android 组件和APIs
+以下组件提供了通用android类的包装器
+1. BackHandler
+2. DatePickerAndroid
+3. DrawerLayoutAndroid
+4. PermissionsAndroid
+5. ProgressBarAndroid
+6. TimePickerAndroid
+7. ToastAndroid
+8. ToolbarAndroid
+9. ViewPagerAndroid
+
+##### 其他
+以下组件可能在特定的应用中有用。
+1. ActivityIndicator
+2. Alert
+3. Animated
+4. CameraRoll
+5. Clipboard
+6. Dimensions
+7. KeyboardAvoidingView
+8. Linking
+9. Modal
+10. PixelRatio
+11. RefreshControl
+12. StatusBar
+13. WebView
 
 
 
