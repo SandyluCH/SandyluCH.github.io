@@ -1,4 +1,4 @@
-### [exp使用](https://expo.io/learn)
+### [expo使用](https://expo.io/learn)
 步骤：
 1.  全局安装npm install exp -g；
 2. 在当前项目目录下面启动项目exp start

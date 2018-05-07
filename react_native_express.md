@@ -21,8 +21,9 @@
 
 (3). 渲染方法： render() -> React Element
 	该方法要么返回一个React Element 去渲染，要么返回null,要么不做渲染。
-	
+
 (4). 组件挂载：componentDidMount()
+在第一次rendering之后此方法只触发一次。此时跟元素相关的native UI 也已经完成渲染，并且可以通过this.refs直接操作。如果你需要调用异步API或者执行延迟代码使用setTimeout,通常应该在该方法中进行实现操作。
 
 
 
