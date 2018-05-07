@@ -122,6 +122,41 @@ React使用JSX来替换常规的JavaScript。JSX的优点：
 13. WebView
 
 
+#### react  native 中平台代码区分
+当构建跨平台的应用程序时，会希望尽可能多地使用代码。可能会出现以下场景，代码可能会不同，比如你可能想去为android和iOS实现不同可视化组件。
+react native提供了两种简单的方式去阻止你的代码并按照平台分割他们。
+##### 使用Platform module来区分
+1.Platform.OS 获取当前系统
+当react native运行在ios系统上面上的时候，Platform.OS == 'ios'（为true）
+当react native运行在android系统上的时候，Platform.OS == 'android'(为true)
+
+2.Platform.select（）
+这个方法传入以Platform.OS为key的对象，返回当前运行平台的相关数据
+
+	for example:
+	import {Platform, StyleSheet} from 'react-native';
+	const styles = StyleSheet.create({
+	  container: {
+	    flex: 1,
+	    ...Platform.select({
+	      ios: {
+	        backgroundColor: 'red',
+	      },
+	      android: {
+	        backgroundColor: 'blue',
+	      },
+	    }),
+	  },
+	});
+
+
+
+
+
+##### 使用platform-specific file extensions 来区分
+
+
+
 
 
    
