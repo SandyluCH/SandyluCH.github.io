@@ -133,7 +133,7 @@ react native提供了两种简单的方式去阻止你的代码并按照平台�
 2.Platform.select（）
 这个方法传入以Platform.OS为key的对象，返回当前运行平台的相关数据
 
-	for example:
+	for example1:
 	import {Platform, StyleSheet} from 'react-native';
 	const styles = StyleSheet.create({
 	  container: {
@@ -149,7 +149,33 @@ react native提供了两种简单的方式去阻止你的代码并按照平台�
 	  },
 	});
 
+	for example2:
+	const Component = Platform.select({
+	  ios: () => require('ComponentIOS'),
+	  android: () => require('ComponentAndroid'),
+	})();
+	<Component />;
 
+3. Platform.Version  获取版本
+检测android版本
+<pre>
+	<code>
+		import {Platform} from 'react-native';
+		if (Platform.Version === 25) {
+		  console.log('Running on Nougat!');
+		}
+	</code>
+</pre>
+检测ios版本
+<pre>
+	<code>
+	import {Platform} from 'react-native';
+	const majorVersionIOS = parseInt(Platform.Version, 10);
+	if (majorVersionIOS <= 9) {
+	  console.log('Work around a change in behavior');
+	}
+	</code>
+</pre>
 
 
 
