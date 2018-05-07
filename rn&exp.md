@@ -180,6 +180,19 @@ react native提供了两种简单的方式去阻止你的代码并按照平台�
 
 
 ##### 使用platform-specific file extensions 来区分
+当你的平台差异性代码很负责的时候，你应该考虑将代码分割到一个单独的文件中。React Native将会检测到文件名后缀为.ios或.android的文件并下载相关的平台文件，当required 其他组件时。
+
+For example, say you have the following files in your project:
+
+	BigButton.ios.js
+	BigButton.android.js
+
+You can then require the component as follows:
+
+	const BigButton = require('./BigButton');
+	
+React Native will automatically pick up the right file based on the running platform.
+
 
 
 
