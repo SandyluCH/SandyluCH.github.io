@@ -122,9 +122,10 @@ export default class App extends React.Component{
 
 	</code>
 </pre>
+(1). 路由配置快捷键
+如果组件中唯一的路由配置是屏幕组件，那么不需要使用{screen:HomeScreen}格式进行配置，
+我们可以直接：
 
-    (1). 路由配置快捷键
-    如果组件中唯一的路由配置是屏幕组件，那么不需要使用{screen:HomeScreen}格式进行配置，我们可以直接：
 <pre>
 	<code>
 		const RootStack = createStackNavigator({
@@ -132,9 +133,9 @@ export default class App extends React.Component{
 	});
 	</code>
 </pre>
-   (2). 多路由配置
-   所有配置在createStackNavigator的方法的options参数中指定。如果我们不给options赋值，那么它将会使用默认的配置。
-   例如：多路由时需要指定默认路由。
+(2). 多路由配置
+所有配置在createStackNavigator的方法的options参数中指定。如果我们不给options赋值，那么它将会使用默认的配置。
+例如：多路由时需要指定默认路由。
 <pre>
 	<code>
 		const RootStack = createStackNavigator(
