@@ -18,6 +18,7 @@
 	使用：
 
 	(1). 安装  yarn add react-navigation
+
 	(2). 创建stack navigator
 
      createStackNavigator方法会返回一个React组件。它带有一个路由配置对象和其他的对象。因为createStackNavigator方法会返回一个React组件，所以我们可以之间在App.js中使用，把它作为我们app的根组件。
@@ -100,11 +101,26 @@
 	        screen:HomeScreen
 	    }
 	})
+	//或者App.js代码
+	import React from 'react';
+	import {createStackNavigator} from 'react-navigation';
+	import HomeScreen from './src/components/homescreen';
+	const RootStack = createStackNavigator({
+      Home:{
+        screen:HomeScreen
+      }
+    });
+	export default class App extends React.Component{
+	    render(){
+	        return <RootStack/>
+	    }
+	}
 
 		</code>
 	</pre>
 
-
+isMounted()  is deprecated in Plain Javascript react classes.
+make sure to clean up subscriptions and pending requests in componentWillUnmount to prevent memory leaks
 
 
  2. NavifatorIOS
