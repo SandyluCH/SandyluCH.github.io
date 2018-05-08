@@ -273,8 +273,18 @@ export default class App extends React.Component{
 	(7). getParam: 回调获取特定的参数
 	(9). dispatch: 发送路由action
 
-* 注意：并不是所有的组件都有navigation prop的传递，只有screen组件自动获取到navigation prop。例如：如果你定义一个MyBackButton组件并将其作为子组件在screen 组件中渲染，你将不能在MyBackButton组件中获取到navigation。
+	* 注意：并不是所有的组件都有navigation prop的传递，只有screen组件自动获取到navigation prop。例如：如果你定义一个MyBackButton组件并将其作为子组件在screen 组件中渲染，你将不能在MyBackButton组件中获取到navigation。
+	如果当前navigator是stack navigator, this.props.navigation还有一些额外的方法	可以调用。这些方法是navigate和goBack的其他选择，具体如下：
+	(1). push : 往stack中放入新的路由
+	(2). pop： 返回到从栈中弹出的页面
+	(3). popToTop : 进入栈中的底部
+	(4). replace : 用新的路由页面替换当前路由
    
+
+* 除了createStackNavigator，还有createSwitchNavigator、 createDrawerNavigator 、
+createTabNavigator 、 createBottomTabNavigator 、 createMaterialBottomTabNavigator、
+createMaterTopTabNavigator,详情参加文档。
+
 
 
 ####  NavifatorIOS
