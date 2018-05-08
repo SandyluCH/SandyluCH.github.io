@@ -23,8 +23,24 @@
 	该方法要么返回一个React Element 去渲染，要么返回null,要么不做渲染。
 
 (4). 组件挂载：componentDidMount()
-在第一次rendering之后此方法只触发一次。此时跟元素相关的native UI 也已经完成渲染，并且可以通过this.refs直接操作。如果你需要调用异步API或者执行延迟代码使用setTimeout,通常应该在该方法中进行实现操作。
+	在第一次rendering之后此方法只触发一次。此时跟元素相关的native UI 也已经完成渲染，并且可以通过this.refs直接操作。如果你需要调用异步API或者执行延迟代码使用setTimeout,通常应该在该方法中进行实现操作。
 
 
 
 #### Updating Cycle
+
+(1). componentWillReceiveProps(object nextProps)
+	父组件已经传入了新的props。当前组件将会被重新渲染。你可能选择的调用this.setState()去更新组件的内部状态在render方法被调用之前。	
+
+(2). shouldComponentUpdate(object nextProps, object nextState) -> boolean
+    基于props和state的next values,  组件也许会去重新渲染或者不去重新渲染。这个方法的基类实现总是返回true(组件应该重新渲染)。为了优化， 覆盖这个方法并且检查是props还是state已经被改变，例如对这些对象中的键/值进行相等性测试，如果返回false将会阻止render方法会被调用
+
+(3). componentWillUpdate(object nextProps, object nextState)
+    在确定组件将重新渲染之后，这个方法将被触发。你可能不会在这个方法中调用this.setState(),因为已经有一个update操作处于进程中了。	
+
+(4). render() -> React Element
+    假设shouldComponentUpdate方法返回true,  那么这个方法将会被调用。这个方法会返回一个要渲染的react element或者null或者不做任何渲染。
+
+(5). componentDidUpdate(object prevProps, object prevState)
+	在re-rendering发生之后这个方法会被触发。此时，当前组件的原生UI已经被更新了，反映在通过render()方法所返回的react element上面。
+	
