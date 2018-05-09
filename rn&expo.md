@@ -1,7 +1,41 @@
 ### [expo使用](https://expo.io/learn)
+Expo是一个免费和开源的工具链，围绕着React Native的构建来帮助你使用JavaScript和React构建原生的iOS和Android项目。
+#### 功能：
+1. 相机，推送通知，ARKit
+2. 空中更新已发布的项目
+3. 分发到App Store
+
+[expo的文档](https://docs.expo.io/versions/v27.0.0/introduction/installation)
+
+#### [Expo development tool (expo的开发工具)](https://expo.io/tools#cli)
+1. Expo Client: expo的客户端
+
+在部署之前运行项目，然后通过扫描QR码在客户端打开项目，或直接查看运行的项目并打开。
+有android端和iOS端的安装包。
+
+2. Expo CLI: expo命令行环境
+
+serve、share、build and publish Expo项目
+
 步骤：
-1.  全局安装npm install exp -g；
-2. 在当前项目目录下面启动项目exp start
+
+(1).  全局安装npm install exp -g；
+(2).  在当前项目目录下面启动项目exp start
+
+3. Expo Snack
+  
+  让你可以在浏览器中运行完整的React Native项目
+  [地址](https://snack.expo.io/)
+
+4. Expo SDK 
+   
+  该工具是一种库。可以在你的Expo 项目中访问原生跨平台设备API。
+
+5. Expo XDE
+  
+  提供给桌面使用的。如果你不想使用Expo CLI,那么Expo XDE会提供一个图形化的开发环境来serve,share and publish 你的
+  Expo 项目。[下载地址](https://github.com/expo/xde/releases)
+
 
 ### [react](https://reactjs.org/tutorial/tutorial.html)
 
