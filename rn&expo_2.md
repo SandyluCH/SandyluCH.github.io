@@ -301,13 +301,9 @@ export default class NavigatorIOSApp extends React.Component {
     render() {
         return (
             <NavigatorIOS
-                initialRoute=
-                 {{ 
-                    component: MyScene,
-                    title: 'My Initial Scene',
-                    passProps: {index: 1} 
-                 }}
-                style={{flex: 1}}
+              initialRoute= {{
+              component:MyScene,title:'My Initial Scene',passProps:{index: 1}，}}
+              style={{flex: 1}}
             />
         );
     }
@@ -358,13 +354,15 @@ class MyScene extends React.Component {
     }
 }
 
-
 	</code>
 </pre>
 
+与其他导航系统一样，NavigatorIOS 使用路由来表示屏幕，但也有一些重要的区别。实际的组件将被呈现通过使用路由中的组件键，并且可以在passProps中指定应该传递给组件的任何props。navigator对象会自动的被传递给这个组件，以允许你可以调用push和pop方法。
 
-####  native-navigation 
-    可用来实现原生的外观和效果在android和iOS两个平台上面
 
-####  react-native-navigation
-    可用来实现原生的外观和效果在android和iOS两个平台上面
+
+####  [native-navigation](http://airbnb.io/native-navigation/) 
+可用来实现原生的外观和效果在android和iOS两个平台上面。
+
+####  [react-native-navigation](https://github.com/wix/react-native-navigation/)
+可用来实现原生的外观和效果在android和iOS两个平台上面

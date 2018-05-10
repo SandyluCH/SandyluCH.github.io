@@ -37,17 +37,6 @@ serve、share、build and publish Expo项目
   Expo 项目。[下载地址](https://github.com/expo/xde/releases)
 
 
-### [react](https://reactjs.org/tutorial/tutorial.html)
-
- react相关基础： JSX, components, state 和 props。
-
-   1. JSX[相关文档地址](http://www.css88.com/react/docs/jsx-in-depth.html)
-
-React使用JSX来替换常规的JavaScript。JSX的优点：
-执行更快，因为它在编译为JavaScript代码后进行了优化；类型安全，在编译
-过程中就能发现错误，使用JSX编写模板更加简单快捷。
-
-
 
 ### [react native](http://facebook.github.io/react-native/docs/tutorial.html)
     
