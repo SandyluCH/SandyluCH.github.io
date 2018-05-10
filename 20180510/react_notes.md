@@ -27,8 +27,7 @@ React使用JSX来替换常规的JavaScript。JSX的优点：
 	
 
 或者如下
-<pre>
-	<code>
+````
 	function formatName(user) {
 	  return user.firstName + ' ' + user.lastName;
 	}
@@ -45,21 +44,18 @@ React使用JSX来替换常规的JavaScript。JSX的优点：
 	  element,
 	  document.getElementById('root')
 	);
-	</code>
-</pre>
+````
 
 3. 也作为一种expression
 即我们可以在if条件和for循环中，将jsx表达式作为一种变量，或者参数 ，或者作为函数的返回值
-<pre>
-	<code>
+````
 	function getGreeting(user) {
 	  if (user) {
 	    return <h1>Hello, {formatName(user)}!</h1>;
 	  }
 	  return <h1>Hello, Stranger.</h1>;
 	}
-	</code>
-</pre>
+````
 
 4. 指定Attributes值
 
@@ -71,29 +67,25 @@ React使用JSX来替换常规的JavaScript。JSX的优点：
 
 如果一个tag是空的，你可以用“/>”关闭它，如：```const element = <img src={user.avatarUrl} />;```
 JSX的tags可以包含Children ，如：
-<pre>
-	<code>
+````
 		const element = (
 			  <div>
 			    <h1>Hello!</h1>
 			    <h2>Good to see you here.</h2>
 			  </div>
 			);		
-	</code>
-</pre>
+````
 
 
 6. JSX阻止注入攻击
 
 在JSX中嵌入user input 是安全的。
 如：
-<pre>
-	<code>
+````
 		const title = response.potentiallyMaliciousInput;
 // This is safe:
 const element = <h1>{title}</h1>;
-    </code>
-</pre>
+````
 
 默认情况下， React DOM 在渲染jsx之前会释放掉任何嵌入在JSX中的值。因此，它确保你
 不会注入未在应用程序中显示写入的任何内容。在渲染之前，所有的东西都被转为字符串了，
@@ -102,33 +94,28 @@ const element = <h1>{title}</h1>;
 7. 表示对象
 
 方式一：
-<pre>
-	<code>
+````
 		const element = (
 		  <h1 className="greeting">
 		    Hello, world!
 		  </h1>
 		);
-	</code>
-</pre>
+````
 
 
 方式二：
-<pre>
-	<code>
+````
 	const element = React.createElement(
 	  'h1',
 	  {className: 'greeting'},
 	  'Hello, world!'
 	);	
-	</code>
-</pre>
+````
 
 
 方式一和方式二是相同的。
 方式二的本质等同于：
-<pre>
-	<code>
+````
 		const element = {
 		  type: 'h1',
 		  props: {
@@ -136,6 +123,5 @@ const element = <h1>{title}</h1>;
 		    children: 'Hello, world!'
 		  }
 		}; 
-	</code>
-</pre>
+````
 
