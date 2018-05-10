@@ -19,7 +19,7 @@ React使用JSX来替换常规的JavaScript。JSX的优点：
 <pre>
 	<code>
 	const name = 'Josh Perez';
-	const element = <h1>Hello, {name}<\/h1>;
+	const element = \<h1>Hello, {name}\</h1>;
 	ReactDOM.render(
 	  element,
 	  document.getElementById('root')
