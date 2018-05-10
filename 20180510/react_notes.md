@@ -13,19 +13,24 @@ React使用JSX来替换常规的JavaScript。JSX的优点：
 可用作：
 1. 变量声明
 
-	const element= = <h1>Hello,world!</h1>
+```const element= = <h1>Hello,world!</h1>```
 
 2. 嵌入式表达
-
-	const name = 'Josh Perez';
+<pre>
+	<code>
+		const name = 'Josh Perez';
 	const element = <h1>Hello, {name}</h1>;
 	ReactDOM.render(
 	  element,
 	  document.getElementById('root')
 	);
+	</code>
+</pre>
+	
 
 或者如下
-
+<pre>
+	<code>
 	function formatName(user) {
 	  return user.firstName + ' ' + user.lastName;
 	}
@@ -42,16 +47,21 @@ React使用JSX来替换常规的JavaScript。JSX的优点：
 	  element,
 	  document.getElementById('root')
 	);
+	</code>
+</pre>
 
 3. 也作为一种expression
 即我们可以在if条件和for循环中，将jsx表达式作为一种变量，或者参数 ，或者作为函数的返回值
-
+<pre>
+	<code>
 	function getGreeting(user) {
 	  if (user) {
 	    return <h1>Hello, {formatName(user)}!</h1>;
 	  }
 	  return <h1>Hello, Stranger.</h1>;
 	}
+	</code>
+</pre>
 
 4. 指定Attributes值
 
@@ -79,9 +89,13 @@ JSX的tags可以包含Children ，如：
 
 在JSX中嵌入user input 是安全的。
 如：
-```const title = response.potentiallyMaliciousInput;
+<pre>
+	<code>
+		const title = response.potentiallyMaliciousInput;
 // This is safe:
-const element = <h1>{title}</h1>;```
+const element = <h1>{title}</h1>;
+    </code>
+</pre>
 
 默认情况下， React DOM 在渲染jsx之前会释放掉任何嵌入在JSX中的值。因此，它确保你
 不会注入未在应用程序中显示写入的任何内容。在渲染之前，所有的东西都被转为字符串了，
