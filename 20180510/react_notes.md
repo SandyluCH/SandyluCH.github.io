@@ -90,26 +90,40 @@ const element = <h1>{title}</h1>;```
 7. 表示对象
 
 方式一：
-```
-const element = (
-  <h1 className="greeting">
-    Hello, world!
-  </h1>
-);```
+<pre>
+	<code>
+		const element = (
+		  <h1 className="greeting">
+		    Hello, world!
+		  </h1>
+		);
+	</code>
+</pre>
+
 
 方式二：
-```const element = React.createElement(
-  'h1',
-  {className: 'greeting'},
-  'Hello, world!'
-);```
+<pre>
+	<code>
+	const element = React.createElement(
+	  'h1',
+	  {className: 'greeting'},
+	  'Hello, world!'
+	);	
+	</code>
+</pre>
+
 
 方式一和方式二是相同的。
 方式二的本质等同于：
-```const element = {
-  type: 'h1',
-  props: {
-    className: 'greeting',
-    children: 'Hello, world!'
-  }
-}; ```
+<pre>
+	<code>
+		const element = {
+		  type: 'h1',
+		  props: {
+		    className: 'greeting',
+		    children: 'Hello, world!'
+		  }
+		}; 
+	</code>
+</pre>
+
