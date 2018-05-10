@@ -301,11 +301,12 @@ export default class NavigatorIOSApp extends React.Component {
     render() {
         return (
             <NavigatorIOS
-                initialRoute={{
+                initialRoute=
+                 {{ 
                     component: MyScene,
                     title: 'My Initial Scene',
-                    passProps: {index: 1},
-                }}
+                    passProps: {index: 1} 
+                 }}
                 style={{flex: 1}}
             />
         );
@@ -349,6 +350,8 @@ class MyScene extends React.Component {
 //注意：上述代码react native version 版本在0.50.0 到 0.55.2在之间 返回时会有bug。
 需要将react native的版本回退到0.49.4， 对应的expo sdk version版本为22.0.0
 即app.json中的代码 
+
+
 {
 	"expo": {
        "sdkVersion": "22.0.0",
