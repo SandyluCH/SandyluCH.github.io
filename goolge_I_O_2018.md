@@ -204,15 +204,15 @@ Service Worker可能以下之一的原因被废弃（redundant）
 [Progressive Web Apps](https://developers.google.com/web/progressive-web-apps/)
 
    优点：
-   (1). Responsive : to fit any form factor
-   (2). Connectivity independent : 使用service workers 逐步提升让他们可以离线工作
-   (3). App-like-interactions ： Adopt a Shell + Content application model to create appy navigations & interactions
-   (4). Fresh ： 随着service worker 更新进程，它总是最新的 
-   (5). Safe安全：  由TLS(a service worker requirement)来提供服务 从而阻止嗅探
-   (6). Discoverable ：Are identifiable as “applications” thanks to W3C Manifests and Service Worker registration scope allowing search engines to find them
-   (7). Re-engageable:Can access the re-engagement UIs of the OS; e.g. Push Notifications
-   (8). Installable: to the home screen through browser-provided prompts, allowing users to “keep” apps they find most useful without the hassle of an app store
-   (9).Linkable: meaning they’re zero-friction, zero-install, and easy to share. The social power of URLs matters.
+   + (1). Responsive : to fit any form factor
+   + (2). Connectivity independent : 使用service workers 逐步提升让他们可以离线工作
+   + (3). App-like-interactions ： Adopt a Shell + Content application model to create appy navigations & interactions
+   + (4). Fresh ： 随着service worker 更新进程，它总是最新的 
+   + (5). Safe安全：  由TLS(a service worker requirement)来提供服务 从而阻止嗅探
+   + (6). Discoverable ：Are identifiable as “applications” thanks to W3C Manifests and Service Worker registration scope allowing search engines to find them
+   + (7). Re-engageable:Can access the re-engagement UIs of the OS; e.g. Push Notifications
+   + (8). Installable: to the home screen through browser-provided prompts, allowing users to “keep” apps they find most useful without the hassle of an app store
+   + (9).Linkable: meaning they’re zero-friction, zero-install, and easy to share. The social power of URLs matters.
    
 
 
