@@ -127,10 +127,10 @@ navigator.serviceWorker.register('./sw.js').then(function(registration) {
 + 4、正在激活（Activating）
 
 处于waiting状态的service worker,在以下之一的情况下，会被处罚activating状态。
-- （1）当前义务已激活状态的worker
--  (2) Service Workder脚本中的self.skipWaiting()方法被调用
--  (3) 用户已关闭Service Worker作用域下的所有页面，从而释放了此前处于激活态的worker
--  (4) 超出指定时间，从而释放此前处于激活态的worker
+   - （1）当前义务已激活状态的worker
+   -  (2) Service Workder脚本中的self.skipWaiting()方法被调用
+   -  (3) 用户已关闭Service Worker作用域下的所有页面，从而释放了此前处于激活态的worker
+   -  (4) 超出指定时间，从而释放此前处于激活态的worker
 
 处于activating状态期间，Service Workder 脚本中的activate事件被执行。我们通常在activate事件中，清理
 cache中的文件。
@@ -190,9 +190,9 @@ self.addEventListener('message', function(event) {
 + 6、废弃（Redundant）
 
 Service Worker可能以下之一的原因被废弃（redundant）
-- (1)installing事件失败
-- (2)activating事件失败
-- (3)新的Service Worker替换其成为激活态worker
+   - (1)installing事件失败
+   - (2)activating事件失败
+   - (3)新的Service Worker替换其成为激活态worker
 
 如果Service Worker因前两个原因失败，我们在开发者工具的resouces中看到service workers相关信息
 如果一存在前一版本的激活态Service Worker,它会继续保持对document的控制。
