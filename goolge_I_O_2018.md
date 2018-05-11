@@ -204,6 +204,7 @@ Service Worker可能以下之一的原因被废弃（redundant）
 [Progressive Web Apps](https://developers.google.com/web/progressive-web-apps/)
 
    优点：
+   
    + (1). Responsive : to fit any form factor
    + (2). Connectivity independent : 使用service workers 逐步提升让他们可以离线工作
    + (3). App-like-interactions ： Adopt a Shell + Content application model to create appy navigations & interactions
