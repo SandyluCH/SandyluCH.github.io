@@ -127,10 +127,10 @@ navigator.serviceWorker.register('./sw.js').then(function(registration) {
 + 4.正在激活（Activating）
 
 处于waiting状态的service worker,在以下之一的情况下，会被处罚activating状态。
-	+ (1)当前义务已激活状态的worker
-	+ (2) Service Workder脚本中的self.skipWaiting()方法被调用
-	+ (3) 用户已关闭Service Worker作用域下的所有页面，从而释放了此前处于激活态的worker
-	+ (4) 超出指定时间，从而释放此前处于激活态的worker
++ (1)当前义务已激活状态的worker
++ (2) Service Workder脚本中的self.skipWaiting()方法被调用
++ (3) 用户已关闭Service Worker作用域下的所有页面，从而释放了此前处于激活态的worker
++ (4) 超出指定时间，从而释放此前处于激活态的worker
 
 处于activating状态期间，Service Workder 脚本中的activate事件被执行。我们通常在activate事件中，清理
 cache中的文件。
