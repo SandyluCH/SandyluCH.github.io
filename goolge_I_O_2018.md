@@ -1,8 +1,118 @@
 ### [Flutter Beta3新特性](https://juejin.im/entry/5af3887b6fb9a07ace58df5e)
 ### [2018 web](https://juejin.im/post/5af2a6e1f265da0b9c109f8a)
-1. Service Worker  
-   未知
-2. PWA渐进式应用Progressive Web Apps
+####  [Service Worker（服务工作线程）](https://developers.google.com/web/fundamentals/primers/service-workers/)    
+
+丰富的离线体验、定期的后台同步以及推送通知等通常需要将面向本机应用的功能将引入到网络应用中。
+服务工作线程提供了所有这些功能所依赖的技术基础
+   
+##### 简介
+服务工作线程是浏览器在后台独立于网页运行的脚本，它打开了通向不需要网页或用户交互的功能的大门。
+现在，他们已经包括如推送通知和后台同步等功能。将来，服务工作线程将会支持如定期同步或地理围栏等
+其他功能。
+
+注意事项：
+1. 它是一种JavaScript工作线程，无法直接访问DOM。服务工作线程通过相应postMessage接口发送的消息来
+与其控制的页面通信，页面可在必要时对DOM执行操作。
+2. 服务工作线程是一种可编程网络代理，让您能够控制页面所发送网络请求的处理方式
+3. 它在不用时会被中止，并在下次有需要时重启，因此，您不能依赖于服务工作线程的onfetch和onmessage
+处理程序中的全局状态。如果存在您需要持续保存并在重启后加以重用的信息，服务工作线程可以访问IndexedDB API.
+4. 服务工作线程广泛地利用了[promise](https://developers.google.com/web/fundamentals/primers/promises)。
+
+##### 生命周期
+服务工作线程的生命周期完全独立于网页。
+要为网站安装服务工作线程，您需要现在页面的JavaScript中注册。注册服务工作线程将会导致浏览器在后台启动服务工作
+线程安装步骤。
+
+在安装过程中，您通常需要缓存某些静态资产。如果所有文件均已成功缓存，那么服务工作线程就安装完毕。如果任何文件下载
+失败或者缓存失败，那么安装步骤将会失败，服务工作线程就无法激活（即不会安装）。如果发生这种情况，不必担心，它下次
+会再试一次。如果安装完成，您可以知道您已在缓存中获得哪些静态资产。
+
+安装之后，接下来是激活步骤，这是管理旧缓存的绝佳机会。
+
+激活之后，服务工作线程将会对其作用域内的所有页面实施控制。不过，首次注册该服务工作线程的页面需要再次加载才会受其
+控制。服务工作线程实施控制后，它将处于以下两种状态之一：服务工作线程终止以节省内存，或处理获取和消息事件，从页面
+发出网络请求或消息后将会出现后一种状态。
+
+生命周期如下：
+![avatar](/user/desktop/doge.png)
+
+Service Workder可能拥有以下六种状态的一种：解析成功(parsed)、正在安装（installing）、安装成功（installed）、正在
+激活（activating）、激活成功（activated）、废弃（redundant）
+1. 解析成功（parsed）
+
+首次注册Serice workder时，浏览器解决脚本并获得入口点。如果解析成功（而且满足其他条件，如HTTPS协议），就可以访问到
+Service Worker注册对象（registration object）,就可以访问到Service Worker注册对象（registration Object）,其中
+包含Service Worker的状态及其作用域。
+
+````
+if ('serviceWorker' in navigator) {  
+    navigator.serviceWorker.register('./sw.js')
+    .then(function(registration) {
+        console.log("Service Worker Registered", registration);
+    })
+    .catch(function(err) {
+        console.log("Service Worker Failed to Register", err);
+    })
+} 
+
+````
+
+Service Worker注册成功，并不意味着它已经完成安装，也不能说明它已经激活，仅仅是脚本被成功解析，与document同源
+，而且原协议是HTTPS。
+
+2. 正在安装（Installing）
+
+Service Worker脚本解析完成后，浏览器会试着安装，进入下一状态，‘installing’。在Service Worker（注册registration）
+对象中，我们可以通过installing子对象检查该状态。
+
+````
+/* In main.js */
+navigator.serviceWorker.register('./sw.js').then(function(registration) {  
+    if (registration.installing) {
+        // Service Worker is Installing
+    }
+}) 
+
+````
+
+在installing状态中，Service Worker脚本中的install事件被执行。 我们通常在安装事件中，为document缓存静态
+文件。
+
+````
+/* In sw.js */
+self.addEventListener('install', function(event) {  
+  event.waitUntil(
+    caches.open(currentCacheName).then(function(cache) {
+      return cache.addAll(arrayOfFilesToCache);
+    })
+  );
+}); 
+
+````
+
+若事件中有event.waitUntil()方法，则installing事件会一直等到该方法中的Promise完成之后才会成功；
+若Promise被拒，则安装失败，Service worker直接进入废弃（redundant）状态。
+
+````
+/* In sw.js */
+self.addEventListener('install', function(event) {  
+  event.waitUntil(
+   return Promise.reject(); // Failure
+  );
+}); 
+// Install Event will fail
+
+````
+
+
+3. 安装成功/等待中（Installed/Waiting）
+
+
+
+
+
+
+#### PWA渐进式应用Progressive Web Apps
 
 [Progressive Web Apps](https://developers.google.com/web/progressive-web-apps/)
 
@@ -25,7 +135,7 @@
 
 
 
-3. Web Media
+#### Web Media
    
    	Media Session API 允许页面为标准媒体交互提供自定义行为。
 
@@ -39,7 +149,7 @@
 
 	AV1 视频编码格式也将在今年应用于 chrome。
 
-4. WebAssembly
+#### WebAssembly
 
-5. Speedometer 
+#### Speedometer 
 Speedometer 是一个衡量 Web 应用性能的浏览器基准。
