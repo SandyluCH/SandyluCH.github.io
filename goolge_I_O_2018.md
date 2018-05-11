@@ -34,11 +34,11 @@
 发出网络请求或消息后将会出现后一种状态。
 
 生命周期如下：
-![avatar](/user/desktop/doge.png)
+![avatar](/img/service_worker_cycle.png)
 
 Service Workder可能拥有以下六种状态的一种：解析成功(parsed)、正在安装（installing）、安装成功（installed）、正在
 激活（activating）、激活成功（activated）、废弃（redundant）
-1. 解析成功（parsed）
++ 1、解析成功（parsed）
 
 首次注册Serice workder时，浏览器解决脚本并获得入口点。如果解析成功（而且满足其他条件，如HTTPS协议），就可以访问到
 Service Worker注册对象（registration object）,就可以访问到Service Worker注册对象（registration Object）,其中
@@ -60,7 +60,7 @@ if ('serviceWorker' in navigator) {
 Service Worker注册成功，并不意味着它已经完成安装，也不能说明它已经激活，仅仅是脚本被成功解析，与document同源
 ，而且原协议是HTTPS。
 
-2. 正在安装（Installing）
++ 2、正在安装（Installing）
 
 Service Worker脚本解析完成后，浏览器会试着安装，进入下一状态，‘installing’。在Service Worker（注册registration）
 对象中，我们可以通过installing子对象检查该状态。
@@ -105,10 +105,97 @@ self.addEventListener('install', function(event) {
 ````
 
 
-3. 安装成功/等待中（Installed/Waiting）
++ 3、安装成功/等待中（Installed/Waiting）
 
+如果安装成功，服务工作线程进入安装成功（installed）(也称为等待中[waiting])状态。在此状态中，它
+是一个有效的但尚未激活的worker.它尚未纳入document的控制，确切来说是在等待着从当前worker接手。
 
+在service worker注（registration）对象中，可通过waiting子对象检查该状态。
 
+````
+/* In main.js */
+navigator.serviceWorker.register('./sw.js').then(function(registration) {  
+    if (registration.waiting) {
+        // Service Worker is Waiting
+    }
+}) 
+
+````
+
+这是通过App用户升级新版本或自动升级的好时机。
+
++ 4、正在激活（Activating）
+
+处于waiting状态的service worker,在以下之一的情况下，会被处罚activating状态。
+- （1）当前义务已激活状态的worker
+-  (2) Service Workder脚本中的self.skipWaiting()方法被调用
+-  (3) 用户已关闭Service Worker作用域下的所有页面，从而释放了此前处于激活态的worker
+-  (4) 超出指定时间，从而释放此前处于激活态的worker
+
+处于activating状态期间，Service Workder 脚本中的activate事件被执行。我们通常在activate事件中，清理
+cache中的文件。
+
+````
+/* In sw.js */
+self.addEventListener('activate', function(event) {  
+  event.waitUntil(
+    // 获取所有 cache 名称
+    caches.keys().then(function(cacheNames) {
+      return Promise.all(
+        // 获取所有不同于当前版本名称 cache 下的内容
+        cacheNames.filter(function(cacheName) {
+          return cacheName != currentCacheName;
+        }).map(function(cacheName) {
+          // 删除内容
+          return caches.delete(cacheName);
+        })
+      ); // end Promise.all()
+    }) // end caches.keys()
+  ); // end event.waitUntil()
+}); 
+
+````
+
+与install事件类似，如果activate事件中存在event.waitUntil()方法，则在其中的Promise完成之后，激活才会成功。
+如果Promise被拒，激活事件失败，Service Worker进入废弃（redundant）状态。
+
++ 5、激活成功（Activated）
+
+如果激活成功，Service Worker进入active状态。在此状态中， 其成为接收document全面控制的激活态worker。在Service 
+Worker 注册（register）对象中，可以通过active子对象检查此状态
+````
+/* In main.js */
+navigator.serviceWorker.register('./sw.js').then(function(registration) {  
+    if (registration.active) {
+        // Service Worker is Active
+    }
+}) 
+
+````
+
+如果Service Worker处于激活态，就可以应对事件性事件————fetch和message
+````
+/* In sw.js */
+
+self.addEventListener('fetch', function(event) {  
+  // Do stuff with fetch events
+});
+
+self.addEventListener('message', function(event) {  
+  // Do stuff with postMessages received from document
+}); 
+
+````
+
++ 6、废弃（Redundant）
+
+Service Worker可能以下之一的原因被废弃（redundant）
+- (1)installing事件失败
+- (2)activating事件失败
+- (3)新的Service Worker替换其成为激活态worker
+
+如果Service Worker因前两个原因失败，我们在开发者工具的resouces中看到service workers相关信息
+如果一存在前一版本的激活态Service Worker,它会继续保持对document的控制。
 
 
 
