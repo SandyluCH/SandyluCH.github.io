@@ -192,9 +192,254 @@ Service Worker可能以下之一的原因被废弃（redundant）
    - (2)activating事件失败
    - (3)新的Service Worker替换其成为激活态worker
 
-如果Service Worker因前两个原因失败，我们在开发者工具的resouces中看到service workers相关信息
+如果Service Worker因前两个原因失败，我们在开发者工具中看到service workers相关信息
 如果一存在前一版本的激活态Service Worker,它会继续保持对document的控制。
 
 
+
+
+### [浏览器支持情况](https://jakearchibald.github.io/isserviceworkerready/#moar)
+
+### 需要HTTPS支持
+
+在开发过程中，可以通过localhost使用服务工作线程，但如果要在网站上部署服务工作线程，需要在服务器上
+设置HTTPS.
+
+使用服务工作线程，可以劫持链接，编撰以及过滤响应，为了避免中间人的恶意使用，可仅在通过HTTPS提供的页面
+上注册服务工作线程，如此我们便知道浏览器接收的服务工作线程在整个网络传输过程中都没有被篡改。
+
+
+### 注册服务工作线程
+
+要安装服务工作线程，您需要通过在页面中对其进行注册来启动安装。这将告诉浏览器服务工作线程Javascript文件的
+文件。
+````
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/sw.js').then(function(registration) {
+      // Registration was successful
+      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+    }).catch(function(err) {
+      // registration failed :(
+      console.log('ServiceWorker registration failed: ', err);
+    });
+  });
+}
+
+````
+
+此代码用于检查Service Worker API是否可用，如果可用，则在页面加载后注册位于/sw.js的服务工作线程。
+
+每次页面加载无误时，即可调用register();浏览器将会判断服务工作线程是否已注册并做出相应的处理。
+
+register()方法的精妙之处在与服务工作线程文件的位置。您会发现在上述代码中服务工作线程文件位于根网域，
+这以为着服务工作线程的作用域将是整个来源。换句话说，服务工作线程将接受此网域上所有的事项的fetch事件。
+如果我们在/example/sw.js处注册服务工作线程文件，则服务工作线程将只能看到网址以/example/开头
+（即/example/page1/、 /example/page2/）的页面的fetch事件。
+
+首次实施服务工作线程时，可以通过chrome://serviceworker-internals来查看服务工作线程详情。
+其他情况可以通过chrome://inspect/#service-workers来查看您的网站的服务工作线程启用情况
+
+### 安装服务工作线程
+
+在受控页面启动注册流程后，关于处理install事件的服务工作线程脚本内容示例如下：
+
+加入您需要为安装事件定义回调，并决定想要缓存的文件。
+````
+self.addEventListener('install', function(event) {
+  // Perform install steps
+});
+
+````
+
+在install回调的内部，我们需要执行以下步骤：
+1. 打开缓存 ——> 2. 缓存文件 ———> 3. 确认所有需要的资产是否缓存
+
+````
+var CACHE_NAME = 'my-site-cache-v1';
+var urlsToCache = [
+  '/',
+  '/styles/main.css',
+  '/script/main.js'
+];
+
+self.addEventListener('install', function(event) {
+  // Perform install steps
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(function(cache) {
+        console.log('Opened cache');
+        return cache.addAll(urlsToCache);
+      })
+  );
+});
+
+````
+
+上述代码中， 以所需的缓存名称调用caches.open(),之后再调用cache.addAll()并传入文件数组。event.waitUntil()
+方法带有promise参数并使用它来判断安装所花费的时间以及安装是否成功。
+
+如果所有文件都成功缓存，则将安装服务工作线程。如果有任何文件无法下载，则安装步骤将失败，这可让您所依赖与所定义的
+所有资产，但也意味着需要对您决定在安装步骤缓存的文件列表格外留意。定义一个过长的文件列表将会增加文件缓存失败的几率，
+从而导致服务工作线程未能安装。
+
+
+实际您可以在install事件中执行其他任务，或完全避免设置install事件侦听器。
+
+
+### 缓存和返回请求
+
+在安装服务工作线程且用户转至其他页面或刷新当前页面后，服务工作线程将开始接收fetch事件。
+示例如下：
+
+````
+self.addEventListener('fetch', function(event) {
+  event.respondWith(
+    caches.match(event.request)
+      .then(function(response) {
+        // Cache hit - return response
+        if (response) {
+          return response;
+        }
+        return fetch(event.request);
+      }
+    )
+  );
+});
+
+````
+
+如果发现匹配的响应，则返回缓存的值，否则将调用fetch以发出网络请求，并将从网络检索到的任何数据作为结果返回。上述代码
+例子是 使用了在安装步骤中缓存的所有资产。
+
+如果希望连续缓存新请求，可以通过处理fetch请求的响应并将其添加到缓存中来实现，示例代码如下：
+````
+self.addEventListener('fetch', function(event) {
+  event.respondWith(
+    caches.match(event.request)
+      .then(function(response) {
+        // Cache hit - return response
+        if (response) {
+          return response;
+        }
+
+        // IMPORTANT: Clone the request. A request is a stream and
+        // can only be consumed once. Since we are consuming this
+        // once by cache and once by the browser for fetch, we need
+        // to clone the response.
+        var fetchRequest = event.request.clone();
+
+        return fetch(fetchRequest).then(
+          function(response) {
+            // Check if we received a valid response
+            if(!response || response.status !== 200 || response.type !== 'basic') {
+              return response;
+            }
+
+            // IMPORTANT: Clone the response. A response is a stream
+            // and because we want the browser to consume the response
+            // as well as the cache consuming the response, we need
+            // to clone it so we have two streams.
+            var responseToCache = response.clone();
+
+            caches.open(CACHE_NAME)
+              .then(function(cache) {
+                cache.put(event.request, responseToCache);
+              });
+
+            return response;
+          }
+        );
+      })
+    );
+});
+
+````
+
+执行的操作如下：
+- 在fetch请求中添加对.then()的回调
+- 获得响应后，执行以下检查
+	- 确保响应有效
+	- 检查并确保响应的状态为200
+	- 确保响应类型为basic,亦即有自身发起请求。这意味着，对第三方资产的请求不会添加到缓存。
+- 如果通过检查，则克隆响应（因为该响应是[Stream](https://streams.spec.whatwg.org/)）,
+因此主体只能使用一次，由于我们想要返回能被浏览器使用的响应，并将其传递到缓存以供使用，一次
+需要克隆一份副本，我们将一份发送给浏览器，另一份则保留在缓存里。
+
+### 更改服务工作线程
+
+在某个时间点，您的服务工作线程需要更新。此时，您需要遵循以下步骤：
+	
+- 更新您的服务工作线程JavaScript文件。用户导航至您的站点时，浏览器会尝试在后台重新下载定义服务工作线程
+的脚本文本，如果服务工作线程文件与其当前所用的文件存在字节差异，则将其视为“新服务工作线程”
+- 新服务工作线程将会启动，且将会触发install事件
+- 此时，就服务工作线程仍控制着当前页面，因此新服务工作线程将进入waiting状态
+- 当网站上当前打开的页面关闭是，旧服务工作线程将会被中止，新服务工作线程将会取得控制权。
+- 新服务工作线程取得控制权后，将会触发其activate事件
+
+出现在activate回调中的一个常见任务是缓存管理。 因为在安装步骤中清除了任何旧缓存，则继续控制所有当前页面
+的任何旧服务工作线程将无法从缓存中提供文件。
+
+比如说我们有一个名为 'my-site-cache-v1' 的缓存，我们想要将该缓存拆分为一个页面缓存和一个博文缓存。这就意味着在安装步骤中我们创建了两个缓存：'pages-cache-v1' 和 'blog-posts-cache-v1'，且在激活步骤中我们要删除旧的 'my-site-cache-v1'。
+
+以下代码将执行此操作，具体做法为：遍历服务工作线程中的所有缓存，并删除未在缓存白名单中定义的任何缓存。
+
+````
+self.addEventListener('activate', function(event) {
+
+  var cacheWhitelist = ['pages-cache-v1', 'blog-posts-cache-v1'];
+
+  event.waitUntil(
+    caches.keys().then(function(cacheNames) {
+      return Promise.all(
+        cacheNames.map(function(cacheName) {
+          if (cacheWhitelist.indexOf(cacheName) === -1) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
+  );
+});
+
+````
+
+### 其他
+
+如果工作线程注册后未在chrome://inspect/#service-workers 或chrome://serviceworker-internals中显示。
+则可能是引发错误或想event.waitUntil()发送被拒绝的promise 而导致无法安装。
+
+debug 方式：  在chrome://serviceworker-internals 并选中 “open DevTools window and pause JavaScript 
+execution on service worker startup for debugging”,然后将调试程序语句置于安装事件开始处
+，参见[exception breakpoint](https://developers.google.com/web/tools/chrome-devtools/javascript/breakpoints#exceptions)
+
+### fetch()默认值
+
+默认情况下没有凭据
+使用fetch时，默认情况下请求中不包含Cookie等凭据。如需凭据，改为调用：
+````
+fetch(url,{
+	credentials: 'include'
+	});
+
+````
+
+如果网址具有相同的来源，则默认发送凭据，否则忽略。获取的行为更接近于其他的CORS请求。
+
+### 非CORS请求失败
+默认情况下，从不支持CORS的第三方网址中获取资源将会失败。您可以向请求中添加no-CORS选项来克服
+此问题，不过这可能会导致“不透明”的响应，这意味着您无法辨别响应是否成功。
+
+````
+cache.addAll(urlsToPrefetch.map(function(urlToPrefetch) {
+  return new Request(urlToPrefetch, { mode: 'no-cors' });
+})).then(function() {
+  console.log('All resources have been fetched and cached.');
+});
+
+````
+
+
+### [更多资料](https://jakearchibald.github.io/isserviceworkerready/resources.html#moar)
 
 
