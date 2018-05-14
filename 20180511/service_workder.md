@@ -458,6 +458,27 @@ cache.addAll(urlsToPrefetch.map(function(urlToPrefetch) {
 ````
 
 
+
+###跳过等待阶段 
+等待阶段表示您每次只能运行一个网站版本，但如果您不需要该功能，您可以通过调用self.skipWaiting()
+尽快将新工作线程激活。
+
+这会导致您的服务工作线程将当前活动的工作线程逐出，并在进入等待阶段时尽快激活自己（或立即激活，前提是）
+已经处于等待阶段）。这不能让您的工作线程跳过安装，只是跳过等待阶段。skipWaiting()在等待期间调用还是在
+之前调用并没有什么不同。一般情况下是在install事件中调用它：
+````
+self.addEventListener('install', event => {
+  self.skipWaiting();
+
+  event.waitUntil(
+    // caching etc
+  );
+});
+
+
+````
+
+
 ### [更多资料](https://jakearchibald.github.io/isserviceworkerready/resources.html#moar)
 
 
