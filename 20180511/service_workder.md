@@ -478,6 +478,28 @@ self.addEventListener('install', event => {
 
 ````
 
+您也可能在对服务工作线程发出postMessage()时调用它。
+
+
+### 手动更新
+在执行导航和功能事件后，浏览器将自动检查更新，但是您也可以手动触发更新。
+
+````
+navigator.serviceWorker.register('/sw.js').then(reg => {
+  // sometime later…
+  reg.update();
+});
+````
+
+如果您期望用户可以长时间使用您的网站而不必重新加载，您需要按一定间隔（如每小时）调用 update()。
+
+
+### clients.claim
+
+激活服务工作线程后，您可以通过在其中调用clients.claim()控制未受控制的客户端。
+
+
+
 
 ### [更多资料](https://jakearchibald.github.io/isserviceworkerready/resources.html#moar)
 
