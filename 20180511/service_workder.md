@@ -17,6 +17,16 @@
 4. 服务工作线程广泛地利用了[promise](https://developers.google.com/web/fundamentals/primers/promises)。
 
 ### 生命周期
+
+#### 目的
+服务工作线程生命周期的目的：
++ 实现离线优先
++ 允许新服务工作线程自行做好运行准备，无需中断当前的服务工作线程
++ 确保整个过程中作用域页面由同一个服务工作线程（或者没有服务工作线程）控制
++ 确保每次只运行网站的一个版本
+
+
+
 服务工作线程的生命周期完全独立于网页。
 要为网站安装服务工作线程，您需要现在页面的JavaScript中注册。注册服务工作线程将会导致浏览器在后台启动服务工作
 线程安装步骤。
@@ -235,7 +245,12 @@ if ('serviceWorker' in navigator) {
 register()方法的精妙之处在与服务工作线程文件的位置。您会发现在上述代码中服务工作线程文件位于根网域，
 这以为着服务工作线程的作用域将是整个来源。换句话说，服务工作线程将接受此网域上所有的事项的fetch事件。
 如果我们在/example/sw.js处注册服务工作线程文件，则服务工作线程将只能看到网址以/example/开头
-（即/example/page1/、 /example/page2/）的页面的fetch事件。
+（即/example/page1/、 /example/page2/）的页面的fetch事件。即，服务工作线程注册的默认作用域是与脚本
+网址相对的'./'。这意味着如果您在//example.com/foo/bar.js注册一个服务工作线程，则它的默认作用域为
+//example.com/foo/。我们调用页面、工作线程和共享的工作线程clients。您的服务工作线程只能控制位于作用域
+内的客户端。在客户端“受控制”后，它在获取数据时将执行作用域内的服务工作线程。您可以通过navigator.serviceWorder.controller(其将为null或一个服务工作线程实例)检测客户端是否受控制。
+
+
 
 首次实施服务工作线程时，可以通过chrome://serviceworker-internals来查看服务工作线程详情。
 其他情况可以通过chrome://inspect/#service-workers来查看您的网站的服务工作线程启用情况
@@ -441,5 +456,6 @@ cache.addAll(urlsToPrefetch.map(function(urlToPrefetch) {
 
 
 ### [更多资料](https://jakearchibald.github.io/isserviceworkerready/resources.html#moar)
+
 
 
