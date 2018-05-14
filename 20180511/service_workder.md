@@ -1,5 +1,8 @@
 ##  [Service Worker（服务工作线程）](https://developers.google.com/web/fundamentals/primers/service-workers/)    
 
+* process.env.PUBLIC_URL的origin 和 window.location的origin如果是在不同的origin，  service worker won't
+work.
+
 丰富的离线体验、定期的后台同步以及推送通知等通常需要将面向本机应用的功能将引入到网络应用中。
 服务工作线程提供了所有这些功能所依赖的技术基础
    
