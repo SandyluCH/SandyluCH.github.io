@@ -118,3 +118,6 @@ ReactDOM.render(
 
 
 ````
+
++ State Updates May Be Asynchronous
+
