@@ -197,3 +197,88 @@ componentDidMount(){
 React 元素上的Handling events与Dom元素上的handling events 类似，但是也有一些区别：
 -- React events 通常采用驼峰式命名，而不是lowercase
 -- 使用JSX语法，你传入的一个函数作为event handler，而不是一个字符串。
+
+例如：在Html中代码如下：
+````
+<button onclick="activateLasers()">
+  Activate Lasers
+</button>
+
+````
+
+在React中代码如下：
+````
+<button onClick={activateLasers}>
+  Activate Lasers
+</button>
+
+````
+
+
+在html中阻止默认事件，代码如下：
+````
+<a href="#" onclick="console.log('The link was clicked.'); return false">
+  Click me
+</a>
+
+````
+
+而在React中阻止默认事件，代码如下：
+````
+function ActionLink() {
+  function handleClick(e) {
+    e.preventDefault();
+    console.log('The link was clicked.');
+  }
+
+  return (
+    <a href="#" onClick={handleClick}>
+      Click me
+    </a>
+  );
+}
+
+````
+
+
+当我们使用ES6 class定义一个组件,示例代码：
+````
+class Toggle extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {isToggleOn: true};
+
+    // This binding is necessary to make `this` work in the callback
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick() {
+    this.setState(prevState => ({
+      isToggleOn: !prevState.isToggleOn
+    }));
+  }
+
+  render() {
+    return (
+      <button onClick={this.handleClick}>
+        {this.state.isToggleOn ? 'ON' : 'OFF'}
+      </button>
+    );
+  }
+}
+
+ReactDOM.render(
+  <Toggle />,
+  document.getElementById('root')
+);
+
+````
+
+* 注意：必须小心JSX 回调中this的意义， class methods 并不是默认绑定在this上的。如果
+你忘记绑定this.handlerClick （即未使用代码```this.handleClick = this.handleClick.bind(this);```）并将其传入onClick,  ‘this’对象将会是undefined当这个方法真正
+被调用的时候。这不是React的特殊性，这个是“how functions work in JavaScript”中的一部分。通常，如果你
+引用一个方法并且在方法后面没有带有'()',例如：```onClick={this.handlerClick}```,你应该绑定这个方法
+（使用代码```this.handleClick = this.handleClick.bind(this);```进行绑定）
+
+
+如果对于调用bind
