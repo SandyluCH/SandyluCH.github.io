@@ -195,5 +195,5 @@ componentDidMount(){
 ### Handling Events
 
 React 元素上的Handling events与Dom元素上的handling events 类似，但是也有一些区别：
--- React events 通常采用驼峰式命名，而不是lowercase
--- 使用JSX语法，你传入的一个函数作为event handler，而不是一个字符串。
+	- React events 通常采用驼峰式命名，而不是lowercase
+	- 使用JSX语法，你传入的一个函数作为event handler，而不是一个字符串。
