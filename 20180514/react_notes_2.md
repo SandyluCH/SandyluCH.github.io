@@ -192,6 +192,8 @@ componentDidMount(){
 
 这就是为什么state通常被称为局部的或者封装的。任何组件无法访问到它，除非拥有并设置它的组件。
 
+
+
 ### Handling Events
 
 React 元素上的Handling events与Dom元素上的handling events 类似，但是也有一些区别：
@@ -330,3 +332,230 @@ class LoggingButton extends React.Component {
 <button onClick={this.deleteRow.bind(this, id)}>Delete Row</button>
 
 ````
+
+
+### Conditional Rendering
+
+在React, 你可能创建不同的组件来封装你需要的行为。然后，你可以根据应用的状态，只渲染其中一部分。
+
+React中的条件渲染与JavaScript中的条件渲染是一致的。使用Javascript操作像if 或者 条件操作符to创建
+elements代表当前状态，然后让React 更新UI去跟他们相配。
+
+条件渲染示例如下：
+````
+
+function UserGreeting(props) {
+  return <h1>Welcome back!</h1>;
+}
+
+function GuestGreeting(props) {
+  return <h1>Please sign up.</h1>;
+}
+
+function Greeting(props){
+  const isLoggedIn = props.isLoggedIn;
+  if(isLoggedIn){
+     return <UserGreeting />;
+  }
+  return <GuestGreeting />;
+}
+
+  ReactDOM.render(
+   <Greetting isLoggedIn = {false} />,
+   document.getElementById('root')
+  );
+
+````
+
++ Element Variables
+可以使用变量来存放elements。这可以帮助你有条件地呈现组件的一部分，而其余的输出不会改变。
+
+
+代码示例：
+````
+function UserGreeting(props) {
+  return <h1>Welcome back!</h1>;
+}
+
+function GuestGreeting(props) {
+  return <h1>Please sign up.</h1>;
+}
+
+function Greeting(props){
+  const isLoggedIn = props.isLoggedIn;
+  if(isLoggedIn){
+     return <UserGreeting />;
+  }
+  return <GuestGreeting />;
+}
+
+function LoginButton(props) {
+  return (
+    <button onClick={props.onClick}>
+      Login
+    </button>
+  );
+}
+
+function LogoutButton(props) {
+  return (
+    <button onClick={props.onClick}>
+      Logout
+    </button>
+  );
+}
+
+class LoginControl extends React.Component{
+  constructor(props){
+     super(props);
+     this.handleLoginClick = this.handleLoginClick.bind(this);
+     this.handleLogoutClick = this.handleLogoutClick.bind(this);
+     this.state = { isLoggedIn:false };
+  }
+
+  handleLoginClick(){
+    this.setState({isLoggedIn:true});
+  }
+
+  handleLogoutClick(){
+    this.setState({isLoggedIn:false});
+  }
+
+  render(){
+    const isLoggedIn = this.state.isLoggedIn;
+
+    const button = isLoggedIn?(
+<logoutButton  onClick = {this.handleLogoutClick} />
+      ):(
+<loginButton onClick = {this.handleLoginClick} />
+        );
+
+        return (
+            <div>
+                <Greeting isLoggedIn = {isLoggedIn} />
+                {button}
+            </div>
+        );
+
+  }
+
+}
+
+ReactDOM.render(
+  <LoginControl />,
+  document.getElementById('root')
+);
+
+
+````
+
++ Inline If with Logical && Operator
+
+您可以将任何表达式嵌入到JSX中，将他们用大括号括起来。这包括JavaScript的逻辑和运算符。
+示例代码:
+````
+function Mailbox(props) {
+  const unreadMessages = props.unreadMessages;
+  return (
+    <div>
+      <h1>Hello!</h1>
+      {unreadMessages.length > 0 &&
+        <h2>
+          You have {unreadMessages.length} unread messages.
+        </h2>
+      }
+    </div>
+  );
+}
+
+const messages = ['React', 'Re: React', 'Re:Re: React'];
+ReactDOM.render(
+  <Mailbox unreadMessages={messages} />,
+  document.getElementById('root')
+);
+
+````
+
++ Inline If-Else with Conditional Operator
+JavaScript条件操作符： condition ? true: false
+代码示例1：
+````
+render() {
+  const isLoggedIn = this.state.isLoggedIn;
+  return (
+    <div>
+      The user is <b>{isLoggedIn ? 'currently' : 'not'}</b> logged in.
+    </div>
+  );
+}
+
+````
+
+代码示例2：
+````
+render() {
+  const isLoggedIn = this.state.isLoggedIn;
+  return (
+    <div>
+      {isLoggedIn ? (
+        <LogoutButton onClick={this.handleLogoutClick} />
+      ) : (
+        <LoginButton onClick={this.handleLoginClick} />
+      )}
+    </div>
+  );
+}
+
+````
+
++ Preventing Component from Rendering
+
+极少数情况下，你可能想要一个隐藏组件，尽管它被其他组件渲染，办法是返回null而不是将这个组件输出。
+
+代码示例：
+
+````
+function WarningBanner(props){
+  if(!props.warn){
+    return null;
+  }
+  return (
+     <div className = "warning">
+       Warning!
+     </div>
+    );
+}
+
+class Page extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {showWarning:true};
+    this.handleToggleClick = this.handleToggleClick.bind(this);
+  }
+
+  handleToggleClick(){
+    this.setState(preState => ({
+       showWarning:!prevState.showWarning
+      });//箭头函数返回值为对象{}用括号（）包起来以示跟函数{}的区别
+  }
+
+  render(){
+    return (
+      <div>
+          <WarningBanner warn={this.state.showWarning} />
+          <button onClick={this.handleToggleClick}>
+             {this.state.showWarning ? 'Hide':'Show'}
+          </button>
+      </div>
+      );
+  }
+
+}
+
+
+````
+
+上述代码中组件<WarningBanner />的渲染取决于warn的值，如果值为false, 那么这个组件将不会渲染
+
+
+
