@@ -451,5 +451,5 @@ export default class AutoFocusTextInput extends React.Component{
 
 ````
 
-*注意：只有CustomTextInput被定义为class组件时，上述功能才有效
+* 注意：只有CustomTextInput被定义为class组件时，上述功能才有效
 
