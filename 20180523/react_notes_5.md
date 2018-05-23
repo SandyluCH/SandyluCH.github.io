@@ -172,7 +172,98 @@ Provider 到它的后代consumers 的传播不受 方法shouldComponentUpdate的
 ### 例子
 
 #### Dynamic Context
+theme-context.js代码如下：
+````
+import React from 'react';
+export const themes = {
+    light: {
+        foreground: '#000000',
+        background: '#eeeeee',
+    },
+    dark: {
+        foreground: '#ffffff',
+        background: '#222222',
+    },
+};
 
+export const ThemeContext = React.createContext(
+    themes.dark // default value
+);
+
+````
+
+themed-button.js代码如下：
+````
+import {ThemeContext} from './theme-context';
+import React from 'react';
+function ThemedButton(props) {
+    return (
+        <ThemeContext.Consumer>
+            {theme => (
+                <button
+                    {...props}
+                    style={{backgroundColor: theme.background}}
+                />
+            )}
+        </ThemeContext.Consumer>
+    );
+}
+
+export default ThemedButton;
+
+````
+
+app.js代码如下：
+````
+import React from 'react';
+import {ThemeContext, themes} from './theme-context';
+import ThemedButton from './themed-button';
+
+// An intermediate component that uses the ThemedButton
+function Toolbar(props) {
+    return (
+        <ThemedButton onClick={props.changeTheme}>
+            Change Theme
+        </ThemedButton>
+    );
+}
+
+export default class App extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            theme: themes.light,
+        };
+
+        this.toggleTheme = () => {
+            this.setState(state => ({
+                theme:
+                    state.theme === themes.dark
+                        ? themes.light
+                        : themes.dark,
+            }));
+        };
+    }
+
+    render() {
+        // The ThemedButton button inside the ThemeProvider
+        // uses the theme from state while the one outside uses
+        // the default dark theme
+        return (
+            <div>
+                <ThemeContext.Provider value={this.state.theme}>
+                    <Toolbar changeTheme={this.toggleTheme} />
+                </ThemeContext.Provider>
+                <div>
+                    <ThemedButton >currentTheme</ThemedButton>
+                </div>
+            </div>
+        );
+    }
+}
+
+
+````
 
 #### Updating Context from a Nested Component
 
