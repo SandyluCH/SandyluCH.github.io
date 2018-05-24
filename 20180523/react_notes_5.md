@@ -266,5 +266,205 @@ export default class App extends React.Component {
 ````
 
 #### Updating Context from a Nested Component
+通常更新那些嵌套在组件树中很深的组件的上下文是很有必要。这种情况下，你应该传入一个
+函数通过上下，从而允许consumers 去更新上下文。
+示例：
+theme-context.js代码：
+````
+import React from 'react';
+export const themes = {
+    light: {
+        foreground: '#000000',
+        background: '#eeeeee',
+    },
+    dark: {
+        foreground: '#ffffff',
+        background: '#222222',
+    },
+};
 
+//Make sure the shape of the default value passed to
+//createContext matches the shape that the consumers expect
+export const ThemeContext = React.createContext(
+    {
+        theme: themes.dark,// default value
+        toggleTheme:() => {}
+    }
+);
+
+````
+
+theme-toggler-button.js代码：
+````
+import {ThemeContext} from "./theme-context";
+import React from 'react';
+function ThemeTogglerButton() {
+    // the Theme Toggler Button Receives not only the theme
+    //but alse a toggleTheme function from the context
+    return (
+        <ThemeContext.Consumer>
+            {
+                ({theme,toggleTheme}) => (
+                    <button
+                    onClick={toggleTheme}
+                    style={{backgroundColor:theme.background}}
+                    >Toggle Theme</button>
+                )
+            }
+
+        </ThemeContext.Consumer>
+    );
+}
+
+export default ThemeTogglerButton;
+
+````
+
+app.js代码
+````
+import React from 'react';
+import {ThemeContext,themes} from "./theme-context";
+import ThemeTogglerButton from './theme-toggler-button';
+function Content(){
+    return (
+        <div>
+            <ThemeTogglerButton/>
+        </div>
+    );
+}
+export default class App extends React.Component{
+    constructor(props){
+        super(props);
+        this.toggleTheme = () => {
+            this.setState(state => ({
+                theme:state.theme === themes.dark?
+                    themes.light: themes.dark
+            }));
+        };
+        //State also contains the updater function so it will
+        // be passed down into the context provider
+        this.state = {
+           theme:themes.light,
+            toggleTheme:this.toggleTheme,
+        };
+    }
+
+    render(){
+        //The entire state is passed to the provider
+        return (
+            <ThemeContext.Provider value={this.state}>
+                <Content/>
+            </ThemeContext.Provider>
+        );
+    }
+}
+
+
+````
+
+#### Consuming Multiple Contexts
+为了保证context的re-rendering 快速，React需要让每一个context consumer 处在tree中的separate node。
+
+示例代码:
+````
+import React from 'react';
+
+// Theme context, default to light theme
+const ThemeContext = React.createContext('light');
+
+// Signed-in user context
+const UserContext = React.createContext({
+    name: 'Guest',
+});
+function Layout() {
+    return (
+        <div>
+            <button>siderbar </button>
+            <Content />
+        </div>
+    );
+}
+
+// A component may consume multiple contexts
+function Content() {
+    return (
+        <ThemeContext.Consumer>
+            {theme => (
+                <UserContext.Consumer>
+                    {user => (
+                        <button user={user} theme={theme} >button--</button>
+                    )}
+                </UserContext.Consumer>
+            )}
+        </ThemeContext.Consumer>
+    );
+}
+
+export default class App extends React.Component {
+    render() {
+        const {signedInUser, theme} = {
+            signedInUser:'signed in user',
+            theme:'dark'
+        };
+
+        // App component that provides initial context values
+        return (
+            <ThemeContext.Provider value={theme}>
+                <UserContext.Provider value={signedInUser}>
+                    <Layout />
+                </UserContext.Provider>
+            </ThemeContext.Provider>
+        );
+    }
+}
+
+````
+
+
+#### Accessing Context in Lifecycle Methods
+在生命周期的方法中获取上下文的值 是一种相对通用的做法。
+不是在每个生命周期的方法中添加上下文， 你仅仅需要传入它作为prop, 然后work with it .
+
+待续......
+
+
+
+
+#### Consuming Context with a HOC
+上下文的types被许多components consumed,例如：theme 或者 localization.
+使用```<Context.Consumer>```元素来明确包含每一个独立的依赖是很乏味的。
+因此 A higher-order component 可能会有帮助。
+
+例如，一个按钮组件可能consume a theme like this:
+````
+const ThemeContext = React.createContext('light');
+function Themed Button(props){
+	return (
+        <ThemeContext.Consumer>
+           {theme => <button className={theme}  {...props}>test</button>}
+        </ThemeContext.Consumer>
+	);
+}
+
+````
+
+加入我们想使用theme context 在很多地方，我们可以创建 a higher-order component called withTheme:
+````
+const ThemeContext = React.createContext('light');
+
+//This function takes a component...
+export function withTheme(Component){
+	//... and returns another component...
+
+}
+
+````
+
+#### Forwarding Refs to Context Consumers
+
+使用render prop API ，这个refs 不会自动的被传授给wrapper elements.
+为了绕过这个， 使用 React.forwardRef。
+
+
+待续......
 
