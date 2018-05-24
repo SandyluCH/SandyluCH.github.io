@@ -260,5 +260,19 @@ export default class Parent extends React.Component{
 
 ````
 
+index.js代码：
+````
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import registerServiceWorker from './registerServiceWorker';
+ReactDOM.render(
+    <App  />,
+    document.getElementById('app-root')
+);
+registerServiceWorker();
+
+````
 
 代码中，modal组件的button的click事件冒泡到 包含它的React组件上即Parent组件上。
