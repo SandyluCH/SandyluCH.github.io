@@ -95,4 +95,5 @@ mysql>   CREATE TABLE tb_emp1(
 
 ### MySQL数据类型
 
+......
 
