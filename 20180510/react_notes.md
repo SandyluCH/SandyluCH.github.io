@@ -168,6 +168,8 @@ setInterval(tick, 1000);
 ````
 
 #### Components and Props
+组件从概念上看就像是函数，它可以接受任意的输入值(称之为“props”),并返回一个需要在页面上展示的React元素。
+
 
 + Functional and Class Components
 1. 定义一个组件最简单的方式是写一个Javascript函数：
