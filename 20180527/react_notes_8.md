@@ -163,3 +163,18 @@ export default class App extends React.Component{
 
 
 ````
+
+## Render Props
+"Render prop"是指一种在React组件之间使用一个值为函数的prop在React组件间共享代码的简单技术。
+带有render prop的组件带有一个返回一个React元素的函数并调用该函数而不是实现自己的渲染逻辑。
+````
+<DataProvider 
+   render = {
+     data => (<h1>Hello {data.target}</h1>)
+   }
+/>
+
+````
+
+使用render props的库包括React Router 和Downshift。
+
