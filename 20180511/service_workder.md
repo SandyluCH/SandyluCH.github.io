@@ -1,4 +1,8 @@
-##  [Service Worker（服务工作线程）](https://developers.google.com/web/fundamentals/primers/service-workers/)    
+##  [Service Worker（服务工作线程）](https://developers.google.com/web/fundamentals/primers/service-workers/)   
+
+[Adding a service workder and offline into your web app](https://codelabs.developers.google.com/codelabs/offline/index.html?index=..%2F..%2Findex#7) 
+
+[Debugging Service Workers](https://codelabs.developers.google.com/codelabs/debugging-service-workers/index.html?index=..%2F..%2Findex#2)
 
 * process.env.PUBLIC_URL的origin 和 window.location的origin如果是在不同的origin，  service worker won't
 work.
