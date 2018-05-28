@@ -535,5 +535,28 @@ class MouseTracker extends React.Component {
 
 ## React高阶API
 react是React库的入口点。如果你通过<script>标签加载React,这些高阶API可用于React全局。
-如果你使用ES6,你可以使用```import React from 'react'```。如果你使用ES5, 你可以使用
-```var React = require('react');```
+如果你使用ES6,你可以使用 ```import React from 'react'```。如果你使用ES5, 
+你可以使用 ```var React = require('react');```。
+
+### Reference
+
+1. [React.Component](https://reactjs.org/docs/react-component.html)
+
+2. React.PureComponent
+
+React.PureComponent与React.Component几乎完全相同，但 React.PureComponent通过
+prop和state的浅对比来实现shouldComponentUpdate()
+
+如果React组件的 render() 函数 在给定相同的props 和 state下渲染为相同的结果，在某
+些场景下你可以使用 React.PureComponent来提升性能。
+
+注意：
+React.PureComponent 的 shouldComponentUpdate() 只会对对象进行浅对比。
+如果对象包含复杂的数据结构，它可能会因深层的数据不一致而产生错误的否定判断(表现为对象深层
+    的数据已改变视图却没有更新)。当你期望只拥有简单的props和state时，才去继承
+     PureComponent ，
+     或者在你知道深层的数据结构已经发生改变时使用
+     [forceUpate](https://reactjs.org/docs/react-component.html#forceupdate) 。或者，考虑使用 
+     [不可变对象](https://facebook.github.io/immutable-js/) 来促进嵌套数据的快速比较。
+
+此外,React.PureComponent 的 shouldComponentUpate() 会忽略整个组件的子级。请确保所有的子级组件也是”Pure”的。
