@@ -533,8 +533,9 @@ class MouseTracker extends React.Component {
 
 待完善......
 
+
 ## React高阶API
-react是React库的入口点。如果你通过<script>标签加载React,这些高阶API可用于React全局。
+react是React库的入口点。如果你通过```<script>```标签加载React,这些高阶API可用于React全局。
 如果你使用ES6,你可以使用 ```import React from 'react'```。如果你使用ES5, 
 你可以使用 ```var React = require('react');```。
 
@@ -560,3 +561,90 @@ React.PureComponent 的 shouldComponentUpdate() 只会对对象进行浅对比�
      [不可变对象](https://facebook.github.io/immutable-js/) 来促进嵌套数据的快速比较。
 
 此外,React.PureComponent 的 shouldComponentUpate() 会忽略整个组件的子级。请确保所有的子级组件也是”Pure”的。
+
+
+3. createElement()
+````
+React.createElement(
+  type,
+  [props],
+  [...children]
+)
+
+````
+
+4. cloneElement()
+````
+React.cloneElement(
+  element,
+  [props],
+  [...children]
+)
+
+````
+几乎等价于
+````
+<element.type {...element.props} {...props}>{children}</element.type>
+
+````
+
+
+5. createFactory
+```React.createFactory(type) ```
+根据给定的类型返回一个创建React元素的函数，类似于```React.createElement ```
+
+6. isValidElement()
+
+```React.isValidElement(object) ```
+验证对象是否是一个React元素，返回true或false。
+
+7. React.Children
+
+React.Children提供了处理this.props.children这个不透明数据结果的工具。
+
+React.Children.map
+
+````
+React.Children.map(children,function[(thisArg)])
+
+````
+
+在包含children的每个子级上调用函数，调用的函数的this设置为thisArg。
+如果children 是一个嵌套的对象或数组，它将被遍历。 如果children是null
+或undefined,返回null或undefined 而不是一个空数组。
+
+React.Children.forEach
+
+````
+React.Children.forEach(children, function[(thisArg)]);
+
+````
+类似React.Children.map(),但是不返回数组。
+
+React.Children.count
+````
+ React.Children.count(children)
+
+````
+返回children中的组件总数，相当于传给map或forEach时， 回调函数被调用次数。
+
+React.Children.only
+````
+React.Children.only(children)
+
+````
+这里children里仅有的子级。否则抛出异常。
+
+React.Children.toArray
+````
+React.Children.toArray(children)
+
+````
+返回以赋key给每个子级child的扁平数组形式来组成不透明的children数据结果。
+如果你打算在你的渲染方法里操纵子级集合，特别是你想在this.props.children
+传下之前对它重新排序或切割，会很有用。
+
+Note:
+当children是扁平列表时，React.Children.toArray() 改变key来保留嵌套数组的语义。也就是说，为了在展开时保留嵌套数组的语义，toArray 会自动的给数组中每个 key 加了上前缀，以便将每个元素的key被限定到包含它的输入数组。
+
+8. React.Fragment
