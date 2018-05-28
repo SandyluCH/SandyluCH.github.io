@@ -524,3 +524,16 @@ class MouseTracker extends React.Component {
 
 ````
 <Mouse> 应继承React.Component，万一你没法提前在构造函数中绑定实例方法（如因为你可能要掩盖组件的 props 和/或 state)。
+
+
+## 与第三方库协同
+
+我们可以在任何网页应用中使用React。不仅可以把React添加到其它应用里，而且只要稍作改动，我们
+也可以把其它应用添加到React项目里。
+
+待完善......
+
+## React高阶API
+react是React库的入口点。如果你通过<script>标签加载React,这些高阶API可用于React全局。
+如果你使用ES6,你可以使用```import React from 'react'```。如果你使用ES5, 你可以使用
+```var React = require('react');```
