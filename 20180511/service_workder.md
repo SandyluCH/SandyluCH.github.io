@@ -51,6 +51,8 @@ work.
 生命周期如下：
 ![avatar](/img/service_worker_cycle.png)
 
+service worker生命周期主要是3步：Registration => Installation => Activation.
+
 Service Workder可能拥有以下六种状态的一种：解析成功(parsed)、正在安装（installing）、安装成功（installed）、正在
 激活（activating）、激活成功（activated）、废弃（redundant）
 + 1、解析成功（parsed）
