@@ -267,7 +267,7 @@ dbPromise.then(function(db){
 
 
 
-## Introduction to Push Notifications
+##  推送和通知的介绍（ Introduction to Push Notifications）
 
 通知是在用户设备上弹出的消息。通知可以由一个打开的应用程序本地触发，或者即使在应用程序不运行时也可以从服务器“推”到用户。它们允许您的用户选择及时更新，并允许您有效地重新使用定制内容的用户。
 
@@ -344,6 +344,7 @@ Two notification events you can listen for in a service worker:
 
 示例代码：
 ````
+//service-worker.js
  self.addEventListener('notificationclose',function(event){
      var notification = event.notification;
      var primaryKey = notification.data.primaryKey;
@@ -353,3 +354,204 @@ Two notification events you can listen for in a service worker:
 ````
 
 - notificationclick
+
+代码示例：
+````
+//service-worker.js
+self.addEventListener('notificationclick',function(event){
+	   var notification = event.notification;
+	   var action = event.action;
+	   if(action === 'close'){
+	   	   notification.close();
+	   	}else {
+           client.openWindow('http://www.example.com');
+	   	}
+});
+
+````
+
+
+注意：不是所有的浏览器都能实现notification API 到相同的水平，另外操作系统也可能不支持通知的same features。
+
+因此为了创建一个一直的体验，需要：
+1. Check for Support
+
+代码：
+````
+
+//main.js
+if('Notification' in window && navigator.serviceWorker){
+  //Display the UI to let the user toggle notifications
+}
+
+````
+
+当用户浏览器不支持Notifications API时，可以：
+   - Offer a simple inline “notification” on your web page.This works well when the user has the page open.
+   - Integrate with another service, such as an SMS provider or email provider timely alerts to the user.
+
+2. Check for permission
+
+保持校验当前的permission已经是granted的状态是很重要的，因为这个状态有可能改变
+
+代码：
+````
+//main.js
+if(Notification.permission === 'granted'){
+  /* do our magic*/
+}else if(Notification.permission === 'blocked'){
+   /* the user has previously denied push.Can't reprompt */
+}else {
+	/* show a prompt to the user */
+}
+
+
+
+````
+
+3. 注意平台间的差异性
+
+动作按钮和图像在平台上差别很大。例如，一些OSs可以显示有限数量的动作，而其他的可能不允许用户直接可见动作。
+
+你可以调用Notification.maxActions来检查可能展示的动作按钮的最大数量。当你创建notification的时候需要检查这个，以适应动作按钮的最大数量。 在service worker文件中的noticationclick的handler也要检查这个以便于决定正确的response.
+
+
+
+### Sending and Receiving Push Notifications
+
+它工作的流程是：
+1. In the app’s main JavaScript, call pushManager.subscribe() on the service worker registration object.
+2. Get the subscription object and convert it to JSON. Get the endpoint URL and public key and save this to your server (for example, by using a fetch request).
+3. Send the message payload from your server to the endpoint URL, encrypted with the public key.
+4. The push message raises a “push” event in the service worker which we can handle in a push event handler.
+5. In push event handler we get the data from the message and display a notification
+
+### Push API
+
+首先我们需要检查用户是否已经subscribed 和update 相应的the page UI。如果他们没有被subscribed,促使他们去subscribe。 如果他们已经被subscribed, 更新 server 用最新的subscription.
+
+当用户赋予在你的site上的push的权限， 你subscrible browser的push service。 这会创建一个特殊的subsciption object ,这个object 包含了 the push service的 "endpoint URL"(这个值在每个浏览器上是不同)， 以及 public key。
+
+我们为当前用户发送 这个 subscription object 到server上并保存它。
+
+check if user is subscribed的代码如下：
+````
+navigator.serviceWorker.ready.then(function(reg){
+    reg.pushManager.getSubscription().then(function(sub){
+        if(sub == undefined){
+             // ask user to register for push
+        }else {
+        	// you have subscription, update the database on your server
+        }
+    });
+});
+
+````
+
+Subscribe to the push service的代码如下：
+````
+navigator.serviceWorker.getRegistration().then(function(reg){
+    reg.pushManager.subscribe({
+       userVisibleOnly:true
+    }).then(function(subscription){
+    	// send subscription.toJSON() to server
+    });
+});
+
+````
+
+The subscription object 的代码格式如下：
+````
+{
+    "endpoint": "https://fcm.googleapis.com/fcm/send/f1LsxkKp...",
+    "keys": {
+        "p256dh": "BLc4xRzKlKORKWlbdgFaB1oEKgPpWC5cW8OCzVrOQRv-1n ...",
+        "auth": "5I2Bu2oKdyy9CwL8QVF0NQ=="
+    }
+}
+
+````
+
+### Send a push message from the server
+
+server生成一个message ,并用public key 加密，然后将它发送给endpoint URL 在
+subscription object中。  这个URL 包含了push service的地址以及一个subscription ID(允许 push service 去验证接收message的客户端)。 这个消息在push service上接收，然后分发给正确的客户端。
+
+
+send a message from the server的代码如下：
+````
+var webPush = require('web-push');
+var payload = 'Here is a payload!';
+var options = {
+	TTL:60,// max time in seconds for push service to retry delivery
+};
+webPush.sendNotification(pushSubscription,payload,options);
+
+````
+
+你需要一种方式来保证user和server之间、 你的server和push service之间、 push service之间的安全通信。VAPID就是一种方案。
+
+这个VAPID 识别信息可以被push service使用去将 相同的应用server发送的请求归于a single entity。 
+
+VAPID介绍：
+- Voluntary Application Server identification for Web Push(VAPID) protocol is an optional method to identify your service
+- VAPID uses JSON Web Tokens(JWT) to carry identifying information
+- A JWT contains  a three properties called a Claim. The claim has:
+Audience attribute 、 Subscriber property 、 Expiration time value。
+
+
+为了使用VAPID,我们需要生成 public/private key pair ，然后用 public key去 订阅push service. 这个public key 必须首先有 URL base64 转为 a Unit8Array.
+
+“web-push” 库提供了一个方法generateVapidKeys 用来生成keys的。命令行：
+```web-push generate-vapid-keys [--json] ```
+
+
+
+Subscribe with the VAPID public key代码如下：
+````
+var applicationServerPublicKey = 'BLiZBfZJTwbWe_TzKaKuiT8GHqmcFU';
+var applicationServerKey = urlB64ToUnit8Array(applicationServerPublicKey);
+
+swRegistration.pushManager.subscribe({
+   userVisibleOnly:true,
+   applicationServerKey:applicationServerKey 
+});
+
+````
+
+
+Send a message with VAPID代码如下：
+````
+var webPush = require('web-push');
+var payload = 'Here is a payload!';
+var options = {
+	vapidDetails:{
+		subject:'mailto:example-email@example.com',
+		publicKey:vapidPublicKey,
+		privateKey:vapidPrivateKey
+	}
+};
+
+webPush.sendNotification(pushSubscription,payload,options);
+
+
+````
+
+
+下面是发送和接收push message以及展示push notification的总结：
+客户端：
+   1. Subscribe to the push service
+   2. Send the subscription object to the server
+服务端：
+   1. Generate the data that we want to send to the user
+   2. Encrypt the data with the user public key
+   3. Send the data to the endpoint URL with a payload of encrypted data
+这个消息会被路由到 user's device. 这个会激活 the browser 找到正确的service worker 然后触发 ‘push’ event.  
+客户端：
+   1. Receive the message data(if there is any) in the "push" event
+   2. Perform some custom logic in the push event
+   3. Show a notification
+
+
+另外 push notification 需要翻墙
+
