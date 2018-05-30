@@ -102,6 +102,7 @@ var dbPromise = idb.open('test-db',1,function(upgradeDb){
 });
 
 3. 定义关键字 Defining the Primary Key
+
 示例代码：
 ````
 upgradeDb.createObjectStore('people',{keyPath:'email'});
@@ -111,3 +112,244 @@ upgradeDb.createObjectStore('notes',{autoIncrement:true});
 upgradeDb.createObjectStore('logs',{keyPath:'id', autoIncrement:true});
 
 ````
+
+4. Definint Indexes example
+
+示例代码：
+````
+var dbPromise = idb.open('test-db',function(upgreadeDb){
+    if(!upgradeDb.objectStoreNames.contains('people')){
+    	var peopleOS = upgradeDb.createObjectStore('people');
+    	peopleOS.createIndex('email','email',{unique:true});
+    }
+});
+
+````
+
+
+5. Operations
+	- add
+	- get
+	- put
+	- delete
+	- getAll
+	- cursor
+
+6. Transactions
+  
+  A wrapper around a series of operations
+
+
+7. Working with data
+
+Each data operation has this form:
+  - (1)get database object from idb.open
+  - (2)open transaction on database
+  - (3)open object store on transaction
+  - (4)optionally open index on object store
+  - (5)perform operation on object store or index
+
+8. Add data
+
+示例代码：
+````
+dbPromise.then(function(db){
+   var transaction = db.transaction(['people'],'readwrite');
+   var store  = transaction.objectStore('people');
+   store.add({name:'Fred'});
+   return transaction.complete;
+});
+
+````  
+
+
+9. Read Data
+
+示例代码：
+````
+  dbPromise.then(function(db){
+     var tx = db.transaction(['people'],'readonly');
+     var store = tx.objectStore('people');
+     return store.get('Fred');
+  });
+
+````
+
+10. Update Data
+
+示例代码：
+````
+  dbPromise.then(function(db){
+     var tx = db.transaction(['store'],'readwrite');
+     var store = tx.objectStore('store');
+     var item = {name:'Fred',email:'Fred@fred.com'};
+     store.put(item);
+     return tx.complete;
+  });
+
+````
+
+11. Delete Data
+
+示例代码：
+````
+  dbPromise.then(function(db){
+     var tx = db.transaction(['people'],'readwrite');
+     var store = tx.objectStore('people');
+     store.delete('Fred');
+     return tx.complete;
+  });
+
+````
+
+12. getAll() method
+
+示例代码：
+````
+  dbPromise.then(function(db){
+       var tx = db.transaction(['store'],'readonly');
+       var store = tx.objectStore('store');
+       return store.getAll();
+  });
+
+````
+
+13. Cursors(1)
+
+示例代码：
+````
+  dbPromise.then(function(db){
+     var tx = db.transaction(['store'],'readonly');
+     var store = tx.objectStore('store');
+     return store.openCursor();
+  });
+
+````
+
+14. Cursors(2)
+
+示例代码：
+````
+  dbPromise.then(function(db){
+     var tx = db.transaction(['store'],'readonly');
+     var store = tx.objectStore('store');
+     return store.openCursor().then(fucntion showItems(cursor){
+        if(!cursor){ return ;}
+        for(var field in cursor.value){
+        	console.log(cursor.value[field]);
+        }
+        return cursor.continue.then(showItems);
+     });
+  });
+
+````
+
+15. Specifying the range
+
+IDBKeyRange.lowerBound(indexKey);
+
+IDBKeyRange.upperBound(indexKey);
+
+IDBKeyRange.bound(lowerIndexKey,upperIndexKey);
+
+16. Range example
+
+示例代码：
+````
+var range = IDBKeyRange.lowerBound('soda');
+dbPromise.then(function(db){
+   var tx = db.transaction(['store'],'readonly');
+   var store = tx.objectStore('store');
+   return store.getAll(range);
+});
+
+````
+
+
+
+## Introduction to Push Notifications
+
+通知是在用户设备上弹出的消息。通知可以由一个打开的应用程序本地触发，或者即使在应用程序不运行时也可以从服务器“推”到用户。它们允许您的用户选择及时更新，并允许您有效地重新使用定制内容的用户。
+
+主要包含：
+- Client: (Web Page , Service worker, User Agent)
+- Push Service
+- App Server
+
+### The Notification API
+client端  web page中
+1. Request permission
+ 在创建通知之前需要获取用户的授权。
+ 代码示例：
+````
+//main.js
+Notification.requestPermission(function(status){
+  console.log('Notification permission status :',status);
+});
+
+````
+
+2. Display a notification
+
+示例代码：
+````
+//main.js
+function displayNotification(){
+	if(Notification.permission === 'granted'){
+		navigator.serviceWorker.getRegistration().then(function(reg){
+			 reg.showNotification('Hello World');
+		});
+	}
+}
+
+````
+
+3. Add notification options
+
+示例代码：
+````
+//main.js
+var options = {
+	body:'Here is a notification body!',
+	icon:'images/example.png',
+	vibrate:[100,50,100],
+	data:{primaryKey:1} //allows us to identify notification
+};
+reg.showNotification('Hellow world!',options);
+
+````
+
+4. Add notification actions
+
+代码示例：
+````
+//main.js
+var options = {
+	body:'First notification!',
+	actions:[
+      {action:'explore',title:'Go to the site', icon:'img/check.png'},
+      {action:'close', title:'No thank you', icon:'img/x.png'},
+	]
+};
+reg.showNotification('Hello world',options);
+
+````
+
+
+### Notification interactions
+client 端service worker
+
+Two notification events you can listen for in a service worker:
+- notificationclose
+
+示例代码：
+````
+ self.addEventListener('notificationclose',function(event){
+     var notification = event.notification;
+     var primaryKey = notification.data.primaryKey;
+     console.log('Closed notification:'+ primaryKey);
+ });
+
+````
+
+- notificationclick
