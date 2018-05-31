@@ -547,14 +547,18 @@ webPush.sendNotification(pushSubscription,payload,options);
 
 
 下面是发送和接收push message以及展示push notification的总结：
+
 客户端：
    1. Subscribe to the push service
    2. Send the subscription object to the server
+
 服务端：
    1. Generate the data that we want to send to the user
    2. Encrypt the data with the user public key
    3. Send the data to the endpoint URL with a payload of encrypted data
+
 这个消息会被路由到 user's device. 这个会激活 the browser 找到正确的service worker 然后触发 ‘push’ event.  
+
 客户端：
    1. Receive the message data(if there is any) in the "push" event
    2. Perform some custom logic in the push event
