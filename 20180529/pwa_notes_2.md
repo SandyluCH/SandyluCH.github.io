@@ -75,11 +75,19 @@ fetch(url).then(response => {
 
 ### Events事件
 
+1. statechange
+2. updatefound
+3. controllerchange
+4. error
+5. message
+6. install 
+7. active
+8. fetch
 
 
 
 ## Service Worker API
-[Service Worker API](https://developers.google.com/web/ilt/pwa/lab-caching-files-with-service-worker)
+[Service Worker API](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API)
 
 ## [Working with Indexed DB](https://developers.google.com/web/ilt/pwa/working-with-indexeddb-slides)
 如果我们想让app变成真正的离线优先， 我们需要一个储存数据的方式。IndexDB 就是一种解决方案。
