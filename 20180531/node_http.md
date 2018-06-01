@@ -435,6 +435,101 @@ socket被认定为超时的空闲毫秒数。值设为0 ，可禁用请求连接
 #### server.keepAliveTimeout
 默认为5000（5秒）
 
+服务器完成最后的响应之后需要等待的额外的传入数据的活跃毫秒数，socket才能被销毁。
+如果服务器在keep-alive计时已激活时接收到新的数据，他会充值常规的非活动计时，即server.timeout
+
+值为0时， 表示禁用传入连接的keep-alive的超时行为。
+
+注意：socket的超时逻辑上取决于服务器连接，所以改变这个值只影响服务器的新连接，不影响任何已存在的连接。
+
+### http.ServerResponse类
+
+该对象在HTTP服务器内部被创建。它作为第二个参数被传入reqeust事件。
+这个类是吸纳了（而不是继承自）可写流接口，它是一个有以下事件的EventEmitter:
+  1. close事件
+
+   当底层连接在response.end()被调用或能够刷新之前被终止时触发
+
+  2. finish事件
+
+   当响应已被发送时触发。更具体地说，当响应头和响应主题的最后一部分已被交给操作系统通过网络进行传输时，触发该事件。这并不以为着客户端已接收到任何东西。
+
+   该事件触发后，响应对象上不在触发其他事件。
+
+
+#### response.addTrailers(headers)
+参数：
+  - headers :<Object>
+该方法会添加HTTP尾部响应头（一种在消息尾部的响应头）到响应。
+
+仅当响应使用分块编码时，尾部响应头才会被发送；否则（比如：请求为HTTP/1.0）,尾部响应头会被丢弃。
+
+注意，发送尾部响应头之前，需先发送Trailer响应头，并在值里戴胜尾部响应头字段的列表。例如：
+````
+  response.writeHead(200,{'Content-Type':'text/plain','Trailer':'Content-MD5'});
+  response.write(fileData);
+  response.addTrailers({'Content-MD5':'7895bf4b8828b55ceaf47747b4bca667'});
+  response.end();
+
+````
+
+如果尾部响应头字段的名称或值包含无效字符，则抛出TypeError错误。
+
+#### response.connection
+同response.socket
+
+#### response.end([data][,encoding][,callbak])
+参数：
+  - data:<string>
+  - encoding:<string>
+  - callback :<Function>
+
+该方法会通知服务器，所有响应头和响应主题都已被发送，即拂去其将其视为已完成。每次响应都必须调用response.end()方法。
+如果指定了data,则相当于调用response.write(data,encoding)之后再调用response.end(callback).
+如果指定了callback,则当响应流结束时被调用
+
+#### response.finished
+返回一个布尔值，表示响应是否已完成。默认为false。执行response.end()之后，该值会变为true。
+
+#### response.getHeader(name)
+参数：
+ - name:<string>不区分大小写
+返回<string>
+
+读取一个已入队列但尚未发送到客户端的响应头。 	
+
+#### response.getHeaderNames()
+返回一个包含当前响应唯一名称的http头信息名称数组。名称均为小写
+示例：
+````
+response.setHeader('Foo', 'bar');
+response.setHeader('Set-Cookie', ['foo=bar', 'bar=baz']);
+
+const headerNames = response.getHeaderNames();
+// headerNames === ['foo', 'set-cookie']
+
+````
+
+#### response.getHeaders()
+返回当前响应头文件的浅拷贝。由于使用了浅拷贝，因此数组值可能会改变，无需对各种与响应头相关的http模块方法进行额外调用。返回对象的键是响应头名称，值是各自的响应头值。所以响应头名称都是小写的。
+
+注意： response.getHeaders()方法返回的对象不会原型集成JavaScript Object。这意味着，没有定义典型的Object方法，如obj.toString(),obj.hasOwnProperty()和其他方法，并且不起作用。
+
+例子：
+````
+ response.setHeader('Foo','bar');
+ response.setHeader('Set-Cookie',['foo=bar','bar=baz']);
+ cont headers = response.getHeaders();
+ //headers === {foo:'bar','set-cookie':['foo=bar','bar=baz']}
+
+````
+
+#### response.hasHeader(name)
+
+
+
+
+
 
 
 
