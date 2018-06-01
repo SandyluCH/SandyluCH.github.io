@@ -337,6 +337,106 @@ callback参数是可选的，当数据块被刷新时调用。
 返回request
 
 ### http.Server类
-该类继承自net.Server,且具有以下额外的事件
+该类继承自net.Server,且具有以下额外的事件:
+  1. checkContinue事件
+
+  参数：
+   - request: <http.IncomingMessage>
+   - response: <http.ServerResponse>
+  每当接收到一个带有HTTP ```Expect:100-continue ```请求头的请求时触发。如果该事件未被监听，则服务器会自动响应```100-continue```.
+  
+  处理该事件时，如果客户端应该继续发送请求主题，则调用response.writeContinue(),否则生成一个适当的HTTP响应（例如：400错误请求）。
+
+  注意： 当该事件被触发且处理后，‘request’事件不会被触发。
+
+  2. checkExpectation事件
+
+  参数：
+    - reqeust: <http.IncomingMessage>
+    - response: <http.ServerResponse>
+
+  每当接收到一个带有HTTP Expect请求头（值不为```100-continue ```）的请求时触发。如果该事件未被监听，则服务器会自动响应```417 Expectation Failed ```。
+  
+  注意， 当该事件被触发且处理后，‘request’事件不会被触发。
+
+  3. clientError事件
+     如果客户端触发一个'error'事件，则它会被传递到这里。该事件的监听器负责关闭或销毁底层的socket。例如，用户可能希望更温和的用HTTP‘400 Bad Request’响应关闭socket,而不是突然地切断连接。
+
+   默认情况下，请求异常时会立即销毁socket.
+   当clientError事件发生时，不会有request或response对象，所以发送的任何HTTP响应，包括响应头和内容，必须被直接写入到socket对象。注意,确保响应是一个被正确格式化的HTTP响应消息。
+
+  4. close事件
+  
+  当服务器关闭时触发
+
+  5. connect事件
+
+  参数:
+    - request :<http.IncomingMessage> HTTP请求，同request事件 
+    - socket :<net.Socket>服务器与客户端之间的网络socket
+    - head :<Buffer>流的第一个数据包，可能为空
+
+  每当客户端发送HTTP connect请求时触发。如果该事件未被监听，则发送CONNECT请求的客户端会关闭连接。
+
+  当该事件被触发后，请求的socket上没有‘data’事件监听器，这意味着需要绑定‘data’事件监听器，用来处理socket上被发送到服务器的数据。
+
+  6. connection事件
+
+  参数：
+   - socket : <net.Socket>
+
+  当新的TCP流被建立时触发。socket是一个net.Socket类型的对象，通常用户无需访问该事件。注意，因为协议解析器绑定到socket的方式，socket不会触发‘readable’事件。socket也可以通过request.connection访问。
+  
+  7. request事件
+
+  参数：
+    - request :<http.IncomingMessage>
+    - response :<http.ServerResponse>
+
+ 每次接收到一个请求时触发。注意，每个链接可能有多个请求（在HTTP keep-alive连接的情况下）
+
+  8. upgrade事件
+
+   参数：
+      - request ：<http.IncomingMessage> http请求，同 request事件
+      - socket  : <net.Socket>服务器与客户端之间的网络socket
+      - head :<Buffer>流的第一个数据包，可能为空
+   每当客户端发送HTTP upgrade请求时触发。如果该事件未被监听，则发送upgrade请求的客户端会关闭连接。
+   
+   当该事件被触发后，请求的socket上没有‘data’ 事件监听器，这意味着需要绑定‘data’事件监听器，用来处理socket上被发送到服务器的数据。
+
+#### server.close([callback])
+ 停止服务端接受新的连接
+
+#### server.listen()
+开启HTTP服务器监听连接。方法与net.server的server.listen()相同。
+
+#### server.listening
+返回一个布尔值，表示服务器是否正在监听连接。
+ 
+#### sever.maxHeadersCount
+限制请求头的最大数量，默认为2000，如果设为0，则是没有限制
+
+#### server.setTimeout([msecs][,callback])
+参数：
+  - msecs :<number>默认为120000（2分钟）
+  - callback: <function>
+设置socket的超时时间。如果发生超时，则触发服务器对象的timeout时间，并传入socket作为一个参数。
+
+默认情况下，服务器的超时时间是2分钟，且超时后的socket会被自动销毁。但是，如果你为服务器的timeout事件分配了一个回调函数，则超时必须被显式地处理。
+
+返回server
+
+#### server.timeout
+默认2分钟
+socket被认定为超时的空闲毫秒数。值设为0 ，可禁用请求连接的超时行为。
+注意：socket的超时逻辑是在连接上设定，所以改变这个值只影响服务器新建的链接，而不会影响任何已存在连接。
+
+#### server.keepAliveTimeout
+默认为5000（5秒）
+
+
+
+
 
 
