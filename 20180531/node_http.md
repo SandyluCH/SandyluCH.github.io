@@ -525,6 +525,65 @@ const headerNames = response.getHeaderNames();
 ````
 
 #### response.hasHeader(name)
+参数：
+  - name : <string>
+返回：
+  Returns :<boolean>
+如果响应头当前有设置name头部，返回true。请注意，名称匹配不区分大小写。
+示例：
+``` const hasContentType = response.hasHeader('content-type'); ```
+
+#### response.headersSent
+返回一个布尔值（只读）。如果响应头已被发送则为true, 否则为false。
+
+#### response.removeHeader(name)
+参数：
+  - name: <string>
+从隐式发送的队列中移除一个响应头。
+例子：
+```response.removeHeader('Content-Encoding'); ```
+
+#### response.sendDate
+当为true时，如果响应头里没有日期响应头，则日期响应头会自动生成并发送。默认为true。
+
+该属性值可在测试时被禁用，因为HTTP响应需要包含日期响应头。
+
+#### response.setHeader(name,value)
+参数：
+  - name: <string>
+  - value: <string>或<string[]>
+为一个隐式的响应头设置值。如果该响应头已存在，则值会被覆盖。如果要发送多个名称相同的响应头，则使用字符串数组。
+例子：
+```response.setHeader('Content-Type','text/html') ```
+或
+```response.setHeader('Set-Cookie',['type=ninja','language=javascript']) ```
+
+如果响应头字段的名称或值包含无效字符，则抛出TypeError错误。
+response.setHeader()设置的响应头会与response.writeHead()设置的响应头合并，且
+response.writeHead()的优先。
+````
+//返回content-type = text/plain
+const server = http.createServer((req,res)=>{
+   res.setHeader('Content-Type','text/html');
+   res.setHeader('X-Foo','bar');
+   res.writeHead(200,{'Content-Type':'text/plain'});
+   res.end('ok');
+});
+
+````
+
+#### response.setTimeout(msecs,[,callback])
+参数：
+  - msecs: <number>
+  - callback : <Function>
+设置socket的超时时间为msecs。如果提供了回调函数，则它会作为监听器被添加到响应对象的‘timeout’事件。
+
+如果没有timeout监听器被添加到请求、响应或服务器，则socket会在超时后被销毁。如果在请求、响应或服务器的timeout事件上分配了回调函数，则超时的socket必须被显式地处理。
+
+返回response.    
+
+
+
 
 
 
