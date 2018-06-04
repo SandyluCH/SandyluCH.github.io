@@ -580,7 +580,373 @@ const server = http.createServer((req,res)=>{
 
 如果没有timeout监听器被添加到请求、响应或服务器，则socket会在超时后被销毁。如果在请求、响应或服务器的timeout事件上分配了回调函数，则超时的socket必须被显式地处理。
 
-返回response.    
+返回response.
+
+#### response.socket
+引用底层socket。通常用户不想访问此属性。特别地，由于协议解析器连接到socket的方式，socket将不会发出readable事件。在response.end()之后，该属性为null。也可以通过response.connection来访问socket。
+例如：
+````
+const http = require('http');
+const server = http.createServer((req,res)=>{
+   const ip = res.socket.remoteAddress;
+   const port = res.socket.remotePort;
+   res.end(`你的IP地址是${ip},你的源端口是${port}。`);
+}).listen(3000);
+
+````
+
+#### response.statusCode
+当使用隐式的响应头时（没有显式地调用response.writeHead()）,该属性控制响应头刷新时将被发送到客户端的状态码。
+
+例子：
+```response.statusCode = 404; ```
+
+响应头被发送到客户端后，该属性表示被发出的状态码。
+
+#### response.statusMessage
+当使用隐式的响应头时（没有显式地调用response.writeHead()）,该属性控制响应头刷新时将被发送到客户端的状态信息。如果该值为undefined,则使用状态码的标准信息。
+例子：
+```response.statusMessage = 'Not found'; ```
+
+#### response.write(chunk[,encoding][,callback])
+参数：
+  - chunk ： <string>或<Buffer>
+  - encoding: <string>
+  - callback: <Function>
+  返回：<boolean>
+
+如果该方法被调用且response.writeHead()没有被调用，则它会切换到隐式响应头模式并刷新隐式响应头。
+
+该方法会发送一块响应主题。它可被多次调用，一遍提供联系的响应主体片段。
+
+请注意在http模块中，当请求是HEAD请求时，响应主体被忽略。类似地，204和304响应不能包括
+消息体。
+
+chunk可以是一个字符串或一个buffer。如果chunk是一个字符串，则第二个参数指定如何将它编码成一个字节流。encoding默认为‘utf8’。当数据块被刷新时，callback会被调用。
+
+注意：这是原始的HTTP主体，且与可能被使用的高级主体编码无关。
+
+response.write()首次被调用时，会发送缓冲的响应头信息和响应主题的第一个块数据到客户端。
+response.write()第二次被调用时，Node.js能够确定数据会被接收，于是开始传输新数据。也就是说，响应的完成取决于响应主体的第一块数据。
+
+如果全部数据被成功刷新到内核缓冲区，则返回true。如果全部或部分数据还在内存中排队，则返回false。 当缓冲区再次空闲时，则触发drain事件。
+
+#### response.writeContinue()
+发送一个HTTP/1.1 100 Continue消息到客户端，表示请求主题可以开始发送。 
+同server的‘checkContinue’事件。
+
+#### response.writeHead(statusCode[,statusMessage][,headers])
+发送一个响应头给请求。状态码是一个三位数的HTTP状态码，如404。 最后一个参数headers是响应头。
+第二个参数statusMessage是可选的状态描述。
+
+例子：
+````
+const body = 'hello world';
+response.writeHead(200,{
+  'Content-Length':Buffer.byteLength(body),
+  'Content-Type':'text/plain'
+  });
+
+````
+
+该方法在消息中只能被调用一次，且必须在response.end()被调用之前调用。
+
+如果在调用该方法之前调用response.write()或response.end()， 则隐式的响应头会被处理并调用该函数。
+
+response.setHeader()设置的响应头会与response.writeHead()设置的响应头合并，
+且response.writeHead()的优先。
+````
+//返回content-type = text/plain
+const server = http.createServer((req,res)=>{
+  res.setHeader('Content-Type','text/html');
+  res.setHeader('X-Foo','bar');
+  res.writeHead(200,{'Content-Type':'text/plain'});
+  res.end('ok');
+});
+
+````
+
+注意，Content-Length是以字节（而不是字符）为单位的。上面的例子行的通是因为
+字符串‘hello world’只包含单字节字符。如果响应主题包含高级编码的字符，则应使
+用Buffer.byteLength()来确定在给定编码中的字节数。Node.js不会检查Content-Length
+与已发送的响应主题的长度是否相同。
+
+如果响应头字段的名称或值包含无效字符，则抛出TypeError错误。
+
+#### response.writeProcessing()
+
+### http.IncomingMessage类
+
+IncomingMessage对象由http.Server或http.clientRequest创建，并作为第一个参数分别传递给
+‘request’和‘response’事件。它可以用来访问响应状态、消息头、以及数据。
+
+它实现了可读流接口，还有以下额外的事件、方法以及属性。
+  1. aborted事件
+
+  当请求已被终止且网络socket已关闭时触发。
+
+  2. close事件
+
+  当底层连接被关闭时触发。通end事件一样，该事件每个响应只触发一次。
+
+#### message.aborted
+如果请求已经被aborted， 那么message.aborted属性的值将为true.
+
+#### message.destroy([error])
+调用接收到IncomingMessage的socket上的destroy()方法。如果提供了error,则触发error事件，且把error作为参数传入事件的监听器。
+
+#### message.headers
+请求头或响应头的对象。
+头信息的名称与值的键值对。头信息的名称为小写。
+原始头信息中的重复数据会按一下方式根据头信息名称进行处理：
+  - 重复的age 、 authorization 、 content-length 、 content-type 、 etag 、 expires 、 from 、 host 、 if-modified-since \ if-unmodified-since \ last-modified \ location
+  \ max-forwards \ proxy-authorization \ referer\ retry-after \或user-agent会被丢弃。
+  - set-cookie始终是一个数组。重复的会被添加到数组。
+  - 对于其他头信息，其值使用','拼接。
+
+#### message.httpVersion
+在服务器其你去中，该属性返回客户端发送HTTP版本。在客户端响应中，该属性返回连接到的服务器的
+HTTP版本。可能的值有‘1.1’ 或‘1.0’。
+
+message.httpVersionMajor返回HTTP版本的第一个整数值，message.httpVersionMinor返回HTTP版本的第二个整数值。
+
+#### message.method
+仅在http.Server返回的请求中有效。
+返回一个字符串，表示请求的方法。该属性只读
+
+#### message.rawHeaders
+接收到的原始的请求头或响应头列表。
+注意，键和值在同一个列表中。偶数位的是键，奇数为的是对应的值。
+头信息的名称不会被转换为小写，重复的也不会被合并。
+
+#### message.rawTrailers
+接收到原始的Trailer请求头或响应头的键和值。只在end事件时被赋值。
+
+#### message.setTimeout(msecs,callback)
+参数：
+ - msecs :<number>
+ - callback : <Function>
+ 调用message.connection.setTimeout(msecs,callback)
+ 返回message。
+
+#### message.socket
+返回与连接关联的net.Socket对象。
+通过HTTPS的支持，使用request.socket.getPeerCertificate()获取客户端的认证信息。
+
+#### message.statusCode
+仅在http.clientRequest返回的响应中有效。
+
+返回一个三位数的HTTP响应状态码。如404.
+
+#### message.statusMessage
+仅在http.clientRequest返回的响应中有效
+返回HTTP响应状态消息（原因描述）。如OK或Internal Server Error.
+
+#### message.trailers
+返回Trailer请求头或响应头对象。只在end事件时被赋值。
+
+#### message.url
+仅在http.Server返回的请求中有效。
+返回请求的URL字符串。仅包含实际HTTP请求中的URL。如：
+````
+GET /status?name=ryan HTTP/1.1\r\n
+Accept: text/plain\r\n
+\r\n
+
+````
+
+则request.url会是：
+```'/status?name=ryan' ```
+
+如果想将url解析成各个部分，可以使用require('url').parse(request.url)。
+例子：
+````
+$ node
+> require('url').parse('/status?name=ryan')
+Url {
+  protocol: null,
+  slashes: null,
+  auth: null,
+  host: null,
+  port: null,
+  hostname: null,
+  hash: null,
+  search: '?name=ryan',
+  query: 'name=ryan',
+  pathname: '/status',
+  path: '/status?name=ryan',
+  href: '/status?name=ryan' }
+
+````
+
+如果想从查询字符串中提取参数，可以使用require('querystring').parse函数，或为require('url').parse的第二个参数传入true,例子：
+````
+$ node
+> require('url').parse('/status?name=ryan', true)
+Url {
+  protocol: null,
+  slashes: null,
+  auth: null,
+  host: null,
+  port: null,
+  hostname: null,
+  hash: null,
+  search: '?name=ryan',
+  query: { name: 'ryan' },
+  pathname: '/status',
+  path: '/status?name=ryan',
+  href: '/status?name=ryan' }
+
+````
+
+### http.METHODS
+返回解析器支持的HTTP方法的列表
+
+### http.STATUS_CODES
+返回标准的HTTP响应状态码的集合，以及各自的简短描述。
+例如：```http.STATUS_CODES[404] === 'Not Found' ```
+
+### http.createServer([options][,requestListener])
+返回：<http.Server>的实例
+
+The requestListener is a function which is automatically added to the
+'request' event.
+
+### http.get(options[,callback])
+参数：
+ - options ： 同http.request()。 method设置为GET.
+ - callback: <Function>
+返回：<http.ClientRequest>
+因为大多数请求都是GET请求且不带请求主体，所以Node.js提供了该便捷方法。该方法与http.request()唯一的区别是它设置请求方法为GET且自动调用req.end()。注意，回调函数务必消耗掉响应数据。原因见http.ClientRequest.
+
+callback被调用时只传入一个参数，该参数是http.IncomingMessage的一个实例。
+一个获取JSON的例子：
+````
+http.get('http://nodejs.org/dist/index.json',(res)=>{
+  const {statusCode} = res;
+  const contentType = res.headers['content-type'];
+  let error;
+  if(statusCode !== 200){
+    error = new Error('请求失败。\n'+`状态码：${statusCode}`);
+  }else if(!/^application\/json/.test(contentType)){
+    error = new Error('无效的content-type.\n'+`期望application/json但获取的是${contentType}`);
+  }
+
+  if(error){
+     console.error(error.message);
+     //消耗响应数据以释放内存
+     res.resume();
+     return;
+  }
+
+  res.setEncoding('utf8');
+  let rawData = '';
+  res.on('data',(chunk)=>{ rawData += chunk; });
+  res.on('end', () => {
+       try{
+          const parsedData = JSON.parse(rawData);
+          console.log(parsedData);
+        }catch(e){
+          console.error(e.message);
+        }
+    }).on('error',(e) => {
+         console.error(`错误：${e.message}`);
+      });
+});
+
+````
+
+### http.globalAgent
+Agent的全局实例，作为所有HTTP客户端请求的默认Agent.
+
+### http.request(options[,callback])
+参数：
+ - options: <Object>或<string>或 <URL> ，如果options是一个字符串，它会被自动使用url.parse()解析。如果它是一个URL对象，它会被默认转换成一个options对象。
+   - protocol : <string>使用的协议。默认为：'http:'.
+   - host: <string> 请求发送至的服务器的域名或IP地址。默认为localhost.
+   - hostname: <string> host的别名。 为了支持url.parse(),hostname优先于host.
+   - family: <number>当解析host 和hostname时使用的IP地址族。 有效值是4或6.当未指
+    定时，则同时使用IP v4和v6.
+   - port : <number>远程服务器的端口。默认为80.
+   - localAddress: <string>为网络连接绑定的本地接口.
+   - socketPath: <string> Unix域Socket(使用host:port或socketPath)
+   - method : <string>指定HTTP请求方法的字符串。默认为‘GET’.
+   - path: <string>请求的路径。默认为‘/’。应包括查询字符串（如有的话）。当请求的路径中包含
+   非法字符时，会抛出异常。目前只有空字符会被拒绝，但未来可能会变化。
+   - headers: <Object>包含请求头的对象。
+   - auth: <string>基本身份验证，如‘user:password’用来计算Authorization请求头
+   - agent: <http.Agent> 或 <boolean>控制Agent的行为。可能的值有：
+     - undefined(默认)：对该主机和端口使用http.globalAgent.
+     - Agent对象：显式地使用传入的Agent.
+     - false: 创建一个新的使用默认值的Agent.
+   - createConnection:<Function>当不使用agent选项时，为请求创建一个socket或流。这可以用户避免仅仅创建一个自定义的Agent类来覆盖默认的createConnection函数。
+    详见agent.createConnection()。 
+   - timeout: <number>指定socket超时的毫秒数。它设置了socket等待连接的超时时间。
+ - callback:<Function>， 可选的callback参数会作为单词监听器被添加到‘response’事件。
+
+ 返回：<http.ClientRequest>
+ Node.js为每台服务器维护多个连接来进行HTTP请求。该函数允许显式地发出请求。
+
+http.request()返回一个http.ClientRequest类的示例。ClientRequest实例是一个可写流。如果需要通过POST请求上传一个文件，则写入到clientRequest对象。
+
+例子：
+````
+  const postData = querystring.stringify({
+   'msg':'Hello World!'
+  });
+
+  const options = {
+    hostname:'www.google.com',
+    post:80,
+    path:'/upload',
+    method:'POST',
+    headers:{
+      'Content-Type':'application/x-www-form-urlencoded',
+      'Content-Length':Buffer.byteLength(postData)
+    }
+  };
+
+  const req = http.request(options,(res) => {
+     console.log(`状态码：${res.statusCode}`);
+     console.log(`响应头：${JSON.stringify(res.headers)}`);
+     res.setEncoding('utf8');
+     res.on('data',(chunk)=>{
+         console.log(`响应主体：${chunk}`);
+     });
+     res.on('end',() => {
+       console.log('响应中已无数据.');
+     });
+  });
+  req.on('error',(e)=>{
+     console.error(`请求遇到问题：${e.message}`);
+  });
+
+  //写入数据到请求主体
+  req.write(postData);
+  req.end();
+
+````
+
+注意：在例子中调用了req.end()。使用http.request()必须总是调用req.end()来表明请求的结束，即使没有数据被写入请求主体。
+
+如果请求过程中遇到任何错误（DNS解析错误、TCP级错误、或实际的HTTP解析错误），则在返回的请求对象中会触发‘error’事件。对于所有‘error’事件，如果没有注册监听器，则抛出错误。
+
+以下是需要注意的几个特殊的请求头：
+  - 发送‘Connection:keep-alive’会通知Node.js，服务器的链接应一致持续到下一个请求
+  - 发送‘Content-Length’请求头会禁用默认的块编码
+  - 发送‘Expect’请求头会立即发送请求头。 通常情况下，当发送‘Expect:100-continue’时，超时时间与continue事件的监听器都需要被设置。
+  - 发送Authorization请求头会替代auth选项计算基本身份验证。
+
+示例代码：
+````
+const {URL} = require('url');
+const options = new URL('http://abc:xyz@example.com');
+const req = http.request(options,(res)=>{
+     // ...
+  })
+
+````
+
 
 
 
