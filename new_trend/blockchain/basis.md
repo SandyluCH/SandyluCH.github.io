@@ -2,6 +2,7 @@ Validation, verification,consensus, Immutable Recording lead to the trust and se
 
 参考文档：
 [Bitcoin's Academic Pedigree](https://queue.acm.org/detail.cfm?id=3136559)
+
 分类账是有相互不信任的参与者共同维护的全局数据结构。他是不可变，只能添加新的交易，但不能删除、修改或重新排序现有的交易，可随时获取账簿状态的简明加密摘要。
 
 在每个区块中，文件可以用哈希指针的二叉树连接在一起，称为Merkle树，而不是直线链。在比特币中，交易取代了文件。在每个块的merkle树中，叶节点都是交易，每个内部节点基本上有两个指针组成。这个数据结构有两个重要属性:
