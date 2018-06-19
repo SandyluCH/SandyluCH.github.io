@@ -1,7 +1,13 @@
+references:
+[Bitcoin whitepage](https://bitcoin.org/bitcoin.pdf)
+[Bitcoin's Academic Pedigree](https://queue.acm.org/detail.cfm?id=3136559)
+
+
+
 Validation, verification,consensus, Immutable Recording lead to the trust and security of Blockchain.
 
-参考文档：
-[Bitcoin's Academic Pedigree](https://queue.acm.org/detail.cfm?id=3136559)
+
+
 
 分类账是有相互不信任的参与者共同维护的全局数据结构。他是不可变，只能添加新的交易，但不能删除、修改或重新排序现有的交易，可随时获取账簿状态的简明加密摘要。
 
@@ -19,4 +25,3 @@ Validation, verification,consensus, Immutable Recording lead to the trust and se
    此外，找到散列到任意一组输出的输入的唯一方法是再次尝试散列不同的输入。
 
 
-参考文档：[How a Bitcoin Transaction Works](https://www.ccn.com/bitcoin-transaction-really-works/)
