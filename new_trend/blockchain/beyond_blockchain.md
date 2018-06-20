@@ -27,8 +27,6 @@ public blockchains,我们通常是指任何人可以写数据。
 
 
 
-
-
 Your computer will act as a full node which means:
   - Connecting to the bitcoin network
   - Downloading the blockchain
@@ -41,3 +39,8 @@ Your computer will act as a full node which means:
   - Passing on valid blocks
   - Creating blocks
   - ‘Mining’ the blocks
+  
+  
+## [on public and private blockchains](https://blog.ethereum.org/2015/08/07/on-public-and-private-blockchains/)  
+
+
