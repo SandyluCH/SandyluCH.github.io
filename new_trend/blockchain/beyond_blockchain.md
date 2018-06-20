@@ -26,6 +26,9 @@ public blockchains,我们通常是指任何人可以写数据。
 反过来,private blockchain就是需要参与者被信任和被知悉.
 
 
+
+
+
 Your computer will act as a full node which means:
   - Connecting to the bitcoin network
   - Downloading the blockchain
