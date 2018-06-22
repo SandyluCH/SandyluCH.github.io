@@ -72,5 +72,5 @@ NXT：NXT是一个公共区块链平台，其中包含有限的智能合约模�
 
 ## [instroduction to smart contract](http://solidity.readthedocs.io/en/develop/introduction-to-smart-contracts.html)
 
-
+## [what is Ethereum](http://ethdocs.org/en/latest/introduction/what-is-ethereum.html)
 
