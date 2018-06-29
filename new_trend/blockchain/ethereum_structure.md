@@ -12,3 +12,10 @@ Contract Accounts：它由代码控制,并且只能由EOA激活。一个contract
 以太坊块结构有一个头部，事务和 runner-up block header。block详情，一个真实的以太坊块在高度4 4 4 6 3 0 8.你可以在给定的链接上实际查看这个特定的块。它显示高度，时间戳，块散列，以前的散列，难度和总难度，大小，使用的气体，气体限制，随机数和块奖励。总而言之，账户是以太坊协议的基本单位。外部拥有账户和智能合约账户。以太坊交易不仅包括传递Ethers的域，还包括调用Smart合同的信息。以太坊区块包含通常以前的区块散列，随机数，交易细节，但也包含有关天然气或收费限制，智能合同和runner-up block header的状态。
 
 ## [Ethereum:smart contract white page](https://github.com/ethereum/wiki/wiki/White-Paper)
+区块链技术常用的替代应用包括使用区块链数字资产来表示自定义货币和金融工具（彩色硬币），底层物理设备的所有权（智能财产），不可互换的资产（如域名（Namecoin））以及更复杂的应用程序，这些应用程序涉及通过实施任意规则的代码（智能合约）或甚至基于区块链的分散自治组织（DAO）直接控制数字资产。以太坊计划提供的区块链是一种内置完全成熟的图灵完整编程语言，可用于创建可用于编码任意状态转换功能的“合同”，允许用户创建上述任何系统，还有其他许多我们还没有想象到的，只需在几行代码中编写逻辑即可。
+
+## [account management](http://ethdocs.org/en/latest/account-management.html)
+
+## [native account management](https://github.com/ethereum/go-ethereum/wiki/Native:-Account-management)
+
+
