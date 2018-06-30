@@ -32,7 +32,50 @@
 
 ## 时间戳服务器
 
-我们提供的方案是开始于时间戳服务器。时间戳服务器
+我们提供的方案是开始于时间戳服务器。时间戳服务器通过给items的block的hash值加盖时间戳且广泛发布hash值例如在newspaper或Usenet post中进行发布 来运转的。 时间戳提供了必须在时间中存在的数据，以便于进入hash。每个时间戳包含了在形成链的且有额外的时间戳在它之前进行加固的hash的中的上一个时间戳。
+
+![avatar](bitcoin_img2.png)
+
+## 工作量证明
+
+为了实现在点对点的基础上运行分布式时间戳服务器，我们将需要使用工作量证明系统，类似于Adam Back的Hashcash, 而不是newspaper或Usenet posts.   工作量证明涉及扫描 例如用SHA-256 hash了的以一些0开头的hash值。 所需要的平均工作量是指数级的。
+
+对于我们的时间戳网络来说， 我们通过增加块中的随机数知道找到一个hash值是以要求数量的0开始的hash值 实现工作量证明。 一旦cpu工作被消耗去满足PoW（工作量证明），block 不能不改装这个work的情况下而改变。之后block被chained， 改变block的工作包含重装他之后的所有blocks。
+
+PoW也解决了在主要决策中决定代理人的问题。如果大多数都是基于一个ip地址对一个vote, 它将会被破坏因为任何人都可以分配许多ip。 PoW 是必要的一个cpu对一个vote。 主要的决策代表了最长的链，最长的链有投入的最多的工作量证明量。如果主要的cpu功率是有诚实的节点控制的，诚实的链会增长最快并且超过任何竞争的链。去改变过去的block, 袭击者将必须去重做当前的block和它之后所有的block的PoW,然后赶上和超越诚实节点的工作。
+
+为了弥补在运行的节点中的增长的硬件速度和变化的利益， 工作量证明的难度是通过每个小时在平均数量的block上移动的平均目标来决定的。如果他们生成太快，这个难度也会增加。
+
+## 网络
+
+运行网络的步骤：
+- 新的交易在所有节点中广播
+- 每个节点收集新的交易到block中
+- 每个节点都在为它的block寻找最难的PoW的路上
+- 当节点找到一个PoW,它会广播这个block到所有的节点中
+- 只有block中所有的交易都是有效且尚未使用时，节点才会接受这个block
+- 节点通过在链中创建下一个block B并使用被接受的block A的hash作为block B的previous hash值来表示接受block A
+
+节点总是将最长的链作为正确的那个，并且一直工作在扩展它上面。如果两个节点同时广播不同版本的next block，一些节点可能先接收这一个，也可能先接收另一个，这种情况下，节点们都处理在他们先接收的block上，但是会保存其他的分支以防它变得更长。当下一个PoW被发现且分支变得更长的时候，这个关系将会被打破，然后节点将会切换到更长的那条链上并工作在上面。
 
 
+新交易广播没有必要到所有的节点，只要他们到达了一些节点，他们将会进入block中在long之前。block广播也能容忍丢掉消息。如果一个节点没有接收到block, 当它接收到下一个block并且意识到丢掉了block的时候它将会请求block 。
+
+## Incentive
+
+依照惯例，block中的第一笔交易是特殊的交易，它开始于一个由block的创建者所拥有的新的coin。这增加了对节点支持网络的激励方案，  且提供一个方式来初始分发coin到发行中，因为这里没有中心组织来发行他们。
+The steady addition of a constant of amount of new coins is analogous to gold miners expending
+resources to add gold to circulation. In our case, it is CPU time and electricity that is expended.
+The incentive can also be funded with transaction fees. If the output value of a transaction is
+less than its input value, the difference is a transaction fee that is added to the incentive value of
+the block containing the transaction. Once a predetermined number of coins have entered
+circulation, the incentive can transition entirely to transaction fees and be completely inflation
+free.
+The incentive may help encourage nodes to stay honest. If a greedy attacker is able to
+assemble more CPU power than all the honest nodes, he would have to choose between using it
+to defraud people by stealing back his payments, or using it to generate new coins. He ought to
+find it more profitable to play by the rules, such rules that favour him with more new coins than
+everyone else combined, than to undermine the system and the validity of his own wealth.
+
+## reclaiming disk space
 
