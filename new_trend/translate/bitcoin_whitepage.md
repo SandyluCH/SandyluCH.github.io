@@ -63,19 +63,9 @@ PoW也解决了在主要决策中决定代理人的问题。如果大多数都�
 
 ## Incentive
 
-依照惯例，block中的第一笔交易是特殊的交易，它开始于一个由block的创建者所拥有的新的coin。这增加了对节点支持网络的激励方案，  且提供一个方式来初始分发coin到发行中，因为这里没有中心组织来发行他们。
-The steady addition of a constant of amount of new coins is analogous to gold miners expending
-resources to add gold to circulation. In our case, it is CPU time and electricity that is expended.
-The incentive can also be funded with transaction fees. If the output value of a transaction is
-less than its input value, the difference is a transaction fee that is added to the incentive value of
-the block containing the transaction. Once a predetermined number of coins have entered
-circulation, the incentive can transition entirely to transaction fees and be completely inflation
-free.
-The incentive may help encourage nodes to stay honest. If a greedy attacker is able to
-assemble more CPU power than all the honest nodes, he would have to choose between using it
-to defraud people by stealing back his payments, or using it to generate new coins. He ought to
-find it more profitable to play by the rules, such rules that favour him with more new coins than
-everyone else combined, than to undermine the system and the validity of his own wealth.
+依照惯例，block中的第一笔交易是特殊的交易，它开始于一个由block的创建者所拥有的新的coin。这增加了对节点支持网络的激励方案，  且提供一个方式来初始分发coin到发行中，因为这里没有中心组织来发行他们。一定数量的新coin的稳定增长类似于淘金者花费他们的资源去添加黄金到他们的发行量中一样。在我们的例子中，花费的是cpu时间和电力。激励方案也能获得交易费用的资助。如果交易的输出值少于它的输入者，差别在于交易费用被添加到了包含这个交易的block的激励值里面。一旦预定数量的coins进入到发行中，激励可以完全过渡到交易费用中并且完全没有通货膨胀。激励方案可以帮助鼓励节点保持诚实。如果一个贪婪的攻击者能够集合比所有的诚实节点更多的cpu power,他必须在使用它通过窃取自己的付款来欺骗人们 或使用它来生成新硬币之间做出选择。他应该会发现根据规则更喜欢用比其他人包含的更多的新硬币而不是破坏系统和他自己财富的有效性，这样更有利可图。
 
-## reclaiming disk space
+## 回收磁盘空间
+
+
 
