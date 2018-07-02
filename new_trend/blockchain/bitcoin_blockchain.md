@@ -23,4 +23,24 @@ Validation, verification,consensus, Immutable Recording lead to the trust and se
 
 
 ## blockchain reference
-[What is Blockchain Technology? A Step-by-Step Guide For Beginners](https://blockgeeks.com/guides/what-is-blockchain-technology/)
+### [What is Blockchain Technology? A Step-by-Step Guide For Beginners](https://blockgeeks.com/guides/what-is-blockchain-technology/)
+
+区块链是一个由化名为Satoshi Nakamoto所熟知的人及其他一群人的心血结晶。通过允许数字信息分发但不复制，区块链技术创造了一种新型互联网的支柱。最初设计为数字货币、比特币。
+
+比特币被称为数字黄金，迄今为止，该货币的总价值接近90亿美元。区块链可以创造其他类型的数字价值。
+
+### [a introduction to blockchain technology](https://bitsonblocks.net/2015/09/09/a-gentle-introduction-to-blockchain-technology/)
+通常关于blockchain technology都是关于一种数据存储的主题.
+具有以下特性的数据存储:
+- 包含金融交易
+- 实时多个系统被复制
+- 存在于点对点网络中
+- 使用密码和数字签名来证明身份、辨别真伪,并且有强制读写权限
+- 被某些参与者写入
+- 被某些参与者阅读,也可以被更广泛的读者阅读,并且有机制使其很难改变历史记录,或者至少可以很容易地检测到有人试图这样做
+
+blockchain 是一系列技术的集合.
+![avatar](https://bitsonblocks.files.wordpress.com/2015/09/blockchain_bag2.png)
+
+blockchain与普通数据库的区别:blockchain系统是一个包含普通数据库和一些软件的包。这些软件可以添加新行，验证新航符合预先约定的规则,并通过网络监听和广播新行给他们的对等节点,确保所有对等节点在他们的数据库中有相同的数据。
+![blockchain_approach](https://bitsonblocks.files.wordpress.com/2015/09/bitcoin_approach.jpg)
