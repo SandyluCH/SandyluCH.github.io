@@ -87,3 +87,5 @@
 - 与许多其他加密币一样，比特币非常不稳定，市场上没有那么多的比特币，而且需求正在快速变化。比特币价格受到加密货币行业的大型活动或公告的影响
 - 该技术仍处于起步节点。每天都在开发新工具，以提高区块链的安全稳定性，同时提供更广泛的功能，工具和服务。
 
+
+### [其他阅读 how does blockchain work](https://medium.com/blockchain-review/how-does-the-blockchain-work-for-dummies-explained-simply-9f94d386e093)
