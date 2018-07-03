@@ -228,4 +228,8 @@ public blockchains的优势:
 
 [区块链浏览器](https://blockexplorer.com/)
 
+[区块链浏览器2](https://blockchain.info/)
+
+如果要查询block #0模块的相关信息可以在上述两个浏览器中输入0搜索即可查询
+
 [EtherScan is a Block Explorer, Search, API and Analytics Platform for Ethereum, a decentralized smart contracts platform. You can use this website to explore and answer questions related to Ethereum Blockchain.](https://etherscan.io/)
