@@ -10,13 +10,46 @@ p的状态由p1、p2、p3决定，分成两种情况。
 例子：
 
 		var length = 0;
-		var p1 = new Promise((resolve,reject)=>{setTimeout(function(){console.info('p1'); length ++; reject('reject p1'); })});
-		var p2 = new Promise((resolve,reject)=>{setTimeout(function(){console.info('p2'); length ++; reject('reject p2');  })});
-		var p3 = new Promise((resolve,reject)=>{setTimeout(function(){console.info('p3'); resolve('resolve p3'); })});
-		var p = new Promise((resolve,reject)=>{ 
-		     Promise.all([p1,p2,p3]).then(res=>{console.info(res);}).catch(err=>{length++;console.info('promise all err='+err); if(length <=1){resolve(err);}else{reject(err);}   });
+		var p1 = new Promise((resolve,reject)=>{
+			setTimeout(function(){
+				console.info('p1'); 
+				length ++; 
+				reject('reject p1'); 
+			});
 		});
-		p.then(res=>{console.info('--then------'); console.info(res);  }).catch(err=>{console.info('--catch------'); console.info(err); });
+		var p2 = new Promise((resolve,reject)=>{
+			setTimeout(function(){
+				console.info('p2'); 
+				length ++; 
+				reject('reject p2');  
+			});
+		});
+		var p3 = new Promise((resolve,reject)=>{
+			setTimeout(function(){
+				console.info('p3');
+				 resolve('resolve p3'); 
+			});
+		});
+		var p = new Promise((resolve,reject)=>{ 
+		     Promise.all([p1,p2,p3]).then(res=>{
+		     	console.info(res);
+		     	}).catch(err=>{
+		     		length++;
+		     		console.info('promise all err='+err); 
+		     		if(length <=1){
+		     			resolve(err);
+		     		}else{
+		     			reject(err);
+		     		}  
+		        });
+		});
+		p.then(res=>{
+			console.info('--then------');
+			 console.info(res); 
+			  }).catch(err=>{
+			  	console.info('--catch------'); 
+			  	console.info(err); 
+	    });
 		打印结果是：
 		 Promise {<pending>}
 		 p1

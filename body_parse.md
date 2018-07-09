@@ -8,11 +8,11 @@ body-parser是express的中间件，用于nodejs的body的解析。
   3. 处理不同的压缩类型：如gzip、deflare
   4. 其他边界、异常的处理
 ## pako
-    zlib的压缩和解压  
+zlib的压缩和解压  
 	
-	压缩之后的数据   通过websocket传输得到的是blob对象
-	<p>
-	  <code>
+压缩之后的数据   通过websocket传输得到的是blob对象
+
+
 	  blob对象转为 json
 	function blobToString(blob,conn){
 	//blob 转为 string
@@ -39,8 +39,6 @@ body-parser是express的中间件，用于nodejs的body的解析。
        }
      }
    }
-	  
-	  </code>
-	</p>
+
 	
   
