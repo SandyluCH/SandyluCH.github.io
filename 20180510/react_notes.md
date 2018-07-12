@@ -184,6 +184,7 @@ function Welcome(props) {
 并且返回一个React 元素。  我们把这种组件叫做 “ functional ”,因为它是合法的javascript 函数。
 
 2. 您也可以使用ES6 class来定义一个组件
+
 代码示例：
 ````
 
@@ -212,6 +213,7 @@ ReactDOM.render(
 ````
 
 + Composing Components
+
 组件可以引用输出中的其他组件。这让我们可以在任何级别的细节中使用相同的组件抽象。一个按钮、
 一个表单、一个对话框、一个屏幕，在反应式应用程序中，所有这些都通常表示为组件。
 
