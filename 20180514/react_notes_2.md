@@ -18,11 +18,11 @@ function Clock(props) {
 ````
 
 将一个functional组件转为 a class 只需要5步，以Clock组件为例：
-(1). 创建一个相同名的ES6类， 继承与React.Component
-(2). 添加render()方法
-(3). 改变render()方法的body
-(4). 在render()方法中 用this.props替换 props
-(5). 删掉遗留的空函数声明
+- (1). 创建一个相同名的ES6类， 继承与React.Component
+- (2). 添加render()方法
+- (3). 改变render()方法的body
+- (4). 在render()方法中 用this.props替换 props
+- (5). 删掉遗留的空函数声明
 
 转换之后class的代码是：
 
