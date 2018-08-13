@@ -57,15 +57,15 @@ Here is a list of methods supported by the chart.
 
 ### onDataLoaded()
 
-You can subscribe using [Subscription](Subscription) object returned by this function to be notified when new history bars are loaded. You can also use the same object to unsubscribe from the event.
+You can subscribe using [Subscription](Subscription.md) object returned by this function to be notified when new history bars are loaded. You can also use the same object to unsubscribe from the event.
 
 ### onSymbolChanged()
 
-You can subscribe using [Subscription](Subscription) object returned by this function to be notified when the symbol is changed. You can also use the same object to unsubscribe from the event.
+You can subscribe using [Subscription](Subscription.md) object returned by this function to be notified when the symbol is changed. You can also use the same object to unsubscribe from the event.
 
 ### onIntervalChanged()
 
-You can subscribe using [Subscription](Subscription) object returned by this function to be notified when the interval is changed. You can also use the same object to unsubscribe from the event.
+You can subscribe using [Subscription](Subscription.md) object returned by this function to be notified when the interval is changed. You can also use the same object to unsubscribe from the event.
 When the event is fired it will provide the following arguments:
 
 1. `interval`: new interval
@@ -102,7 +102,7 @@ The Charting Library will call the callback function every time the crosshair po
 
 *Since version 1.13.*
 
-You can subscribe using [Subscription](Subscription) object returned by this function to be notified when visible time range is changed. You can also use the same object to unsubscribe from the event.
+You can subscribe using [Subscription](Subscription.md) object returned by this function to be notified when visible time range is changed. You can also use the same object to unsubscribe from the event.
 
 ## Chart Actions
 
@@ -124,7 +124,7 @@ Makes the chart change its symbol. Callback function is called once the data for
 
 ### setResolution(resolution, callback)
 
-1. `resolution`: string. Format is described in another [article](Resolution).
+1. `resolution`: string. Format is described in another [article](Resolution.md).
 1. `callback`: function()
 
 Makes the chart change its resolution. Callback function is called once new data is loaded.
@@ -275,7 +275,7 @@ Sets visibility of an entity with a passed ID.
 1. `lock`: boolean, shows whether a user will be able to remove/change/hide the study or not
 1. `inputs`: (starting from version `1.2`) an array of study inputs. This array is expected to contain input values in the same order as in the study properties dialog.
 1. `callback`: function(`entityId`)
-1. `overrides`: (starting from version `1.2`) an object [containing properties](Studies-Overrides) you'd like to set for your new study. Note that you should not specify the study name. Start a property path with a plot name.
+1. `overrides`: (starting from version `1.2`) an object [containing properties](Studies-Overrides.md) you'd like to set for your new study. Note that you should not specify the study name. Start a property path with a plot name.
 1. `options`: object with the the following keys:
     * `checkLimit` - if it is `true` then the study limit dialog will be shown if the limit is exceeded.
     * `priceScale` - preferred price scale for the study. Possible values are:
@@ -362,7 +362,7 @@ This call creates a shape at a specific point on the chart provided that it's wi
 
 The function returns `entityId` - unique ID of the shape if the creation was successful and `null` if it wasn't.
 
-Check out [Shapes and Overrides](Shapes-and-Overrides) for more information.
+Check out [Shapes and Overrides](Shapes-and-Overrides.md) for more information.
 
 This call creates a shape at a specific point on the chart provided that it's within the main series area.
 
@@ -370,7 +370,7 @@ This call creates a shape at a specific point on the chart provided that it's wi
 
 1. `entityId`: object. The value that is returned when a shape is created via API
 
-Returns an instance of the [ShapeApi](Shape-Api) that allows you to interact with the shape.
+Returns an instance of the [ShapeApi](Shape-Api.md) that allows you to interact with the shape.
 
 ### removeEntity(entityId)
 
@@ -388,7 +388,7 @@ Removed all the studies from the chart.
 
 ### getPanes()
 
-Returns an array of instances of the [PaneApi](Pane-Api) that allows you to interact with the panes.
+Returns an array of instances of the [PaneApi](Pane-Api.md) that allows you to interact with the panes.
 
 ## Study Templates
 
@@ -399,7 +399,7 @@ Returns an array of instances of the [PaneApi](Pane-Api) that allows you to inte
 
 Saves the study template to JS object. Charting Library will call your callback function and pass the state object as an argument.
 
-This call is a part of low-level [save/load API](Saving-and-Loading-Charts).
+This call is a part of low-level [save/load API](Saving-and-Loading-Charts.md).
 
 ### applyStudyTemplate(template)
 
@@ -407,7 +407,7 @@ This call is a part of low-level [save/load API](Saving-and-Loading-Charts).
 
 Loads the study template from the `template` object.
 
-This call is a part of low-level [save/load API](Saving-and-Loading-Charts).
+This call is a part of low-level [save/load API](Saving-and-Loading-Charts.md).
 
 ## Trading Primitives
 
@@ -418,7 +418,7 @@ This call is a part of low-level [save/load API](Saving-and-Loading-Charts).
 
 Creates a new trading order on the chart and returns an API-object that you can use to adjust its properties and behavior.
 
-It is strongly recommended to read [this article](Trading-Primitives) before using this call.
+It is strongly recommended to read [this article](Trading-Primitives.md) before using this call.
 
 API object methods:
 
@@ -494,7 +494,7 @@ widget.chart().createOrderLine()
 
 Creates a new trading position on the chart and returns an API-object that you can use to adjust its properties and behavior.
 
-It is strongly recommended to read [this article](Trading-Primitives) before using this call.
+It is strongly recommended to read [this article](Trading-Primitives.md) before using this call.
 
 API object methods:
 
@@ -577,7 +577,7 @@ widget.chart().createPositionLine()
 
 Creates a new trade execution on the chart and returns an API-object that you can use to control the execution properties.
 
-It is strongly recommended to read [this article](Trading-Primitives) before using this call.
+It is strongly recommended to read [this article](Trading-Primitives.md) before using this call.
 
 API object has a set of properties listed below. Each property should be used through respective accessors.
 For example, if you wish to work with `Extend Left` property, then use `getExtendLeft()` of `setExtendLeft()` methods.
@@ -642,7 +642,7 @@ Returns the current symbol information of the chart. The object has the followin
 
 ### resolution()
 
-Returns the chart's time interval. The format is described in this [article](Resolution).
+Returns the chart's time interval. The format is described in this [article](Resolution.md).
 
 ### getVisibleRange()
 
@@ -664,9 +664,9 @@ Returns the main series style type.
 
 ## See Also
 
-* [Widget Methods](Widget-Methods)
-* [Customization Overview](Customization-Overview)
-* [Widget Constructor](Widget-Constructor)
-* [Saving and Loading Charts](Saving-and-Loading-Charts)
-* [Overriding Studies' Defaults](Studies-Overrides)
-* [Overriding Chart's Defaults](Overrides)
+* [Widget Methods](Widget-Methods.md)
+* [Customization Overview](Customization-Overview.md)
+* [Widget Constructor](Widget-Constructor.md)
+* [Saving and Loading Charts](Saving-and-Loading-Charts.md)
+* [Overriding Studies' Defaults](Studies-Overrides.md)
+* [Overriding Chart's Defaults](Overrides.md)
