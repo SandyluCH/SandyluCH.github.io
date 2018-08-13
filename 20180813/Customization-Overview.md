@@ -70,10 +70,10 @@ var widget = new TradingView.widget({
 });
 ```
 
-More details are available in the [Widget Constructor Arguments article](Widget-Constructor).
+More details are available in the [Widget Constructor Arguments article](Widget-Constructor.md).
 
 ## See Also
 
-* [Widget's Constructor Arguments](Widget-Constructor)
-* [Widget's Methods](Widget-Methods)
-* [Customization Use Cases](Customization-Use-Cases)
+* [Widget's Constructor Arguments](Widget-Constructor.md)
+* [Widget's Methods](Widget-Methods.md)
+* [Customization Use Cases](Customization-Use-Cases.md)
