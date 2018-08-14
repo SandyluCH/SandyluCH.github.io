@@ -1,4 +1,4 @@
-Delegate is an object that is used in the [Account Manager](Account-Manager) to notify about events happening with orders, positions and other information displayed in the tables.
+Delegate is an object that is used in the [Account Manager](Account-Manager.md) to notify about events happening with orders, positions and other information displayed in the tables.
 
 ### subscribe(object, member)
 

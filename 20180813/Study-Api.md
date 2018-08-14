@@ -70,7 +70,7 @@ Places the study behind all other chart objects.
 
 ### applyOverrides(overrides)
 
-1. `overrides` - new [overrides](Studies-Overrides) for the study
+1. `overrides` - new [overrides](Studies-Overrides.md) for the study
 
 Applies `overrides` to the study.
 

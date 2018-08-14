@@ -46,7 +46,7 @@ Optional type of the instrument.
 
 ## session
 
-Trading hours for this symbol. See the [Trading Sessions](Trading-Sessions) article to learn more details.
+Trading hours for this symbol. See the [Trading Sessions](Trading-Sessions.md) article to learn more details.
 
 ## exchange, listed_exchange
 
@@ -186,7 +186,7 @@ If it is set to `true`, all resolutions that are supplied directly by the datafe
 
 An array of resolutions which should be enabled for this symbol.
 
-Each item of an array is expected to be a string. Format is described in another [article](Resolution).
+Each item of an array is expected to be a string. Format is described in another [article](Resolution.md).
 
 If one changes the symbol and new symbol does not support the selected resolution then resolution will be switched to the first available one in the list.
 
@@ -208,14 +208,14 @@ Supported resolutions affect available timeframes too. The timeframe will not be
 *Default:* `[]`
 
 Array of resolutions (in minutes) supported directly by the data feed.
-Each such resolution may be passed to, and should be implemented by, [getBars](JS-Api#getbarssymbolinfo-resolution-from-to-onhistorycallback-onerrorcallback-firstdatarequest).
+Each such resolution may be passed to, and should be implemented by, [getBars](JS-Api.md#getbarssymbolinfo-resolution-from-to-onhistorycallback-onerrorcallback-firstdatarequest).
 The default of `[]` means that the data feed supports aggregating by any number of minutes.
 
-If the data feed only supports certain minute resolutions but not the requested resolution, [getBars](JS-Api#getbarssymbolinfo-resolution-from-to-onhistorycallback-onerrorcallback-firstdatarequest) will be called (repeatedly if needed) with a higher resolution as a parameter, in order to build the requested resolution.
+If the data feed only supports certain minute resolutions but not the requested resolution, [getBars](JS-Api.md#getbarssymbolinfo-resolution-from-to-onhistorycallback-onerrorcallback-firstdatarequest) will be called (repeatedly if needed) with a higher resolution as a parameter, in order to build the requested resolution.
 
 For example, if the data feed only supports minute resolution, set `intraday_multipliers` to `['1']`.
 
-When the user wants to see 5-minute data, [getBars](JS-Api#getbarssymbolinfo-resolution-from-to-onhistorycallback-onerrorcallback-firstdatarequest) will be called with the resolution set to 1 until the library builds all the 5-minute resolution by itself.
+When the user wants to see 5-minute data, [getBars](JS-Api.md#getbarssymbolinfo-resolution-from-to-onhistorycallback-onerrorcallback-firstdatarequest) will be called with the resolution set to 1 until the library builds all the 5-minute resolution by itself.
 
 ## has_seconds
 
