@@ -147,6 +147,7 @@ String name = 'Bob';
 
 ````
 ### 默认值
+未被初始化的变量有一个初始值null.
 ````
 int lineCount;
 assert(lineCount == null);
@@ -194,6 +195,147 @@ String piAsString = 3.14159.toStringAsFixed(2);
 assert(piAsString == '3.14');
 
 ````
+
+#### 字符串String类型
+A Dart string is a sequence of UTF-16 code units。你可以使用单引号和引号来创建一个字符串。
+
+你也可以使用${expression}在字符串中放表达式的值。如果expression是一个变量，可以取消{}。如：
+````
+var s = 'string interpolation';
+
+assert('Dart has $s, which is very handy.' ==
+    'Dart has string interpolation, ' +
+        'which is very handy.');
+assert('That deserves all caps. ' +
+        '${s.toUpperCase()} is very handy!' ==
+    'That deserves all caps. ' +
+        'STRING INTERPOLATION is very handy!');
+
+````
+
+你可以使用相邻的字符串或+号来连接字符串
+````
+var s1 = 'String '
+    'concatenation'
+    " works even over line breaks.";
+assert(s1 ==
+    'String concatenation works even over '
+        'line breaks.');
+
+var s2 = 'The + operator ' + 'works, as well.';
+assert(s2 == 'The + operator works, as well.');
+
+````
+创建多行文本字符串，可以使用带单引号或双引号的三引号：
+````
+var s1 = '''
+You can create
+multi-line strings like this one.
+''';
+
+var s2 = """This is also a
+multi-line string.""";
+
+````
+你可以在字符串前面加r 来创建一个“raw”字符串：
+````
+var s = r'In a raw string, not even \n gets special treatment.';
+
+````
+var和const定义的变量不能连接成const类型的字符串
+
+
+#### Booleans
+dart语言中只有两个值true和false（都是编译时变量）是bool类型的。
+dart类型的安全性意味着你不能使用如下代码表达式```if(nonbooleanValue)``` 和 ```assert (nonbooleanValue) ```. 相反，需要明确指定检查的值，如下所示：
+````
+// Check for an empty string.
+var fullName = '';
+assert(fullName.isEmpty);
+
+// Check for zero.
+var hitPoints = 0;
+assert(hitPoints <= 0);
+
+// Check for null.
+var unicorn;
+assert(unicorn == null);
+
+// Check for NaN.
+var iMeantToDoThis = 0 / 0;
+assert(iMeantToDoThis.isNaN);
+
+````
+
+#### Lists
+在dart语言中，数组就是List 对象。
+````
+var list = [1, 2, 3];
+````
+Dart 2.3里有扩展操作符(...) 和 允许空值的扩展操作符(...?),都提供了将多个元素插入到集合中的简洁方法。
+如：
+````
+// 不允许空值
+var list = [1, 2, 3];
+var list2 = [0, ...list];
+assert(list2.length == 4);
+
+
+// 允许空值
+var list;
+var list2 = [0, ...?list];
+assert(list2.length == 1);
+
+````
+
+也可以使用conditional (if) 和 repetition (for) 来建立集合。
+如：
+````
+ var promoActive = false;
+var nav = [
+  'Home',
+  'Furniture',
+  'Plants',
+  if (promoActive) 'Outlet'
+]; // promoActive 为false时， nav:['Home', 'Furniture','Plants']
+// promoActive 为true 时， nav:['Home', 'Furniture','Plants', 'Outlet'],
+
+````
+````
+var listOfInts = [1, 2, 3];
+var listOfStrings = [
+  '#0',
+  for (var i in listOfInts) '#$i'
+];
+assert(listOfStrings[1] == '#1');
+
+````
+
+
+#### Sets 集合
+set是一组无序且无重复的item的集合。
+
+创建一个简单的set:
+````
+var halogens = {'fluorine', 'chlorine', 'bromine', 'iodine', 'astatine'};
+
+````
+创建一个空的set:
+````
+var names = <String>{};
+// Set<String> names = {}; // This works, too.
+// var names = {}; // Creates a map, not a set.
+````
+set 也支持扩展操作符 (... 和 ...?)
+
+
+
+
+
+
+
+
+
 
 
 
