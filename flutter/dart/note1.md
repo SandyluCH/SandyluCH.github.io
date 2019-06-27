@@ -593,8 +593,120 @@ conditional	| expr1 ? expr2 : expr3
 cascade	| ..
 assignment	| =    *=    /=   +=   -=   &=   ^=   etc.
 
+1、 算数运算符
++	| Add
+:-: | :-: 
+–	| Subtract
+-expr	| Unary minus, also known as negation (reverse the sign of the expression)
+*	| Multiply
+/	| Divide
+~/	| Divide, returning an integer result
+%	| Get the remainder of an integer division (modulo)
+
+2、前缀和后缀自增自减运算符
+Operator	| Meaning
+:-: | :-: 
+++var	| var = var + 1 (expression value is var + 1)
+var++	| var = var + 1 (expression value is var)
+--var	| var = var – 1 (expression value is var – 1)
+var--	| var = var – 1 (expression value is var)
+
+3、Equality and relational operators
+Operator	| Meaning
+:-: | :-: 
+==	| Equal; see discussion below
+!=	| Not equal
+>	| Greater than
+<	| Less than
+>=	| Greater than or equal to
+<=	| Less than or equal to
+
+4、类型测试运算符
+
+as, is , is! 运算符用来检查在运行时的类型
+Operator	| Meaning
+:-: | :-: 
+as	| Typecast (also used to specify library prefixes)
+is	| True if the object has the specified type
+is!	| False if the object has the specified type
+
+5、 Assignment operators
+=	| –=	| /=	| %=	| >>=	| ^=
+:-: | :-: | :-: | :-: | :-: | :-: 
++=	| *=	| ~/=	| <<=	| &=	| |=
+
+工作方式：
+ 	| Compound assignment	| Equivalent expression
+:-: | :-: | :-:
+For an operator op:	| a op= b	| a = a op b
+Example:	| a += b	| a = a + b
 
 
+6、逻辑运算符
+Operator	| Meaning
+:-: | :-:
+!expr	| inverts the following expression (changes false to true, and vice versa)
+||	| logical OR
+&&	| logical AND
+
+7、位运算符和移位运算符
+Operator	| Meaning
+:-: | :-:
+&	| AND
+|	| OR
+^	| XOR
+~expr	| Unary bitwise complement (0s become 1s; 1s become 0s)
+<<	| Shift left
+>>	| Shift right
+
+8、条件表达
+
+```condition ? expr1 : expr2```
+If condition is true, evaluates expr1 (and returns its value); otherwise, evaluates and returns the value of expr2.
+```expr1 ?? expr2```
+If expr1 is non-null, returns its value; otherwise, evaluates and returns the value of expr2.
+
+9、Cascade notation (..) 级联符号
+
+示例：
+````
+querySelector('#confirm') // Get an object.
+  ..text = 'Confirm' // Use its members.
+  ..classes.add('important')
+  ..onClick.listen((e) => window.alert('Confirmed!'));
+````
+上述代码等价于：
+````
+var button = querySelector('#confirm');
+button.text = 'Confirm';
+button.classes.add('important');
+button.onClick.listen((e) => window.alert('Confirmed!'));
+````
+
+10、其他操作符
+Operator	| Name	| Meaning
+:-: | :-:| :-:
+()	| Function application	| Represents a function call
+[]	| List access	| Refers to the value at the specified index in the list
+.	| Member access	| Refers to a property of an expression; example: foo.bar selects property bar from expression foo
+?.	| Conditional member access	| Like ., but the leftmost operand can be null; example: foo?.bar selects property bar from expression foo unless foo is null (in which case the value of foo?.bar is null) 即，foo可为null
+
+#### Control flow statements
+dart代码中控制流程的表达有：
+- if and else
+- for 
+- while and do-while
+- break and continue
+- switch and case
+- assert
+
+1、 Assert
+
+在开发模式中， 使用断言表达式—— assert(condition, optionalMessage); 如果condition的值为false, 中断正常的执行。
+断言表达式起作用于：
+  - Flutter enables assertions in debug mode
+  - Development-only tools such as dartdevc typically enable assertions by default.
+  - Some tools, such as dart and dart2js, support assertions through a command-line flag: --enable-asserts. 如：```dart --enable-asserts main.dart ```
 
 
 
