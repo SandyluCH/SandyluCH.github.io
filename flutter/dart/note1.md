@@ -331,6 +331,278 @@ set 也支持扩展操作符 (... 和 ...?)
 
 #### Maps
 
+Maps是键值对的集合。key值具有唯一性，value不具有唯一性。
+使用map literals创建 dart map:
+````
+var gifts = {
+  // Key:    Value
+  'first': 'partridge',
+  'second': 'turtledoves',
+  'fifth': 'golden rings'
+};
+
+var nobleGases = {
+  2: 'helium',
+  10: 'neon',
+  18: 'argon',
+};
+
+````
+* 上述代码中的gifts对象相当于类型为Map<String, String>的集合， nobleGases相当于类型为Map<int, String>的集合。如果你尝试添加错误类型的值到任意一个map对象中， 都会报错。
+
+你也可以使用map的构造函数来创建map对象
+````
+var gifts = Map();
+gifts['first'] = 'partridge';
+gifts['second'] = 'turtledoves';
+gifts['fifth'] = 'golden rings';
+
+var nobleGases = Map();
+nobleGases[2] = 'helium';
+nobleGases[10] = 'neon';
+nobleGases[18] = 'argon';
+
+````
+
+向已存在map中添加键值对：
+````
+var gifts = {'first': 'partridge'};
+gifts['fourth'] = 'calling birds'; // Add a key-value pair
+
+````
+
+获取map中的某个键值，如```gifts['fourth'] ```,如果键值不存在，返回的记过为null.
+
+maps 同样支持操作符（... 和 ...?）.
+
+#### Runes（符号文字）
+在dart中， runes是UTF-32编码的字符串。它可以通过文字转换成符号表情或者代表特定的文字。 String类型是UTF-16编码， 所以Rune是一种特殊的字符串，有自己相对独有的声明方式。
+
+通常一个Unicode code point 表达方式是 \uXXXX, 其中XXXX是4位的16进制值。 例如 \u2665 表示❤。 如果要表示多于或者少于4位的16进制字节的表情符号， 可以使用大括号括起来。如：笑脸 是\u{1f600}。
+例如：
+````
+ var clapping = '\u{1f44f}';
+  print(clapping);
+  print(clapping.codeUnits);
+  print(clapping.runes.toList());
+
+  Runes input = new Runes(
+      '\u2665  \u{1f605}  \u{1f60e}  \u{1f47b}  \u{1f596}  \u{1f44d}');
+  print(new String.fromCharCodes(input));
+
+````
+
+翻转字符串例子1：
+````
+var input = "Music \u{1d11e} for the win"; // Music 𝄞 for the win
+print(new String.fromCharCodes(input.runes.toList().reversed)); // niw eht rof 𝄞 cisuM
+
+````
+翻转字符串例子2：
+````
+var input =  'Ame\u{301}lie'; // Amélie
+print(new String.fromCharCodes(input.runes.toList().reversed)); // eiĺemA
+
+````
+
+#### Symbols
+一个symbol对象表示在dart项目中定义的运算符和标识符。
+
+#### Functions
+例子1：
+````
+bool isNoble(int atomicNumber) {
+  return _nobleGases[atomicNumber] != null;
+}
+
+````
+
+例子2：
+````
+isNoble(atomicNumber) {
+  return _nobleGases[atomicNumber] != null;
+}
+````
+
+例子3：
+````
+bool isNoble(int atomicNumber) => _nobleGases[atomicNumber] != null;
+
+````
+
+##### 可选的参数
+可选的参数要么是 指定位置参数，要么是命名参数
+
+1、可选的命令参数 paramName: value
+
+如：
+定义一个函数：
+````
+/// Sets the [bold] and [hidden] flags ...
+void enableFlags({bool bold, bool hidden}) {...}
+````
+调用这个函数：
+````
+enableFlags(bold:true, hidden:false);
+````
+
+可以使用@required来标识一个必须要的参数，例如：
+````
+const Scrollbar({Key key, @required Widget child})
+
+````
+
+2、可选的位置参数
+
+函数的参数集合中 用[]标识的就是可选的位置参数，如：
+````
+String say(String from, String msg, [String device]) {
+  var result = '$from says $msg';
+  if (device != null) {
+    result = '$result with a $device';
+  }
+  return result;
+}
+````
+调用该函数的方法是:
+````
+  var msg = say('Bob', 'Howdy');
+  var msg2 = say('Bob', 'Howdy', 'smoke singal');
+  print(msg); // Bob says Howdy
+  print(msg2); // Bob says Howdy with a smoke singal
+````
+
+3、 默认的参数值
+
+你的函数可以使用=号给命令参数或者位置参数来定义默认值，默认值必须是编译时常量， 如果没有默认值提供，那么默认值就认为是null. 例如：
+````
+/// Sets the [bold] and [hidden] flags ...
+void enableFlags({bool bold = false, bool hidden = false}) {...}
+
+// bold will be true; hidden will be false.
+enableFlags(bold: true);
+
+````
+
+4、 main()函数
+
+每个app都有一个最高级的main函数，作为app的入口。 main函数返回void， 有一个可选的List<String>作为参数， 例如：
+````
+// Run the app like this: dart args.dart 1 test
+void main(List<String> arguments) {
+  print(arguments);
+
+  assert(arguments.length == 2);
+  assert(int.parse(arguments[0]) == 1);
+  assert(arguments[1] == 'test');
+}
+````
+
+5、函数作为first-class对象
+
+你可以把函数作为一个参数传递给另一个函数， 例如：
+````
+void printElement(int element) {
+  print(element);
+}
+
+var list = [1, 2, 3];
+
+// Pass printElement as a parameter.
+list.forEach(printElement);
+
+````
+
+你也可以把函数作为一个变量， 例如：
+````
+var loudify = (msg) => '!!! ${msg.toUpperCase()} !!!';
+assert(loudify('hello') == '!!! HELLO !!!');
+````
+
+##### 匿名函数
+````
+([[Type] param1[, …]]) { 
+  codeBlock; 
+}; 
+````
+实例：
+````
+var list = ['apples', 'bananas', 'oranges'];
+list.forEach((item) {
+  print('${list.indexOf(item)}: $item');
+});
+
+````
+
+##### lexical scope 作用域
+##### lexical closures 闭包
+##### 测试函数相等性
+下面是测试顶级函数、静态方法和实例方法是否相等的示例：
+````
+void foo() {} // A top-level function
+
+class A {
+  static void bar() {} // A static method
+  void baz() {} // An instance method
+}
+
+void main() {
+  var x;
+
+  // Comparing top-level functions.
+  x = foo;
+  assert(foo == x);
+
+  // Comparing static methods.
+  x = A.bar;
+  assert(A.bar == x);
+
+  // Comparing instance methods.
+  var v = A(); // Instance #1 of A
+  var w = A(); // Instance #2 of A
+  var y = w;
+  x = w.baz;
+
+  // These closures refer to the same instance (#2),
+  // so they're equal.
+  assert(y.baz == x);
+
+  // These closures refer to different instances,
+  // so they're unequal.
+  assert(v.baz != w.baz);
+}
+````
+#### Operators
+
+Description	| Operator
+:-: | :-: 
+unary postfix	| expr++    expr--    ()    []    .    ?.
+unary prefix	| -expr    !expr    ~expr    ++expr    --expr   
+multiplicative	| *    /    %  ~/
+additive	| +    -
+shift	| <<    >>    >>>
+bitwise AND	| &
+bitwise XOR	| ^
+bitwise OR	| |
+relational and type test	| >=    >    <=    <    as    is    is!
+equality	| ==    !=   
+logical AND	| &&
+logical OR	| ||
+if null	| ??
+conditional	| expr1 ? expr2 : expr3
+cascade	| ..
+assignment	| =    *=    /=   +=   -=   &=   ^=   etc.
+
+
+
+
+
+
+
+
+
+
+
 
 
 
