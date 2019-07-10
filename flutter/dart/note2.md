@@ -130,7 +130,7 @@ class Point {
 ````
 构造函数不能被继承，父类中的命名构造函数不能被子类继承。如果想要子类也拥有一个父类一样名字，必须在子类中实现这个构造函数
 
-- 调用父类的非默认构造函数 
+ 调用父类的非默认构造函数 
 默认情况下，子类只能调用父类的默认构造函数（无名，无参数的构造函数）； 父类的无名构造函数会在子类的构造函数前调用； 如果
 如果initializer list 也同时定义了，则会先执行initializer list 中的内容，然后在执行父类的无名无参数构造函数，最后调用子类自己的无名无参数构造函数。即下面的顺序：
   - 1、initializer list（初始化列表）
@@ -169,3 +169,138 @@ main() {
 }
 
 ````
+
+- 静态构造函数
+
+如果你的类产生的对象永远不会改变，你可以让这些对象成为编译时常量。为此， 需要定义一个const 构造函数并确保所有的实例变量都是final的。
+````
+class ImmutablePoint {
+    final num x;
+    final num y;
+    const ImmutablePoint(this.x, this.y);
+    static final ImmutablePoint origin = const ImmutablePoint(0, 0);
+}
+
+````
+
+- 重定向构造函数
+
+有时候构造函数的目的只是重定向到该类的另一个构造函数。重定向构造函数没有函数体，使用冒号:分隔。
+````
+class Point {
+    num x;
+    num y;
+
+    // 主构造函数
+    Point(this.x, this.y) {
+        print("Point($x, $y)");
+    }
+
+    // 重定向构造函数，指向主构造函数，函数体为空
+    Point.alongXAxis(num x) : this(x, 0);
+}
+
+void main() {
+    var p1 = new Point(1, 2);
+    var p2 = new Point.alongXAxis(4);
+}
+
+````
+
+- 常量构造函数
+
+如果类的对象不会发生变化， 可以构造一个编译时的常量构造函数。定义格式如下：定义所有的实例变量是final 以及使用const声明构造函数
+````
+class ImmutablePoint {
+  static final ImmutablePoint origin =
+      const ImmutablePoint(0, 0);
+
+  final num x, y;
+
+  const ImmutablePoint(this.x, this.y);
+}
+````
+
+- 工厂构造函数
+
+当实现一个使用factory关键词修饰的构造函数时， 这个构造函数不必创建类的新实例。例如， 工厂构造函数可能从缓存返回实例， 或者它可能返回子类型的实例。
+
+下面例子是工厂函数时从缓存中返回实例
+````
+class Logger {
+  final String name;
+  bool mute = false;
+
+  // _cache is library-private, thanks to
+  // the _ in front of its name.
+  static final Map<String, Logger> _cache =
+      <String, Logger>{};
+
+  factory Logger(String name) {
+    if (_cache.containsKey(name)) {
+      return _cache[name];
+    } else {
+      final logger = Logger._internal(name);
+      _cache[name] = logger;
+      return logger;
+    }
+  }
+
+  Logger._internal(this.name);
+
+  void log(String msg) {
+    if (!mute) print(msg);
+  }
+}
+
+````
+
+
+### methods 方法
+
+1、 实例方法
+````
+import 'dart:math';
+
+class Point {
+  num x, y;
+
+  Point(this.x, this.y);
+
+  num distanceTo(Point other) {
+    var dx = x - other.x;
+    var dy = y - other.y;
+    return sqrt(dx * dx + dy * dy);
+  }
+}
+
+````
+
+2、Getters and Setters
+````
+class Rectangle {
+  num left, top, width, height;
+
+  Rectangle(this.left, this.top, this.width, this.height);
+
+  // Define two calculated properties: right and bottom.
+  num get right => left + width;
+  set right(num value) => left = value - width;
+  num get bottom => top + height;
+  set bottom(num value) => top = value - height;
+}
+
+void main() {
+  var rect = Rectangle(3, 4, 20, 15);
+  assert(rect.left == 3);
+  rect.right = 12;
+  assert(rect.left == -8);
+}
+
+````
+
+3、抽象方法
+
+
+
+
