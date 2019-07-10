@@ -184,20 +184,90 @@ Layout helpers
 
 
 ### Assets、图片、ICONS
+- Image 一个显示图片的widget
+- Icon  A Material Design icon
+- RawImage 一个直接显示dart:ui.Image的widget
+- AssetBundle 包含应用程序可以使用的资源，如图像和字符串。对这些资源的访问是异步，所以他们可以来自网络（例如，从NetworkAssetBundle）或从本地文件系统，这并不会挂起用户界面。
 
-### Input
+### 表单组件
+- Form   一个可选的、用于给多个TextField分组的widget
+- FormFiled 一个单独的表单字段。此widget维护表单字段的当前状态，以便在UI中直观地反映更新和验证错误。
+- RawKeyboardListener 每当用户按下或释放键盘上的调用回调的widget
+
 
 ### 动画和Motion
+- AnimatedContainer 在一段时间内逐渐改变其值的容器
+- AnimatedCrossFade 一个widget， 在两个child之间交叉淡入，并同时调整他们的尺寸
+- Hero 将其子项标记为hero动画候选的widget。
+- AnimatedBuilder 用于构建动画的通用小部件。AnimatedBuilder在有多个widget希望有一个动画作为一个较大的建造函数部分时会非常有用。要使用AnimatedBuilder，只需构建widget并将其传给builder函数即可。
+- DecoratedBoxTransition  DecoratedBox的动画版本， 可以给他的Decoration不同属性使用动画
+- FadeTransition 对透明度使用动画的widget
+- PositionedTransition Positioned的动画版本，它需要一个特定的动画来将孩子的位置从动画的生命周期的起始位置移到结束位置。
+- RotationTransition 对widget使用旋转动画
+- ScaleTransition  对widget使用缩放动画
+- SizeTransition  Animated its own size and clips and aligns the child
+- SlideTransition 对相对于其正常位置的某个位置之间使用动画
+- AnimatedDefaultTextStyle 在文本样式切换时使用动画
+- AnimatedListState 动画列表的state
+- AnimatedModalBarrier 一个阻止用户与widget交互的widget
+- AnimatedOpacity  在给定的透明度变化时，自动地在给定的一段时间内改变孩子的Opacity
+- AnimatedPhysicalModel 
+- AnimatedPositioned 每当给定位置变化，自动在给定的时间内转换孩子的位置
+- AnimatedSize 当给定的孩子的大小变化时，它自动的在给定时间内转换它的大小
+- AnimatedWidget 当给定的listenable改变值时，会重新构建该widget
+- AnimatedWidgetBaseState 具有隐式动画的widget的
 
-### 交互模型
+### 交互模型widget
+- LongPressDraggable  长按时可拖动
+- GestureDetector 检测手势
+- DragTarget 一个拖动的目标widget, 在完成拖动时它可以接收数据
+- Dismissible 可以在拖动时隐藏的widget
+- IgnorePointer 在hit test中不可见的widget。当ignoring为true时，此widget及其子树不响应事件。但它在布局过程中仍然消耗空间，并像往常一样绘制它的孩子。它是无法捕获事件对象、因为它在RenderBox.hitTest中返回false
+- AbsorbPointer  在hit test期间吸收(拦截)事件。当absorbing为true时，此小部件阻止其子树通过终止命中测试来接收指针事件。它在布局过程中仍然消耗空间，并像往常一样绘制它的孩子。它只是防止其孩子成为事件命中目标，因为它从RenderBox.hitTest返回true。
+- Navigator 导航器， 可以在多个页面（路由）栈之间跳转
+- Scrollable 实现了可滚动widget的交互模型， 但不包含UI显示相关的逻辑
 
-### 样式
+
+### 样式widget
+- Padding   一个widget, 会给其子widget添加指定的填充
+- Theme  将主题应用于子widget。 主题描述了应用选择的颜色和字体。
+- MediaQuery 建立一个子树， 在树中媒体查询解析不同的给定数据
 
 ### 绘制和效果
+- Opacity 使其子widget透明的widget
+- Transform 在绘制子widget之前应用转换的widget
+- DecoratedBox 在孩子绘制之前或之后绘制装饰的widget
+- FractionalTranslation 绘制盒子之前给其添加一个偏移转换
+- RotatedBox  可以沿顺时针以90度的倍数旋转其子widget
+- ClipOval 用椭圆剪辑其孩子的widget
+- ClipPath 用path剪辑其孩子的widget
+- ClipRect 用矩形剪辑其孩子的widget
+- CustomPaint 提供一个画布的widget, 在绘制阶段可以在画布上绘制自定义的图形
+- BackdropFilter 一个widget, 它将过滤应用到现有的绘图内容，然后绘制child。 这种效果是比较昂贵的， 尤其是如果过滤器是non-local
 
-### Async
+### Async widget
+- FutureBuilder 基于与Future交互的最新快照来构建自身的widget
+- StreamBuilder 基于流交互的最新快照构建自身widget
 
-### 滚动
+### 可滚动的widget
+- ListView
+- NestedScrollView  可以嵌套其他可滚动的widget的widget
+- GridView 一个可滚动的二维空间数组
+- SingleChildScrollView 有一个子widget的可滚动的widget, 子内容超过父容器时可以滚动
+- Scrollable 实现了可滚动widget的交互模型， 但不包含UI显示相关的逻辑
+- Scrollbar  一个Material Design滚动条， 表示当前滚动到了什么位置
+- CustomScrollView 一个使用slivers创建自定义的滚动效果的ScrollView
+- NotificationListener 一个用来监听树上冒泡通知的widget
+- ScrollConfiguration 控制可滚动组件在子树中的表现行为
+- RefreshIndicator  Material Design下拉刷新指示器， 包装一个可滚动的widget
+
+
 
 ### 辅助功能
+- Semantics 
+一个widget，用以描述widget树的具体语义。使用辅助工具、搜索引擎和其他语义分析软件来确定应用程序的含义。
+- MergeSemantics 
+合并其后代语义的widget
+- ExcludeSemantics 
+删除其后代所有语义的widget
 
