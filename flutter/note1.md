@@ -33,6 +33,7 @@ Flutter logo, 以widget形式. 这个widget遵从IconTheme。
 一个绘制了一个盒子的的widget，代表日后有widget将会被添加到该盒子中
 
 ### Material Components
+
 实现了Material Design指南的视觉、效果、motion-rich的widget。
 
 App结构和导航：
@@ -93,13 +94,29 @@ MaterialDesign 中的button, 一个凸起的材质矩形按钮
 
 布局
 - ListTile 一个固定高度的行，通常包含一些文本，以及一个行前或行尾图标。
-- Stepper
+- Stepper 一个Material Design步骤指示器，显示一系列步骤的过程。
 - Divider 一个逻辑1像素厚的水平分割线，两边都有填充
 
 
 
 ### Cupertino(iOS风格的widget)
 用于当前iOS设计语言的美丽的高保真的widget.
+
+- CupertinoActivityIndicator 一个iOS风格的loading指示器。显示一个圆形的转圈菊花。
+- CupertinoAlertDialog  iOS风格的alert dialog.
+- CupertinoButton iOS风格的button
+- CupertinoDialog iOS风格的对话框
+- CupertinoDialogAction 通常用于CupertinoAlertDialog的一个button
+- CupertinoSlider 从一个范围中选一个值
+- CupertinoSwitch iOS风格的开关，用于单一状态的开/关
+- CupertinoPageTransition 提供iOS风格的页面过度动画
+- CupertinoFullscreenDialogTransition 一个ios风格的过渡， 用于调用全屏对话框。
+- CupertinoNavigationBar iOS风格的导航栏， 通常和CupertinoPageScaffold一起使用。
+- CupertinoTabBar iOS风格的底部选项卡，通常和CupertinoTabScaffold一起使用。
+- CupertinoPageScaffold 一个iOS风格的页面基本布局结构。包含内容和导航栏。
+- CupertinoTabScaffold 标签式ios应用程序的结构。将选项卡栏放在内容选项卡之上
+- CupertinoTabView 支持选项卡间并行导航项卡的根内容， 通常和CupertinoTabScaffold一起使用
+
 
 ### Layout
 排列其他widget的columns、rows、grids和其他的layouts.
