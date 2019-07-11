@@ -34,4 +34,55 @@ State对象的生命周期:
 - 如果框架没有在当前动画帧的末尾重新插入此子树，则框架将调用dispose，这表示此State对象永远不会再次构建。子类应重写此方法以释放此对象保留的任何资源（例如，停止任何活动动画）。
 - 在框架调用dispose之后，State对象被认为是已卸载且mount属性为false。此时调用setState是错误的 。生命周期的这个阶段是终端：没有办法重新安装已经处置的State对象。
 
+### 属性Properties
+- context 
+BuildContext类型
+只读属性
+widget 在树中创建的位置
 
+- mounted
+bool类型
+只读属性
+表示 state对象是否在树中
+
+- widget
+T
+只读属性
+当前的配置
+
+- hashCode 
+int类型
+只读、继承 属性
+this object的hash code值
+
+- runtimeType
+Type类型
+只读、继承 属性
+
+### Methods
+- build(BuildContext context)——》 Widget
+  describles the part of the user interface represented by this widget.
+- deactivate()——》void
+  Called when this object is removed from the tree
+- debugFillProperties(DiagnosticPropertiesBuilder properties)——》 void
+  add additional properties associated with the node.
+- didChangeDependencies() ——》 void
+  Called when a dependency of this State object changes
+- didUpdateWidget(covariant T oldWidget)——》 void
+  Called whenever the widget configuration changes
+- dispose()   ——》 void
+  Called when this object is removed from the tree permanently
+- initState() ——》 void
+  Called when this object is inserted into the tree
+- reassemble() ——》 void
+  Called whenever the application is reassembled during debugging.
+- setState(VoidCallback fn) ——》 void
+  Notify the framework that the internal state of this object has changed
+- noSuchMethod(Invocation invocation) ——》 dynamic
+  invoked when a non-existent method or property is accessed
+- toDiagnosticsNode({String name, DiagnosticsTreeStyle style}) ——》 DiagnosticsNode
+  Returns a debug representation of the object that is used by debugging tools and by DiagnosticsNode.toStringDeep
+- toString({DiagnosticLevel minLevel: DiagnosticLevel.debug }) → String
+Returns a string representation of this object.
+- toStringShort() → String
+A brief description of this object, usually just the runtimeType and the hashCode. 
