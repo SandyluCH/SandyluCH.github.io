@@ -362,7 +362,7 @@ class SmartTelevision extends Television {
 
 ````
 
-#### 可重写运算符
+#### 可重载运算符
 
 您可以覆盖下表中所示的运算符。例如，如果定义一个向量类，可以定义一个+方法来添加两个向量。
 
@@ -372,7 +372,193 @@ class SmartTelevision extends Television {
 >=	| *	| <<	| ==
 –	| %	| >>| 
 
+例子1(不使用重载运算符)：
+````
+class Role{
+  final String name;
+  final int accessLevel;
+  
+  const Role(this.name,this.accessLevel);
+}
+
+main()
+{
+  var adminRole =new Role('管理员',3);
+  var reporterRole = new Role('报告员',2);
+  var userRole= new Role('用户',1);
+  if(adminRole.accessLevel > reporterRole.accessLevel){
+    print("管理员的权限大于报告员");
+  }  
+  if(reporterRole.accessLevel > userRole.accessLevel){
+    print("报告员的权限大于用户");
+  }  
+}
+
+// 运行结果： 
+// 管理员的权限大于报告员
+// 报告员的权限大于用户
+
+````
+例子2（使用重载运算符）：
+````
+class Role {
+  final String name;
+  final int _accessLevel;
+
+  const Role(this.name, this._accessLevel);
+  bool operator >(Role Other) {
+    return this._accessLevel > Other._accessLevel;
+  }
+
+  bool operator <(Role Other) {
+    return this._accessLevel < Other._accessLevel;
+  }
+}
+
+main() {
+  var adminRole = new Role('管理员', 3);
+  var reporterRole = new Role('报告员', 2);
+  var userRole = new Role('用户', 1);
+  if (adminRole > reporterRole) {
+    print("管理员的权限大于报告员");
+  }
+  if (reporterRole > userRole) {
+    print("报告员的权限大于用户");
+  }
+}
+
+````
+例子2运行结果：
+````
+ 管理员的权限大于报告员
+ 报告员的权限大于用户
+````
 
 
+
+
+
+
+
+#### NoSuchMethod
+如果代码视图使用不存在的方法或实例变量，您可以覆盖noSuchMethod();
+````
+class A {
+  // Unless you override noSuchMethod, using a
+  // non-existent member results in a NoSuchMethodError.
+  @override
+  void noSuchMethod(Invocation invocation) {
+    print('You tried to use a non-existent member: ' +
+        '${invocation.memberName}');
+  }
+}
+
+````
+
+你不能调用一个未实现的方法，除非下列之一是true:
+- 接收者拥有静态类型dynamic
+- 接收方有一个定义未实现方法的静态类型（抽象是可以的）， 而接收方的动态类型有一个noSuchMethod（）的实现，与类对象中的实现不同。
+
+
+### Enumerated types
+enumerated types 通常called enumerations or enums.
+
+#### 使用enums
+使用关键字```enum```定义一个枚举类型
+```enum Color {red, green, blue} ```
+
+在枚举类型中的每个值都有index 的获取方法，例如
+````
+assert(Color.red.index == 0);
+assert(Color.green.index == 1);
+assert(Color.blue.index == 2);
+
+````
+获取枚举类型的所有值， 使用枚举类型enum的values变量
+````
+List<Color> colors = Color.values;
+assert(colors[2] == Color.blue);
+
+````
+
+使用枚举类型例子：
+````
+enum Color { red, green, blue }
+main() {
+  var aColor = Color.green;
+  switch (aColor) {
+    case Color.red:
+      print('Red as roses!');
+      break;
+    case Color.green:
+      print('Green as grass!');
+      break;
+    default: // Without this, you see a WARNING.
+      print(aColor); // 'Color.blue'
+  }
+}
+
+````
+运行结果：```Green as grass ```
+
+
+枚举类型有以下限制：
+- You can’t subclass, mix in, or implement an enum.
+- （不能实例化枚举） You can’t explicitly instantiate an enum.
+
+
+### mixins
+在类的多个层次结构上重用类的代码。
+
+为了使用mixin,  使用with 关键字 后面跟着一个或多个mixin名称。
+
+### Class varibales and methods
+使用static关键字 去实现class-wide 变量和方法。
+
+#### static variables
+````
+class Queue {
+  static const initialCapacity = 16;
+  // ···
+}
+
+void main() {
+  assert(Queue.initialCapacity == 16);
+}
+
+````
+静态变量直到他们被使用才会初始化。
+
+#### Static methods
+静态方法不能在实例上操作， 他们获取不是通过this. 例如：
+````
+import 'dart:math';
+
+class Point {
+  num x, y;
+  Point(this.x, this.y);
+
+  static num distanceBetween(Point a, Point b) {
+    var dx = a.x - b.x;
+    var dy = a.y - b.y;
+    return sqrt(dx * dx + dy * dy);
+  }
+}
+
+void main() {
+  var a = Point(2, 2);
+  var b = Point(4, 4);
+  var distance = Point.distanceBetween(a, b);
+  assert(2.8 < distance && distance < 2.9);
+  print(distance);
+}
+````
+
+## Generics
+大部分的type variables 都有一个单字母名， 如E,T,S,K, and V.
+
+泛型通常是为了type 安全，她们也有很多好处：
+- 适当的指明泛型类型利于更好的生成代码
+- 你可以使用泛型来降低代码复杂性
 
 
