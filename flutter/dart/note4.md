@@ -62,3 +62,91 @@ isolate创建时候有以下几个主要步骤：
 - 配置Debugger, 如果有必要的话
 - 将isolate注册到全局监控器（Monitor）
 
+
+## Typedefs
+在dart中，函数也是对象。 一个typedef包含了type的信息当函数类型被指定给变量时。
+例子1：
+````
+typedef Compare = int Function(Object a, Object b);
+
+class SortedCollection {
+  Compare compare;
+
+  SortedCollection(this.compare);
+}
+
+// Initial, broken implementation.
+int sort(Object a, Object b) => 0;
+
+void main() {
+  SortedCollection coll = SortedCollection(sort);
+  assert(coll.compare is Function);
+  assert(coll.compare is Compare);
+}
+
+````
+
+例子2：
+````
+typedef Compare<T> = int Function(T a, T b);
+
+int sort(int a, int b) => a - b;
+
+void main() {
+  assert(sort is Compare<int>); // True!
+}
+
+````
+
+
+## Metadata
+使用metadata提供有关代码的其他信息。metadata注释以字符@开头，后跟对编译时常量的引用（如deprecated） 或对常量构造函数的调用
+
+所有dart代码都有两个注释： @deprecated和 @override。
+使用@deprecated的例子：
+````
+class Television {
+  /// _Deprecated: Use [turnOn] instead._
+  @deprecated
+  void activate() {
+    turnOn();
+  }
+
+  /// Turns the TV's power on.
+  void turnOn() {...}
+}
+
+````
+
+我们也可以自己的metadata注释， 例如： 自定义注意@todo
+
+todo.dart文件：
+````
+library todo;
+class Todo{
+  final String who;
+  final String what;
+  const Todo(this.who, this.what);
+}
+
+````
+使用：
+````
+import 'todo.dart';
+@Todo('seth', 'make this do something')
+void doSomething(){
+  print('do something');
+}
+
+````
+
+## Comments
+dart 支持单行评论、多行评论、和documentation comments.
+- 单行评论  使用 ‘//’
+- 多行评论  使用
+‘/*
+  *
+  */’
+- documentation comments  使用///
+
+
