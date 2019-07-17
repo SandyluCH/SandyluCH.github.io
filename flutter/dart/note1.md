@@ -311,6 +311,152 @@ assert(listOfStrings[1] == '#1');
 
 ````
 
+list<T> 构造函数:
+- List([int length ])
+Creates a list of the given length. [...]
+factory
+- List.filled(int length, E fill, { bool growable: false })
+Creates a list of the given length with fill at each position. [...]
+factory
+- List.from(Iterable elements, { bool growable: true })
+Creates a list containing all elements. [...]
+factory
+- List.generate(int length, E generator(int index), { bool growable: true })
+Generates a list of values. [...]
+factory
+- List.of(Iterable<E> elements, { bool growable: true })
+Creates a list from elements. [...]
+factory
+- List.unmodifiable(Iterable elements)
+Creates an unmodifiable list containing all elements. [...]
+factory
+
+List<T>方法：
+- add(E value) → void
+Adds value to the end of this list, extending the length by one. [...]
+- addAll(Iterable<E> iterable) → void
+Appends all objects of iterable to the end of this list. [...]
+- asMap() → Map<int, E>
+Returns an unmodifiable Map view of this. [...]
+- cast<R>() → List<R>
+Returns a view of this list as a list of R instances. [...]
+override
+- clear() → void
+Removes all objects from this list; the length of the list becomes zero. [...]
+- fillRange(int start, int end, [ E fillValue ]) → void
+Sets the objects in the range start inclusive to end exclusive to the given - - fillValue. [...]
+- getRange(int start, int end) → Iterable<E>
+Returns an Iterable that iterates over the objects in the range start inclusive to end exclusive. [...]
+- indexOf(E element, [ int start = 0 ]) → int
+Returns the first index of element in this list. [...]
+- indexWhere(bool test(E element), [ int start = 0 ]) → int
+Returns the first index in the list that satisfies the provided test. [...]
+- insert(int index, E element) → void
+Inserts the object at position index in this list. [...]
+- insertAll(int index, Iterable<E> iterable) → void
+Inserts all objects of iterable at position index in this list. [...]
+- lastIndexOf(E element, [ int start ]) → int
+Returns the last index of element in this list. [...]
+- lastIndexWhere(bool test(E element), [ int start ]) → int
+Returns the last index in the list that satisfies the provided test. [...]
+- remove(Object value) → bool
+Removes the first occurrence of value from this list. [...]
+- removeAt(int index) → E
+Removes the object at position index from this list. [...]
+- removeLast() → E
+Pops and returns the last object in this list. [...]
+- removeRange(int start, int end) → void
+Removes the objects in the range start inclusive to end exclusive. [...]
+- removeWhere(bool test(E element)) → void
+Removes all objects from this list that satisfy test. [...]
+- replaceRange(int start, int end, Iterable<E> replacement) → void
+Removes the objects in the range start inclusive to end exclusive and inserts the contents of replacement in its place. [...]
+- retainWhere(bool test(E element)) → void
+Removes all objects from this list that fail to satisfy test. [...]
+- setAll(int index, Iterable<E> iterable) → void
+Overwrites objects of this with the objects of iterable, starting at position index in this list. [...]
+- setRange(int start, int end, Iterable<E> iterable, [ int skipCount = 0 ]) → void
+Copies the objects of iterable, skipping skipCount objects first, into the range start, inclusive, to end, exclusive, of the list. [...]
+- shuffle([Random random ]) → void
+Shuffles the elements of this list randomly.
+- sort([int compare(E a, E b) ]) → void
+Sorts this list according to the order specified by the compare function. [...]
+- sublist(int start, [ int end ]) → List<E>
+Returns a new list containing the elements between start and end. [...]
+- any(bool test(E element)) → bool
+Checks whether any element of this iterable satisfies test. [...]
+inherited
+- contains(Object element) → bool
+Returns true if the collection contains an element equal to element. [...]
+inherited
+- elementAt(int index) → E
+Returns the indexth element. [...]
+inherited
+- every(bool test(E element)) → bool
+Checks whether every element of this iterable satisfies test. [...]
+inherited
+- expand<T>(Iterable<T> f(E element)) → Iterable<T>
+Expands each element of this Iterable into zero or more elements. [...]
+inherited
+- firstWhere(bool test(E element), { E orElse() }) → E
+Returns the first element that satisfies the given predicate test. [...]
+inherited
+- fold<T>(T initialValue, T combine(T previousValue, E element)) → T
+Reduces a collection to a single value by iteratively combining each element of the collection with an existing value [...]
+inherited
+- followedBy(Iterable<E> other) → Iterable<E>
+Returns the lazy concatentation of this iterable and other. [...]
+inherited
+- forEach(void f(E element)) → void
+Applies the function f to each element of this collection in iteration order.
+inherited
+- join([String separator = "" ]) → String
+Converts each element to a String and concatenates the strings. [...]
+inherited
+- lastWhere(bool test(E element), { E orElse() }) → E
+Returns the last element that satisfies the given predicate test. [...]
+inherited
+- map<T>(T f(E e)) → Iterable<T>
+Returns a new lazy Iterable with elements that are created by calling f on each element of this Iterable in iteration order. [...]
+inherited
+- noSuchMethod(Invocation invocation) → dynamic
+Invoked when a non-existent method or property is accessed. [...]
+inherited
+- reduce(E combine(E value, E element)) → E
+Reduces a collection to a single value by iteratively combining elements of the collection using the provided function. [...]
+inherited
+- singleWhere(bool test(E element), { E orElse() }) → E
+Returns the single element that satisfies test. [...]
+inherited
+- skip(int count) → Iterable<E>
+Returns an Iterable that provides all but the first count elements. [...]
+inherited
+- skipWhile(bool test(E value)) → Iterable<E>
+Returns an Iterable that skips leading elements while test is satisfied. [...]
+inherited
+- take(int count) → Iterable<E>
+Returns a lazy iterable of the count first elements of this iterable. [...]
+inherited
+- takeWhile(bool test(E value)) → Iterable<E>
+Returns a lazy iterable of the leading elements satisfying test. [...]
+inherited
+- toList({bool growable: true }) → List<E>
+Creates a List containing the elements of this Iterable. [...]
+inherited
+- toSet() → Set<E>
+Creates a Set containing the same elements as this iterable. [...]
+inherited
+- toString() → String
+Returns a string representation of this object.
+inherited
+- where(bool test(E element)) → Iterable<E>
+Returns a new lazy Iterable with all elements that satisfy the predicate test. [...]
+inherited
+- whereType<T>() → Iterable<T>
+Returns a new lazy Iterable with all elements that have type T. [...]
+inherited
+
+
 
 #### Sets 集合
 set是一组无序且无重复的item的集合。
