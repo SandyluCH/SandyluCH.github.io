@@ -28,7 +28,7 @@ SearchDelegate()
 - buildSuggestions(BuildContext context) → Widget
 用户在搜索区域输入查询的同时，在搜索页面的body中展示的搜索建议
 - close(BuildContext context, T result) → void
-管理搜索页面返回潜在的路由
+关闭搜索页面返回潜在的路由
 - showResults(BuildContext context) → void
 展示结果
 Transition from the suggestions returned by buildSuggestions to the query results returned by buildResults. [...]
@@ -37,10 +37,9 @@ Transition from the suggestions returned by buildSuggestions to the query result
 Transition from showing the results returned by buildResults to showing the suggestions returned by buildSuggestions. [...]
 - noSuchMethod(Invocation invocation) → dynamic
 Invoked when a non-existent method or property is accessed. [...]
-inherited
 - toString() → String
 Returns a string representation of this object.
-inherited
+
 
 
 

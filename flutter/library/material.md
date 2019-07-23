@@ -16,11 +16,6 @@
 actions的基本类
 - ActionChip
 一个material design action chip
-- ActionDispatcher
-
-
-
-
 
 ### Functions
 #### showSearch<T>({BuildContext context, SearchDelegate<T> delegate, String query: '' }) → Future<T>
