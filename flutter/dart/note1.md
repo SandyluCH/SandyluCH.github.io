@@ -130,6 +130,21 @@ Avoid using these words as identifiers. However, if necessary, the keywords mark
 
 - 新变量  Words with the superscript 3 are newer, limited reserved words related to the asynchrony support that was added after Dart’s 1.0 release. You can’t use await or yield as an identifier in any function body marked with async, async*, or sync*.
 
+关键字covariant的使用场景： 父类的某个方法定义了形参的类型，而子类想把这个方法的形参类型范围缩小至父类定义的类型的某个子类，这种情况下， 如果直接修改是无法通过编译的，这就需要convariant关键字了，例如：
+````
+class Animal {
+  void chase(Animal x) { ... }
+}
+
+class Mouse extends Animal { ... }
+
+class Cat extends Animal {
+  void chase(covariant Mouse x) { ... }
+}
+
+````
+
+
 ## variables
 例如初始化变量
 ```
