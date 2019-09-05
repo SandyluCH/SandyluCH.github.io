@@ -198,6 +198,128 @@ var lines = inputStream
 
 用于基于web的应用程序的html元素和其他资源
 
+#### 操作DOM
+
+使用DOM, 你需要知道windows, documents, elements 和nodes。
+
+windows对象表示web浏览器的实际窗口。每个窗口都有一个document对象， 该对象只想当前加载的文档。window对象还具有对各种api的访问其， 如IndexedDB(用于存储数据)、requestanimationframe(用于动画)等。在选项卡式浏览器中，每个选项卡都有自己的窗口对象。
+
+使用document对象， 可以在文档中创建和操作元素对象。请注意，文档本身是一个元素，可以对其进行操作。
+
+Dom为节点树建模。这些节点通常是元素，但也可以是属性、文本、注释和其他dom类型。除了没有父节点的根节点之外，dom中的每个节点都有一个父节点，并且可能有许多子节点。
+
+查询一个或多个元素使用方法querySelector() 和 querySelectorAll(). 你可以通过id,class,tag,name,或者这些的组合来查询。例如：
+````
+  // Find an element by id (an-id).
+  Element elem1 = querySelector('#an-id');
+
+  // Find an element by class (a-class).
+  Element elem2 = querySelector('.a-class');
+
+  // Find all elements by tag (<div>).
+  List<Element> elems1 = querySelectorAll('div');
+
+  // Find all text inputs.
+  List<Element> elems2 = querySelectorAll(
+    'input[type="text"]',
+  );
+
+  // Find all elements with the CSS class 'class'
+  // inside of a <p> that is inside an element with
+  // the ID 'id'.
+  List<Element> elems3 = querySelectorAll('#id p.class');
+
+````
+
+操作元素
+可以使用属性更改元素的状态。节点及其子类型元素定义所有元素都具有的属性。例如，所有元素都有classes、 hidden、 id、 style、 title属性， 你可以使用这些属性来设置状态。元素的子类定义其他属性， 如AnchorElement的href属性。如：
+````
+var anchor = querySelector('#example') as AnchorElement;
+anchor.href = 'http://dartlang.org';
+
+````
+
+设置hidden属性为true，效果等同于```display:none ```
+
+当right属性不可用或不方便时，可以使用元素的attributes属性，此属性是Map<String, String>, 其中键是属性名， 可以使用的键值列表及其意义，见[MDN attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes)。 例如：
+````
+ elem.attributes['someAttribute'] = 'someValue';
+
+````
+
+
+创建元素， 例如：
+````
+// 方式一
+ var elem = ParagraphElement();
+  elem.text = 'Creating is easy!';
+
+// 方式二
+  var elem2 = Element.html(
+    '<p>Creating <em>is</em> easy!</p>',
+  );
+
+````
+注意elem2也是 ParagraphElement。
+
+
+通过为新创建的元素分配父元素，将其附加到文档。可以将元素添加到任何现有元素的子元素中。在下面例子中， body是一个元素， 可以从children属性访问它的子元素（作为List<Element>）。``` document.body.children.add(elem2); ```
+
+
+添加、替换、和移除节点。 元素只是一种节点。 使用节点的nodes属性可以找到节点的所有子节点， 该属性返回一个List<Node>(与忽略非元素节点的子节点不同)。拥有此列表后， 可以使用常用的列表方法和运算符来操作节点的子节点。
+
+要将节点添加为其父节点的最后一个子节点，请使用List add()方法， 如：``` querySelector('#inputs').nodes.add(elem); ``` 
+
+替换节点，使用节点replaceWith()方法， 如：``` querySelector('#status').replaceWith(elem); ```
+
+移除节点， 使用节点remove()方法， 如: 
+````  
+// Find a node by ID, and remove it from the DOM.
+  querySelector('#expendable').remove(); 
+
+````
+
+操作css样式。css或层叠样式表定义了dom元素的表示样式。可以通过将id和类属性附加到元素来更改元素的外观。 每个元素都有一个类字段，它是一个列表。只需在此集合中添加和移除字符串，即可添加或移除css类。例如：
+````
+  var elem = querySelector('#message');
+  elem.classes.add('warning');
+
+  var message = DivElement();
+  message.id = 'message2';
+  message.text = 'Please subscribe to the Dart mailing list.';
+  // 或
+  var message = DivElement()
+    ..id = 'message2'
+    ..text = 'Please subscribe to the Dart mailing list.';
+
+  message.style
+    ..fontWeight = 'bold'
+    ..fontSize = '3em';
+
+````
+
+处理事件。要响应外部事件， 如click、 焦点更改、 selections， 请添加事件侦听器。你可以将事件侦听器添加到页面上的任何元素。 使用element.onEvent.listen(function)添加事件处理程序， 其中event是事件名称，function是事件处理程序。例如：
+````
+ // Find a button by ID and add an event handler.
+  querySelector('#submitInfo').onClick.listen((e) {
+    // When the button is clicked, it runs this code.
+    submitData();
+  });
+
+````
+事件可以通过dom树上下传播。要发现最初触发事件的元素， 请使用e.target, 例如：
+````
+document.body.onClick.listen((e) {
+    final clickedElem = e.target;
+    // ...
+  });
+
+````
+要查看可以注册事件侦听器的所有事件，请在元素及其[子类的api文档](https://api.dart.dev/stable/2.4.1/dart-html/Element-class.html)中查找onEventType类型的属性， 如：onChange、 onBlur、 onKeyDown, 一些通用的EventType包括：change、 blur、 keyDown、 keyUp、 mouseDown、 mouseUp。
+
+
+
+
 ### dart:indexed_db
 支持平台：web
 
