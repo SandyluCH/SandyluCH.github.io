@@ -320,6 +320,138 @@ document.body.onClick.listen((e) {
 
 
 
+#### Using HTTP resources with HttpRequest
+HttpRequest类提供了在浏览器基础上访问http资源的机会。
+
+从服务端获取数据。 HttpRequest的静态方法getString()是一种很方便的从web服务器上获取数据的方式。例如：
+````
+  Future main() async {
+    String pageHtml = [!await HttpRequest.getString(url);!]
+    // Do something with pageHtml...
+  }
+
+````
+使用try-catch去捕捉错误
+````
+  try {
+    var data = await HttpRequest.getString(jsonUri);
+    // Process data...
+  } catch (e) {
+    // Handle exception...
+  }
+
+````
+
+如果需要访问HttpRequest, 而不仅仅是它检索的文本数据，那么可以使用request()静态方法而不是getString()。如读取xml数据的示例如下：
+````
+Future main() async {
+    HttpRequest req = await HttpRequest.request(
+      url,
+      method: 'HEAD',
+    );
+    if (req.status == 200) {
+      // Successful URL access...
+    }
+    // ···
+  }
+
+````
+
+你还可以使用完成api来处理更多情况。使用HttpRequest的完成api的一般流程如下：
+- 创建HttpRequest对象；
+- 使用get或post打开url;
+- 附加事件处理程序
+- 发送请求
+
+例如：
+````
+ var request = HttpRequest();
+  request
+    ..open('POST', url)
+    ..onLoadEnd.listen((e) => requestComplete(request))
+    ..send(encodedData);
+
+````
+
+向服务器发送数据。HttpRequest可以使用http方法post向服务器发送数据。
+例如：
+````
+String encodeMap(Map data) => data.keys
+      .map((k) => '${Uri.encodeComponent(k)}=${Uri.encodeComponent(data[k])}')
+      .join('&');
+
+  Future main() async {
+    var data = {'dart': 'fun', 'angular': 'productive'};
+
+    var request = HttpRequest();
+    request
+      ..open('POST', url)
+      ..setRequestHeader(
+        'Content-type',
+        'application/x-www-form-urlencoded',
+      )
+      ..send(encodeMap(data));
+
+    await request.onLoadEnd.first;
+
+    if (request.status == 200) {
+      // Successful URL access...
+    }
+    // ···
+  }
+
+````
+
+用WebSockets发送和接受实时数据。WebSocket允许你的web应用于服务器交互地交换数据，无需轮询。服务器创建Websocket并侦听请求。通过WebSocket传输的数据可以是字符串或blob。通常，数据是json格式的字符串。例如：
+````
+ var ws = WebSocket('ws://echo.websocket.org');
+ ws.send('Hello from Dart!'); // 使用send()方法发送数据
+ // 监听接收数据
+  ws.onMessage.listen((MessageEvent e) {
+    print('Received message: ${e.data}');
+  });
+
+````
+你的应用程序可以处理一下WebSocket事件：open、 close、 error、 message。完整例子如下：
+````
+void initWebSocket([int retrySeconds = 1]) {
+    var reconnectScheduled = false;
+
+    print("Connecting to websocket");
+
+    void scheduleReconnect() {
+      if (!reconnectScheduled) {
+        Timer(Duration(seconds: retrySeconds),
+            () => initWebSocket(retrySeconds * 2));
+      }
+      reconnectScheduled = true;
+    }
+
+    ws.onOpen.listen((e) {
+      print('Connected');
+      ws.send('Hello from Dart!');
+    });
+
+    ws.onClose.listen((e) {
+      print('Websocket closed, retrying in ' + '$retrySeconds seconds');
+      scheduleReconnect();
+    });
+
+    ws.onError.listen((e) {
+      print("Error connecting to ws");
+      scheduleReconnect();
+    });
+
+    ws.onMessage.listen((MessageEvent e) {
+      print('Received message: ${e.data}');
+    });
+  }
+
+````
+
+
+
+
 ### dart:indexed_db
 支持平台：web
 
