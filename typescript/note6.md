@@ -74,3 +74,109 @@ enum FileAccess {
 
 ````
 
+### 联合枚举与枚举成员的类型
+
+存在一种特殊的非计算的常量枚举成员的子集：字面量枚举成员。字面量枚举成员是指不带有初始值的常量枚举成员， 或者是值被初始化为：
+ - 任何字符串字面量， 如 “foo”
+ - 任何数字字面量， 如： 1,100
+ - 应用了一元```- ```符号的数字字面量， 例如：-1， -100
+
+当所有枚举成员都拥有字面量枚举值时，它带有了一种特殊的语义。
+
+首先， 枚举成员成为了类型！例如， 我们可以说某些成员只能是枚举成员的值：
+````
+enum ShapedKind {
+    Circle,
+    Square
+}
+
+interface Circle {
+    kind: ShapeKind.Circle;
+    radius:number;
+}
+
+interface Square {
+    kind: ShapedKind.Square;
+    sideLength: number;
+}
+
+let c:Circle = {
+    kind: ShapeKind.Square,  //    ~~~~~~~~~~~~~~~~ Error!
+    radius: 100,
+};
+
+````
+另一个变化是枚举类型本身变成了每个枚举成员的联合。
+
+### 运行时的枚举
+枚举是在运行时真正存在的对象。例如：下面的枚举：
+````
+enum E {
+    X,Y,Z
+}
+
+````
+
+### 反向映射
+除了创建一个属性名做为对象成员的对象之外，数字枚举成员还具有了反向映射，从枚举值到枚举名字。例如，在下面的例子中：
+````
+enum Enum{
+    A
+}
+let a = Enum.A;
+let nameOfA = Enum[a]; // "A"
+
+````
+typescript可能会将这段代码编译为下面的JavaScript:
+````
+var Enum;
+(function (Enum) {
+    Enum[Enum["A"] = 0] = "A";
+})(Enum || (Enum = {}));
+var a = Enum.A;
+var nameOfA = Enum[a]; // "A"
+
+````
+
+生成的代码中，枚举类型被编译成一个对象，它包含了正向映射（name->value）和反向映射（value->name）。引用枚举成员总会生成为对属性访问并且永远也不会内联代码。
+
+要注意的是不会为字符串枚举成员生成反向映射。
+
+### const枚举
+大多数情况下，枚举是十分有效的方案。然而在某些情况下需求很严格。为了避免在额外生成的代码上的开销和额外的非直接的对枚举成员的访问，我们可以使用const枚举。常量枚举通过在枚举上使用const修饰符来定义。
+````
+const enum Enum {
+    A = 1,
+    B = A * 2
+}
+
+````
+常量枚举只能使用常量枚举表达式，并且不同于常规的枚举， 它们在编译阶段会被删除。常量枚举成员在使用的地方会被内联进来。之所以可以这么做是因为，常量枚举不允许包括计算成员。
+````
+const enum Directions {
+    Up,
+    Down,
+    Left,
+    Right
+}
+
+let directions = [Directions.Up, Directions.Down, Directions.Left, Directions.Right]
+
+````
+生成的代码为：
+````
+var directions = [0 /* Up */, 1 /* Down */, 2 /* Left */, 3 /* Right */];
+````
+
+### 外部枚举
+外部枚举用来描述已经存在的枚举类型的形状。
+````
+declare enum Enum{
+  A = 1,
+  B,
+  C = 2
+}
+
+````
+外部枚举和非外部枚举之间有一个重要的区别，在正常的枚举里，没有初始化方法的成员被当成常数成员。对于非常数的外部枚举而言，没有初始化方法时被当作需要经过计算的。
+
