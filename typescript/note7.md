@@ -201,3 +201,42 @@ a = s;  // OK
 s = a;  // OK
 
 ````
+
+##### 类的私有成员和受保护成员
+
+类的私有成员和受保护成员会影响兼容性， 当检查类实例的兼容时，如果目标类型包含一个私有成员，那么源类型必须包含来自同一个类的这个私有成员。 同样地，这条规则页适用于包含受保护成员实例的类型检查。这允许子类赋值给父类，但是不能赋值给其它有同样类型的类。
+
+#### 泛型
+TypeScript是结构性的类型系统，类型参数只影响使用其作为类型一部分的结果类型。比如，
+````
+interface Empty<T>{}
+let x: Empty<number>;
+let y: Empty<string>;
+x= y; // OK, because y matches structure of x
+
+````
+例子中，x和y是兼容的，因为他们的机构使用类型参数时并没有什么不同，把这个例子改变一下，增加一个成员，就能看出是如何工作的了：
+````
+interface NotEmpty<T>{
+    data: T;
+}
+let x: NotEmpty<number>;
+let y: NotEmpty<string>;
+
+x = y; // Error, 因为x和y不兼容
+
+````
+对于没指定泛型类型的泛型参数时，会把所有泛型参数当成any比较。 然后用结果类型进行比较，就像第一个例子。
+````
+let identity = function<T>(x: T): T {
+    // ...
+}
+
+let reverse = function<U>(y: U): U {
+    // ...
+}
+
+identity = reverse;  // OK, because (x: any) => any matches (y: any) => any
+
+````
+
