@@ -178,3 +178,52 @@ let sq = new polygons.Square(); // Same as "new Shapes.Polygons.Square()"
 为了描述不是用TypeScript编写的类库的类型，我们需要声明类库导出的API。 由于大部分程序库只提供了少数的顶级对象， 命名空间是用来表示它们的一个好办法。
 
 我们称其为声明时因为它不是外部程序的具体实现。我们通常在.d.ts里写这些声明。
+
+## 命名空间和模块
+
+### 使用命名空间
+命名空间是位于全局命名空间下的一个普通的带有名字的JavaScript对象。这令命名空间十分容易使用。 它们可以在多文件中同时使用，并通过--outFile结合在一起。命名空间是帮你阻止web应用不错的方式， 你可以把所有依赖都放在HTML页面的```<script> ```标签里。
+
+但就像其它的全局命名空间污染一样，它很难去识别组件之间的依赖关系，尤其是在大型的应用中。
+
+### 使用模块
+像命名空间一样，模块可以包含代码和声明。不同的是模块可以声明它的依赖。
+
+模块会把依赖添加到模块加载器上（例如CommonJs / Require.js）。 对于小型的JS应用来说可能没必要，但是对于大型应用，这一点点的花费会带来长久的模块化和可维护性上的便利。 模块也提供了更好的代码重用，更强的封闭性以及更好的使用工具进行优化。
+
+对于Node.js应用来说，模块是默认并推荐的组织代码的方式。
+
+### 命名空间和模块的陷阱
+- 对模块使用/// <reference>
+  一个常见的错误是使用/// <reference>引用模块文件，应该使用import。 要理解这之间的区别，我们首先应该弄清编译器是如何根据 import路径（例如，import x from "...";或import x = require("...")里面的...，等等）来定位模块的类型信息的。
+  编译器首先尝试去查找相应路径下的.ts，.tsx再或者.d.ts。 如果这些文件都找不到，编译器会查找 外部模块声明。 回想一下，它们是在 .d.ts文件里声明的。
+  myModules.d.ts
+  ````
+  // In a .d.ts file or .ts file that is not a module:
+  declare module "SomeModule" {
+      export function fn(): string;
+  }
+  ````
+  myOtherModule.ts
+  ````
+  /// <reference path="myModules.d.ts" />
+  import * as m from "SomeModule";
+  ````
+  这里的引用标签指定了外来模块的位置。 这就是一些TypeScript例子中引用 node.d.ts的方法。
+- 不必要的命名空间
+  如果你想把命名空间转换为模块，它可能会像下面这个文件一样：
+  shapes.ts
+  ````
+  export namespace Shapes {
+    export class Triangle { /* ... */ }
+    export class Square { /* ... */ }
+  }
+  ````  
+  顶层的模块Shapes包裹了Triangle和Square。 对于使用它的人来说这是令人迷惑和讨厌的：
+  shapeConsumer.ts
+  ````
+  import * as shapes from "./shapes";
+  let t = new shapes.Shapes.Triangle(); // shapes.Shapes?
+
+  ````
+  
