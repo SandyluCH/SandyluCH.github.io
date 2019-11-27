@@ -759,3 +759,84 @@ type T23 = InstanceType<string>;  // Error
 type T24 = InstanceType<Function>;  // Error
 
 ````
+
+### 映射类型学习笔记2
+- Partial<T> 让属性都变成可选的
+````
+type A = { a:number, b:string };
+type A1 = Partial<A> // { a?:number; b?:string}
+
+````
+- Required<T>, 让属性都变成必选
+````
+type A = {a?:number, b?:string};
+type A1 = Required<A> // {a:number; b:string}
+
+````
+- Pick<T, K>, 只保留自己选择的属性，U代表属性集合
+````
+type A = {a:number, b: string};
+type A1 = Pick<A, 'a'> // {a:number}
+````
+
+- Omit<T,K> 实现排除已选的属性
+````
+type A = { a:number, b: string}
+type A1 = Omit<A, 'a'> // {b:string}
+````
+
+- Record<K,T>, 创建一个类型， K代表键值的类型，T代表值的类型
+````
+type A1= Record<string, string> // 等价{[K:string]:string} 
+````
+
+- Exclude<T,U>, 过滤T中和U相同（或兼容）的类型
+
+- Extract<T,U>, 提取T中和U相同（或兼容）的类型
+
+- NonNullable, 剔除T中的undefined和null
+````
+type A1 = NoNullable<number|string|null|undefined> // number|string
+````
+
+- ReturnType, 获取T的返回值的类型
+````
+type A1 = ReturnType<()=>number> // number
+````
+
+- InstanceType, 返回T的实例类型
+ts中类有2种类型，静态部分的类型和实例的类型，所以T如果是构造函数类型，那么InstanceType可以返回他的实例类型：
+````
+interface A {
+    a: HTMLElement;
+}
+interface Aconstructor{
+    new():A;
+}
+function create(AClass: AConstructor): InstanceType<AConstructor>{
+    return new AClass();
+}
+
+````
+
+- Parameters 获取函数参数类型
+返回类型为元祖， 元素顺序同参数顺序。
+````
+interface A{
+    (a:number, b:string): string[];
+}
+type A1 = Parameters<A> // [number, string]
+
+````
+
+- ConstructorParameters 获取构造函数的参数类型
+和Parameters类似， 只是T这里是构造函数类型
+````
+interface AConstructor{
+    new(a:number):string[];
+}
+
+type A1 = ConstructorParameters<AConstructor> // [number]
+
+````
+
