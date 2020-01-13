@@ -240,3 +240,12 @@ let strLength: number = (someValue as string).length;
 ### 三斜线指令
 
 ### JavaScript文件类型检查
+
+### 其他
+1、安全导航操作符```?. ```和空属性路径，
+为了解决导航时变量值为null时，页面运行时出错的问题。
+````The null hero's name is {{nullHero?.name}} ````
+
+2、非空断言操作符，
+能确定变量值一定不为空时使用。与安全导航操作符不同的是，非空断言操作符不会防止出现null或undefined。它只是告诉TypeScript的类型检查器对特定的属性表达式，不做严格空值检测。
+````this.listeners.get(type)!.size > 0 ````
