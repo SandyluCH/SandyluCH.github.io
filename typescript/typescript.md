@@ -249,3 +249,36 @@ let strLength: number = (someValue as string).length;
 2、非空断言操作符，
 能确定变量值一定不为空时使用。与安全导航操作符不同的是，非空断言操作符不会防止出现null或undefined。它只是告诉TypeScript的类型检查器对特定的属性表达式，不做严格空值检测。
 ````this.listeners.get(type)!.size > 0 ````
+
+3、 void 0的作用
+
+  void 其实是javascript中的一个函数， 接受一个参数， 返回值永远是undefined。所以void 0 是一种正确且标准的产生undefined的方式。
+````
+// 方式1
+void 0
+// 方式2
+void(0)
+// 方式3
+void "hello"
+// 方式4
+void(new Date())
+````
+使用undefined的问题是 undefined不是保留关键字。即， undefined是允许作为变量名使用的， 你可以给它指定一个新的值。
+````
+alert(undefined); // alerts 'undefined'
+var undefined = 'new value';
+alert(undefined) // alerts 'new value'
+
+````
+注意： 在任何支持ECMAScript 5 或者更新的环境中， 这将不成问题（即，undefined作为变量名被重新赋值的问题）， 因为这些环境中undefined作为全局对象的undefined 只读属性。
+````
+alert(window.hasOwnProperty('undefined')); // alerts "true"
+alert(window.undefined); // alerts "undefined"
+alert(undefined === window.undefined); // alerts "true"
+var undefined = "new value";
+alert(undefined); // alerts "new value"
+alert(undefined === window.undefined); // alerts "false"
+
+````
+另一方面, void 不会被覆盖, void 0 总是返回undefined。
+
