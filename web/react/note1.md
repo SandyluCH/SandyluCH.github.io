@@ -51,10 +51,66 @@
 #### 更新Updating
 更新是由props或state的改变引起的， 当组件即将被re-rendered的时候， 这些方法将按照以下顺序调用：
 - static getDerivedStateFromProps() **(不常用)**
+  同上
 - shouldComponentUpdate()  **(不常用)**
+  使用shouldComponentUpdate() 让React知道组件的输出是否不受state或props的当前变化的影响。 默认的行为是每次state变化都要重新渲染。在绝大多数的情况下， 你应该依赖默认行为。
+  当收到新的props或者state时，shouldComponentUpdate() 会在render之前被触发调用。默认为true. 对于初始render或者当使用forceUpdate()方法时， 该方法不会被触发。
+  该方法仅作为性能优化而存在， 不要依赖它来阻止渲染， 因为这会导致错误。 考虑使用内置的PureComponent, 而不是手动编写shouldComponentUpdate(). PureComponent对props和state 进行简单比较， 减少了跳过必要更新的可能性。 
+
+  如果你确信你想手写， 你可以比较一下this.props和nextProps, 以及this.state和nextState, 并返回false ， 去告诉React 这个更新可以跳过了。
+  * 注意返回false并不能阻止子组件们因为他们的state改变而触发的重新渲染。
+  我们建议在shouldComponentUpdate()方法中不要使用深度检查或者使用JSON.stringify(), 它效率很低， 而且会影响性能。
+
+  当然， 如果shouldComponentUpdate方法返回false, 则不会调用UNSAFE_componentWillUpdate()、render() 和 ComponentDidUpdate方法。将来React可能会将shouldComponentUpdate()视为一个提示而不是一个严格的指令， 返回false仍可能导致组件的重新渲染。
+  
 - render()
+  同上
 - getSnapshotBeforeUpdate() **(不常用)**
+  在最近渲染输出被提交到例如DOM之前， getSnapshotBeforeUpdate()方法被触发。这可以让你的组件从DOM(例如scroll position)上在可能变化之前捕捉信息。这个生命周期的任何返回值都会作为参数传给componentDidUpdate()。
+  例如像在聊天线程中需要去特殊处理scroll position, 代码如下：
+  ````
+  class ScrollingList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.listRef = React.createRef();
+  }
+
+  getSnapshotBeforeUpdate(prevProps, prevState) {
+    // Are we adding new items to the list?
+    // Capture the scroll position so we can adjust scroll later.
+    if (prevProps.list.length < this.props.list.length) {
+      const list = this.listRef.current;
+      return list.scrollHeight - list.scrollTop;
+    }
+    return null;
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    // If we have a snapshot value, we've just added new items.
+    // Adjust scroll so these new items don't push the old ones out of view.
+    // (snapshot here is the value returned from getSnapshotBeforeUpdate)
+    if (snapshot !== null) {
+      const list = this.listRef.current;
+      list.scrollTop = list.scrollHeight - snapshot;
+    }
+  }
+
+  render() {
+    return (
+      <div ref={this.listRef}>{/* ...contents... */}</div>
+    );
+  }
+}
+
+  ````
+  
 - componentDidUpdate()
+  componentDidUpdate方法在updating发生之后会被触发。该方法对于初始render不会被触发。
+
+  在这个方法里面有机会去操作已经更新的组件中的DOM。 在这个方法中
+
+
+
 
 * 在代码中要避免使用的方法：UNSAFE_componentWillUpdate()和 UNSAFE_componentWillReceiveProps()
 
