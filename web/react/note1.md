@@ -107,8 +107,18 @@
 - componentDidUpdate()
   componentDidUpdate方法在updating发生之后会被触发。该方法对于初始render不会被触发。
 
-  在这个方法里面有机会去操作已经更新的组件中的DOM。 在这个方法中
+  在这个方法里面有机会去操作已经更新的组件中的DOM。 只要你比较当前的props与之前的props(如果props没有改变， 则可能不要网络请求)， 这也是进行网络请求的好地方。如：
+  ````
+componentDidUpdate(prevProps) {
+  // Typical usage (don't forget to compare props):
+  if (this.props.userID !== prevProps.userID) {
+    this.fetchData(this.props.userID);
+  }
+}
+  ````
+  你可以在componentDidUpdate中立即调用setState(), 但请注意， 它必须包装在如上面示例中所示的条件中， 否则将导致无限循环， 这也会导致额外的重新渲染， 虽然用户看不到， 但会影响组件的性能。如果你试图mirror一些state 到来自上层的props, 考虑直接使用props.
 
+  如果你的组件实现了getSnapshowBeforeUpdate()方法， 这个返回的值会作为第三个参数snapshot传递给componentDidUpdate(), 否则这个参数将会是undefined。
 
 
 
@@ -118,6 +128,10 @@
 #### 卸载Unmounting
 当组件将被从dom中移除的时候， 以下方法会被调用：
 - componentWillUnmount()
+该方法在组件被卸载和销毁前会马上触发， 在这个方法中执行任何有必要的清理。例如， 例如无效的定时器， 取消网络请求， 或者清理任何订阅。
+
+你不应该在componentWillUnmount方法中调用setState(), 因为组件将永远不会被重新渲染， 一旦组件实例被卸载， 他将不会被再次挂载。
+
 
 #### 错误处理Error Handling
 渲染期间， 在生命周期方法中或者 任何子组件的constructor中 发生错误的时候， 以下方法将会被调用：
@@ -130,7 +144,63 @@
 #### 其他的api
 每个组件也提供一些其他的api:
 - setState()
+setState()排队改变组件的state,并且告诉React， 这个组件和它的孩子需要用更新的state 重新渲染。这是用于更新用户界面以响应事件处理程序和服务器响应的主要方法。
+
+将setState()看做是更新组件的请求， 而不是立即命令。为了更好地感知性能，React可能会延迟它， 然后在一次传递中更新多个组件。 React不保证立即应用状态更改。
+
+setState()并不总是立即更新组件。它可以批处理或推迟更新。在调用setState()方法之后立即读取这个state, 这是一个潜在的隐患。相反， 使用componentDidUpdate或者使用setState回调函数（如setState(updater, callback)）, 它们中的任何一个都保证在应用更新后激发。
+
+setState()将总是导致重新渲染 如果shouldComponentUpdate方法不返回false。 如果正在使用可变对象， 并且无法在shouldComponentUpdate()中实现呈现逻辑， 则只有在新状态与以前的状态下不同时才调用setSate()将避免不必要的重新渲染。
+
+```` (state, props) => stateChange   ````
+
+state是应用更改时组件状态的引用。 它不应该直接突变。相反， 更改应该通过基于state和props的输入构建一个新的对象来表示， 例如：
+````
+this.setState((state, props) => {
+  return {counter: state.counter + props.step};
+});
+````
+更换程序函数接收的state 和props都保证是最新的。更新程序的输出是简单地合并在一起。
+
+setState()方法的第二个参数是一个可选的回调函数， 一旦setState完成并重新呈现组件， 该函数将执行。通常， 我们建议对此类逻辑使用componentDidUpdate().
+
+你可以选择将对象作为第一个参数传递给setState(), 而不是函数, 如：
+````
+this.setState({quantity: 2})
+````
+
+这种形式的setState()也是异步的， 同一周期内的多个调用可以一起批处理，例如， 你试图在一个周期中多次增加一个item的数量， 这将导致等效于：
+````
+Object.assign(
+  previousState,
+  {quantity: state.quantity + 1},
+  {quantity: state.quantity + 1},
+  ...
+)
+````
+
+后续调用将覆盖同一个周期中以前调用的值， 因此数量只增加一次。如果下一个状态取决于当前状态， 建议使用更新程序函数形式， 如：
+````
+this.setState((state) => {
+  return {quantity: state.quantity + 1};
+});
+````
+
+
+
+
+
+
+
+
+
 - forceUpdate()
+  默认情况下， 当你组件的state或者props改变， 你组件将会重新渲染。如果你的render方法依赖于一些其他的数据， 你可以通过调用forceUpdate方法告诉React， 组件需要重新渲染。
+
+  调用forceUpdate将会导致组件render（）被调用， 跳过shouldComponentUpdate()。 这将会触发子组件的正常的生命周期方法包括每个子组件的shouldComponentUpdate 。如果标记发生改变， React仍然只更新DOM。
+
+  正常情况下， 你应该避免使用forceUpdate()方法， 仅仅从render方法中读取this.props 和this.state
+
 
 #### Class Properties
 - defaultProps
