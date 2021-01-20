@@ -21,6 +21,8 @@
 
 ## [EventLoop](https://blog.sessionstack.com/how-javascript-works-event-loop-and-the-rise-of-async-programming-5-ways-to-better-coding-with-2f077c4438b5)
 
+![avatar](./image/eventloop.gif)
+
 Event Loops 有一个简单的job, 去监事Call Stack和Callback Queue。 如果Call Stack是空的， 它将会从队列中取出第一个event并放到Call Stack中。
 这种迭代称为事件循环中的tick, 每个事件只是一个函数回调。
 
