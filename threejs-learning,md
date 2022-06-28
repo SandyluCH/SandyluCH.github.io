@@ -24,11 +24,20 @@ Threejs绘制的东西，最终需要在屏幕一块矩形画布上显示出来�
 
 Threejs中的相机跟真实世界的相机不完全一样，这里相机的可见区域是一个立方体，称为相机的示景体。
 
-正交投影相机
+#### ArrayCamera阵列相机
+ArrayCamera可以帮我们方便的在一张画布上渲染多个相机视角，这有点像在监控室的大屏幕上看多个摄像头或者是在同一台电脑上玩多人游戏时的分屏显示。
+
+#### StereoCamera立体相机
+StereoCamera立体相机，这个相机很好玩，我们可以很简单的将场景渲染出需要带VR / 3D眼镜才可以观看到的立体效果。
+
+#### CubeCamera立方体相机
+CubeCamera必须配合WebGLCubeRenderTarget一起使用，这个相机主要用于将当前场景的画面实时渲染成一个六面图（全景图的一种），用于创建类似镜面反射的效果。
+
+#### 正交投影相机
 示景体是一个长方体，由6个参数确定：THREE.OrthographicCamera(left, right, top, bottom, near, far)，这6个参数规定了相机示景体的左、右、上、下、前、后六个面的位置。
 
 
-透视投影相机
+#### 透视投影相机
 示景体是一个梯形体，由四个参数确定：THREE.PerspectiveCamera(fov, aspect, near, far)
 
 fov是相机在竖直方向的张角，aspect则是宽高比，即width/height，通常设为画布的宽高比，near和far分别是近平面和远平面与相机的距离。
