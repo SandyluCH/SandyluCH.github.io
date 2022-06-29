@@ -71,9 +71,27 @@ Threejs提供了一些常见的几何形状，有三维的也有二维的，三�
 计算机是如何绘制几何形状的呢？我们知道，计算机只能绘制直线，那么曲线和3D形状如何绘制出来呢？
 
 1、绘制圆形。如下图所示，通过绘制多边形实现近似的圆形效果，当多边形的边数足够多的时候，两条边之间的过渡就显得平滑，多边形看起来就足够圆了。
-
-
 2、绘制3D模型。常用的做法是用三角形组成的网格来模拟，如下图所示，用足够多的三角形时，兔子的身体看起来就足够平滑，跟真实兔子比较接近。著名的斯坦福兔子模型用了69451个三角形。
+
+##### 预置的几何体
+所有预置的几何体都继承自BufferGeometry这个类。这个类的内部包含很多通用方法，比如translate(...), rotateX(...), normalize()等等
+- BoxGeometry 用于创建一个立方体
+- PlaneGeometry 用于创建一个矩形的面。
+- CircleGeometry 用于创建一个扇形或圆形的面。
+- ConeGeometry 用于创建一个圆锥体。
+- CylinderGeometry 用于创建一个圆柱体。
+- RingGeometry 用于创建一个环形的面。
+- TorusGeometry 用于创建一个圆环体，就像一个甜甜圈一样。
+- TorusKnotGeometry 用于创建一个环面纽结体。
+- DodecahedronGeometry 用于创建一个十二面体。
+- OctahedronGeometry 用于创建一个八面体。
+- TetrahedronGeometry 用于创建一个四面体。
+- IcosahedronGeometry 用于创建一个由相同尺寸的三角形面组成的球体。
+- SphereGeometry 用于创建一个由四边形面组成的球体。
+- ShapeGeometry 基于路径创建一个平面。
+- TubeGeometry 基于路径创建一个管道。
+- ExtrudeGeometry 基于路径创建一个斜面模型。
+- TextGeometry 创建3D文本
 
 
 #### 材质
