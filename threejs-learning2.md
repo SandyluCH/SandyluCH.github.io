@@ -107,3 +107,36 @@ const texture = textureLoader.load(
 )
 ````
 通过这几个回调函数可以监听到图片文件的加载状况，用于创建加载进度条或是提示加载出错。
+
+#### 使用LoadingManager
+背景：在商业项目中，我们经常需要加载很多纹理图片，3D模型等等。我们需要建立一个整体的加载管理器，以确保用户加载完了所有必要资源后才使用我们的网站。这个时候就可以使用LoadingManager。
+
+创建LoadingManager类的实例，并将其传递给TextureLoader：
+````
+const loadingManager = new THREE.LoadingManager()
+const textureLoader = new THREE.TextureLoader(loadingManager)
+
+````
+我们可以对loadingManager添加onStart, onLoad, onProgress和  onError的监听来了解全部资源的加载情况
+````
+const loadingManager = new THREE.LoadingManager()
+loadingManager.onStart = () =>
+{
+    console.log('loading started')
+}
+loadingManager.onLoad = () =>
+{
+    console.log('loading finished')
+}
+loadingManager.onProgress = () =>
+{
+    console.log('loading progressing')
+}
+loadingManager.onError = () =>
+{
+    console.log('loading error')
+}
+
+const textureLoader = new THREE.TextureLoader(loadingManager)
+
+````
