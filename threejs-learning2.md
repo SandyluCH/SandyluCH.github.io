@@ -140,3 +140,55 @@ loadingManager.onError = () =>
 const textureLoader = new THREE.TextureLoader(loadingManager)
 
 ````
+接着我们可以一次性添加所有的纹理贴图资源并管理他们的加载进度
+````
+// ...
+
+const colorTexture = textureLoader.load('/textures/door/color.jpg')
+const alphaTexture = textureLoader.load('/textures/door/alpha.jpg')
+const heightTexture = textureLoader.load('/textures/door/height.jpg')
+const normalTexture = textureLoader.load('/textures/door/normal.jpg')
+const ambientOcclusionTexture = textureLoader.load('/textures/door/ambientOcclusion.jpg')
+const metalnessTexture = textureLoader.load('/textures/door/metalness.jpg')
+const roughnessTexture = textureLoader.load('/textures/door/roughness.jpg')
+LoadingManager非常有用，除了TextureLoader，在Three.js中其他内置的Loader都可以使用LoadingManager来统一管理。
+
+````
+
+### UV
+假如我们把3D立方体的面一一展开，立方体上每一个顶点其实都对应了图片上的一个二维坐标
+
+为了和三维空间的XYZ区分，所以使用UV来代表XY。
+
+所有3D模型都是由面构成的，我们都可以将他们的面展开到一个平面上，通常情况下，是个矩形
+
+这叫做UV展开。我们可以从几何体的attributes.UV属性中看到这些2D坐标：
+```
+console.log(geometry.attributes.uv)
+```
+
+### 转换纹理贴图
+我们可以使用repeat属性来使贴图重复，repeat的x，y属性分别代表了在x轴和y轴上的重复次数。
+````
+const colorTexture = textureLoader.load('/textures/door/color.jpg')
+colorTexture.repeat.x = 2
+colorTexture.repeat.y = 3
+
+````
+设置轴向上的重复次数外，我们还应该设置两个轴向上重复的模式
+
+wrapS 代表x轴上的重复模式
+wrapT 代表y轴上的重复模式
+````
+colorTexture.wrapS = THREE.RepeatWrapping
+colorTexture.wrapT = THREE.RepeatWrapping
+
+````
+
+
+
+
+
+
+
+
