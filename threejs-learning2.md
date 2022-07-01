@@ -1,4 +1,5 @@
 [摘自](https://mp.weixin.qq.com/s?__biz=Mzg3MTUyNzQzNg==&mid=2247489071&idx=1&sn=22300e691f1f32474defc91dc1cee274&chksm=cefc734cf98bfa5a830394b9ad6810528cf25dba2c07132036c5d4c999529e98c83e3548d847&cur_album_id=2405559566127480834&scene=189#wechat_redirect)
+[摘自2](https://mp.weixin.qq.com/s/cEM3UBHHhYFc8HHI2rTaoA)
 ## 纹理贴图
 纹理就是覆盖几何体表面的图像，比如我们已经看腻了的红色立方体，加上纹理，立刻就可以变成一个快递包装盒子。
 
@@ -184,6 +185,13 @@ colorTexture.wrapS = THREE.RepeatWrapping
 colorTexture.wrapT = THREE.RepeatWrapping
 
 ````
+
+## 材质
+材质的作用， 简单来说就是给几何体的每个可见像素加上颜色。但加颜色是要根据光照、材质的物理特性等因素，经过一系列的算法后， 才能决定这些像素到底显示什么颜色。这个算法
+被卸载名为着色器shader的程序中。
+
+Threejs中也有一些预置的材质。
+### 预置材质——MeshBasicMaterial
 
 
 
