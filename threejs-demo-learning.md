@@ -10,8 +10,11 @@ Draco 是一个开源库，用于压缩和解压缩 3D 网格和点云。 压缩
 
 官方提供的npm库有：
 - draco3d
-- draco3dgltf
-- draco_animation
+- draco3dgltf 该包是一个特殊版本，专门用来压缩3D几何图形的
+- draco_animation 该库用来压缩或解压几何图形网格的3D动画
+-
+
+
 
 
 
